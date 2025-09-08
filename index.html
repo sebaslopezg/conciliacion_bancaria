@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conciliador Bancario</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/sweetalert2.min.css">
+</head>
+<body>
+
+
+
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <button id="execute" class="btn btn-primary mb-3">Conciliar Datos</button>
+
+    <div class="col-3">
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Seleccione el Mes</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+    </div>
+
+  </div>
+</nav>
+<br>
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col"></div>
+    
+        <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+    
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Inserta aquí el excel del sistema</label>
+                    <input class="form-control excelInput" type="file" id="exSistema">
+                </div>
+    
+              </div>
+            </div>
+        </div>
+    
+        <div class="col"></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-3"></div>
+    
+        <div class="col-6">
+            <div class="card">
+              <div class="card-body">
+    
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Inserta aquí el excel del Banco</label>
+                    <input class="form-control excelInput" type="file" id="exBanco">
+                </div>
+    
+              </div>
+            </div>
+        </div>
+    
+        <div class="col-3"></div>
+    </div>
+    <br>
+    <div id="display">
+    
+    </div>
+</div>
+
+
+
+    <script type="module" src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/sweetalert2.all.min.js"></script>
+    <script src="app/vendor/excelReader.js"></script>
+    <script type="module" src="app/main.js"></script>
+</body>
+</html>
