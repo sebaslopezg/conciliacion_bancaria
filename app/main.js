@@ -2,6 +2,7 @@ import { getCol } from "./getCol.js"
 import {getData} from './getData.js'
 
 //const input = document.getElementById('exSistema')
+const courrentYearInput = document.querySelector('#courrentYear')
 const inputs = document.getElementsByClassName('excelInput')
 const btnExecute = document.querySelector('#execute')
 const display = document.querySelector('#display')
@@ -9,6 +10,9 @@ let systemData = null
 let bankData = null
 
 //
+
+let date = new Date()
+courrentYearInput.value = date.getFullYear()
 
 btnExecute.addEventListener('click', () =>{
     if (systemData === null || bankData === null) {
@@ -30,18 +34,19 @@ Array.from(inputs).forEach(input => {
             let fileExtention = fileName.split('.')
             fileExtention = fileExtention[fileExtention.length-1]
         
-            if (fileExtention != 'xlsx') {
-                Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: `El archivo es de extención .${fileExtention}, solo se permiten archivos de excel .xlsx`
-                })
-                input.value = ''
-            }else{
+            if (fileExtention === 'xlsx' || fileExtention === 'xls') {
+
                 readXlsxFile(input.files[0]).then((rows) => {
                     input.id === 'exSistema' ? systemData = rows : '' 
                     input.id === 'exBanco' ? bankData = rows : '' 
                 })
+            }else{
+                Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `El archivo es de extención .${fileExtention}, solo se permiten archivos de excel .xlsx o .xls`
+                })
+                input.value = ''
             }
         }
     }) 
@@ -50,7 +55,7 @@ Array.from(inputs).forEach(input => {
 const readData = () =>{
 
     let bankDataRows = getData(bankData, {
-        rowStart: 3,
+        rowStart: 2,
         rowLimit:false,
         date:{
             column:'A',
@@ -74,7 +79,8 @@ const readData = () =>{
             column:'B'
         },
         value:{
-            column:'C'
+            column:'C',
+            t_acount:true
         }
     })
 

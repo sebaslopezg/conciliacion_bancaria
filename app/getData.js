@@ -16,7 +16,7 @@ export const getData = (data, args) => {
 
     if('date' in args && 'description' in args && 'value' in args){
 
-        'rowStart' in args ?  initialRow = args.rowStart : errors.push({status:true, msg:errMsg.value.rowStart})
+        'rowStart' in args ?  initialRow = (args.rowStart) - 1 : errors.push({status:true, msg:errMsg.value.rowStart})
         'rowLimit' in args ?  '' : errors.push({status:true, msg:errMsg.value.rowLimit})
 
         'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:true, msg:errMsg.date.column})
@@ -30,20 +30,27 @@ export const getData = (data, args) => {
     }else{
         let counter = 0
         data.forEach(dataRows => {
-
             if(counter >= initialRow){
-                
-                response.push({
-                    date:dataRows[dateColumn],
-                    descripcion:dataRows[descriptionColumn],
-                    value:dataRows[valueColumn]
-                })
+                'readByRegex' in args.date ? (
+                    console.log(dataRows[dateColumn]),
+                    args.date.readByRegex.test(dataRows[dateColumn]) ? (
+                        response.push({
+                            date:dataRows[dateColumn],
+                            descripcion:dataRows[descriptionColumn],
+                            value:dataRows[valueColumn]
+                        })
+                    ) : ''
+                ) : (
+                    response.push({
+                        date:dataRows[dateColumn],
+                        descripcion:dataRows[descriptionColumn],
+                        value:dataRows[valueColumn]
+                    })     
+                )
             }
-
             counter++
         });
     }
-
     return response
 }
 
