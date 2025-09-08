@@ -6,12 +6,12 @@ const inputs = document.getElementsByClassName('excelInput')
 const btnExecute = document.querySelector('#execute')
 const display = document.querySelector('#display')
 let systemData = null
-let bancData = null
+let bankData = null
 
 //
 
 btnExecute.addEventListener('click', () =>{
-    if (systemData === null || bancData === null) {
+    if (systemData === null || bankData === null) {
             Swal.fire({
             icon: "error",
             title: "Error",
@@ -40,7 +40,7 @@ Array.from(inputs).forEach(input => {
             }else{
                 readXlsxFile(input.files[0]).then((rows) => {
                     input.id === 'exSistema' ? systemData = rows : '' 
-                    input.id === 'exBanco' ? bancData = rows : '' 
+                    input.id === 'exBanco' ? bankData = rows : '' 
                 })
             }
         }
@@ -48,37 +48,41 @@ Array.from(inputs).forEach(input => {
 })
 
 const readData = () =>{
-/*     let sistemaFecha = getCol(systemData,'A', 3, false)
-    let sistemaDescripcion = getCol(systemData,'B', 3, false)
-    let sistemaValor = getCol(systemData,'C', 3, false)
 
-    let Sumalength = (sistemaDescripcion.length / sistemaFecha.length) + (sistemaValor.length / sistemaFecha.length)
+    let bankDataRows = getData(bankData, {
+        rowStart: 3,
+        rowLimit:false,
+        date:{
+            column:'A',
+            readByRegex:/^\d{1,2}\/\d{1,2}$/
+        },
+        description:{
+            column:'B'
+        },
+        value:{
+            column:'C'
+        }
+    })
 
-    if (Sumalength === 2) {
-        display.innerHTML = ""
-        printTable(sistemaFecha, sistemaDescripcion, sistemaValor)
-    }else{
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: `Algúnas columnas presentan mas datos que otras, revise primero el excel y verifique que la cantidad de datos en columnas sean iguales`
-        })  
-    }   */
-        let bancDataRows = getData(bancData, {
-            rowStart: 3,
-            rowLimit:false,
-            date:{
-                column:'A'
-            },
-            description:{
-                column:'B'
-            },
-            value:{
-                column:'C'
-            }
-        })
+    let systemDataRows = getData(systemData, {
+        rowStart: 3,
+        rowLimit:false,
+        date:{
+            column:'A'
+        },
+        description:{
+            column:'B'
+        },
+        value:{
+            column:'C'
+        }
+    })
 
-        console.log(bancDataRows)
+    console.log('Estos son los datos del banco')
+    console.log(bankDataRows)
+
+    console.log('Estos son los datos del sistema')
+    console.log(systemDataRows)
     
 }
 
@@ -86,7 +90,7 @@ const print = (data) =>{
     display.innerHTML += data
 }
 
-const printTable = (sistemaFecha, sistemaDescripcion, sistemaValor, bancoFecha, bancoDescripcion, BancoValor) => {
+const printTable = (sistemaFecha, sistemaDescripcion, sistemaValor) => {
     let html = `
         <table class="table">
         <thead>
