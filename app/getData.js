@@ -9,14 +9,14 @@ export const getData = (data, args) => {
 
     let response = []
     let errors = []
+    let initialRow
+    let dateColumn
+    let descriptionColumn
+    let valueColumn
 
     if('date' in args && 'description' in args && 'value' in args){
 
-        let dateColumn
-        let descriptionColumn
-        let valueColumn
-
-        'rowStart' in args ?  '' : errors.push({status:true, msg:errMsg.value.rowStart})
+        'rowStart' in args ?  initialRow = args.rowStart : errors.push({status:true, msg:errMsg.value.rowStart})
         'rowLimit' in args ?  '' : errors.push({status:true, msg:errMsg.value.rowLimit})
 
         'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:true, msg:errMsg.date.column})
@@ -26,22 +26,23 @@ export const getData = (data, args) => {
 
     if (errors.length > 0) {
         response = {error:errors}
+        console.log(response)
     }else{
         let counter = 0
         data.forEach(dataRows => {
 
             if(counter >= initialRow){
-                if (dataRows[column] !== null) {
-                    response.push(dataRows[column])
-                }
+                
+                response.push({
+                    date:dataRows[dateColumn],
+                    descripcion:dataRows[descriptionColumn],
+                    value:dataRows[valueColumn]
+                })
             }
-
-
 
             counter++
         });
     }
-
 
     return response
 }

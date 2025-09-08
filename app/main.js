@@ -11,7 +11,7 @@ let bancData = null
 //
 
 btnExecute.addEventListener('click', () =>{
-/*     if (systemData === null || bancData === null) {
+    if (systemData === null || bancData === null) {
             Swal.fire({
             icon: "error",
             title: "Error",
@@ -19,8 +19,7 @@ btnExecute.addEventListener('click', () =>{
         }) 
     }else{
         readData()
-    } */
-   readData()
+    }
 })
 
 Array.from(inputs).forEach(input => {
@@ -37,6 +36,7 @@ Array.from(inputs).forEach(input => {
                 title: "Error",
                 text: `El archivo es de extención .${fileExtention}, solo se permiten archivos de excel .xlsx`
                 })
+                input.value = ''
             }else{
                 readXlsxFile(input.files[0]).then((rows) => {
                     input.id === 'exSistema' ? systemData = rows : '' 
@@ -64,13 +64,21 @@ const readData = () =>{
             text: `Algúnas columnas presentan mas datos que otras, revise primero el excel y verifique que la cantidad de datos en columnas sean iguales`
         })  
     }   */
-        dataRows = getData(bancData, {
+        let bancDataRows = getData(bancData, {
             rowStart: 3,
             rowLimit:false,
-            date:'A',
-            description:'B',
-            value:'C'
+            date:{
+                column:'A'
+            },
+            description:{
+                column:'B'
+            },
+            value:{
+                column:'C'
+            }
         })
+
+        console.log(bancDataRows)
     
 }
 
