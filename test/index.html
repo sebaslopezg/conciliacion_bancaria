@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Excel Compare Tool</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { margin-top: 30px; }
+    input[type="file"] { margin: 10px 0; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f4f4f4; }
+    .diff { background: #ffcccc; }
+  </style>
+</head>
+<body>
+  <h1>Excel File Comparator</h1>
+  
+  <p>Upload two Excel files (must include columns: <b>Date</b>, <b>Description</b>, <b>Value</b>)</p>
+  
+  <input type="file" id="file1" accept=".xlsx, .xls">
+  <br>
+  <input type="file" id="file2" accept=".xlsx, .xls">
+  <br><br>
+  <button onclick="compareFiles()">Compare Files</button>
+  
+  <h2>Comparison Results</h2>
+  <div id="results"></div>
+  
+  <script>
+    async function readExcel(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0]; 
+          const sheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(sheet);
+
+          console.log(json)
+          
+          // Extract only Date, Description, Value
+          const filtered = json.map(row => ({
+            Date: row.Date || "",
+            Description: row.Description || "",
+            Value: row.Value || ""
+          }));
+          resolve(filtered);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    async function compareFiles() {
+      const file1 = document.getElementById("file1").files[0];
+      const file2 = document.getElementById("file2").files[0];
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      if (!file1 || !file2) {
+        alert("Please select both files!");
+        return;
+      }
+
+      const data1 = await readExcel(file1);
+      const data2 = await readExcel(file2);
+
+      // Compare rows
+      let html = "<table><tr><th>File 1 - Date</th><th>File 1 - Description</th><th>File 1 - Value</th><th>File 2 - Date</th><th>File 2 - Description</th><th>File 2 - Value</th></tr>";
+      const maxLen = Math.max(data1.length, data2.length);
+
+      for (let i = 0; i < maxLen; i++) {
+        const row1 = data1[i] || { Date: "", Description: "", Value: "" };
+        const row2 = data2[i] || { Date: "", Description: "", Value: "" };
+
+        const diffDate = row1.Date !== row2.Date ? "diff" : "";
+        const diffDesc = row1.Description !== row2.Description ? "diff" : "";
+        const diffVal = row1.Value !== row2.Value ? "diff" : "";
+
+        html += `<tr>
+          <td class="${diffDate}">${row1.Date}</td>
+          <td class="${diffDesc}">${row1.Description}</td>
+          <td class="${diffVal}">${row1.Value}</td>
+          <td class="${diffDate}">${row2.Date}</td>
+          <td class="${diffDesc}">${row2.Description}</td>
+          <td class="${diffVal}">${row2.Value}</td>
+        </tr>`;
+      }
+
+      html += "</table>";
+      resultsDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

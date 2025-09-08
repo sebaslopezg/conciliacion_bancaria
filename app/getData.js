@@ -1,38 +1,47 @@
+import errMsg from './errors.js'
+
 const cols = [];
 for (let i = 65; i <= 90; i++) {
   cols.push(String.fromCharCode(i));
 }
 
-export const getData = (args) => {
+export const getData = (data, args) => {
 
     let response = []
+    let errors = []
 
     if('date' in args && 'description' in args && 'value' in args){
 
-        //todo: pendiente arreglar esto: crear funcion que tramite cada parte de los args y gestione errores
-        let column
-        'column' in args.date ?  column = cols.indexOf(args.date.column) : ''
+        let dateColumn
+        let descriptionColumn
+        let valueColumn
 
-        
+        'rowStart' in args ?  '' : errors.push({status:true, msg:errMsg.value.rowStart})
+        'rowLimit' in args ?  '' : errors.push({status:true, msg:errMsg.value.rowLimit})
 
-        let finalRowState
-        
-        finalRow === false ? finalRowState = 'it is false!' : finalRowState = 'it isnt false'
-
-    }else{
-
+        'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:true, msg:errMsg.date.column})
+        'column' in args.description ?  descriptionColumn = cols.indexOf(args.description.column) : errors.push({status:true, msg:errMsg.description.column})
+        'column' in args.value ?  valueColumn = cols.indexOf(args.value.column) : errors.push({status:true, msg:errMsg.value.column})
     }
 
-    let counter = 0
-    data.forEach(dataRows => {
+    if (errors.length > 0) {
+        response = {error:errors}
+    }else{
+        let counter = 0
+        data.forEach(dataRows => {
 
-        if(counter >= initialRow){
-            if (dataRows[column] !== null) {
-                response.push(dataRows[column])
+            if(counter >= initialRow){
+                if (dataRows[column] !== null) {
+                    response.push(dataRows[column])
+                }
             }
-        }
-        counter++
-    });
+
+
+
+            counter++
+        });
+    }
+
 
     return response
 }

@@ -64,22 +64,12 @@ const readData = () =>{
             text: `Algúnas columnas presentan mas datos que otras, revise primero el excel y verifique que la cantidad de datos en columnas sean iguales`
         })  
     }   */
-        dataRows = getData({
-            date:{
-                column:'A',
-                rowStart:3,
-                rowLimit:false
-            },
-            description:{
-                column:'B',
-                rowStart:3,
-                rowLimit:false
-            },
-            value:{
-                column:'C',
-                rowStart:3,
-                rowLimit:false                
-            }
+        dataRows = getData(bancData, {
+            rowStart: 3,
+            rowLimit:false,
+            date:'A',
+            description:'B',
+            value:'C'
         })
     
 }
