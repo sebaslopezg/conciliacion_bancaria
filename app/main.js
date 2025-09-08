@@ -71,7 +71,7 @@ const readData = () =>{
     })
 
     let systemDataRows = getData(systemData, {
-        rowStart: 3,
+        rowStart: 2,
         rowLimit:false,
         date:{
             column:'A'
@@ -85,11 +85,12 @@ const readData = () =>{
         }
     })
 
-    console.log('Estos son los datos del banco')
-    console.log(bankDataRows)
+    //console.log('Estos son los datos del banco')
+    //console.log(bankDataRows)
+    //console.log('Estos son los datos del sistema')
+    //console.log(systemDataRows)
 
-    console.log('Estos son los datos del sistema')
-    console.log(systemDataRows)
+    printTable(systemDataRows)
     
 }
 
@@ -97,28 +98,33 @@ const print = (data) =>{
     display.innerHTML += data
 }
 
-const printTable = (sistemaFecha, sistemaDescripcion, sistemaValor) => {
+const printTable = (obj) => {
     let html = `
         <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Fecha Sistema</th>
-                <th scope="col">Descripcion Sistema</th>
-                <th scope="col">Valor Sistema</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Valor</th>
             </tr>
         </thead>
         <tbody>
     `
-    sistemaFecha.forEach((fecha, index) => {
-        let fechaFormateada = `${fecha.getDate()}/${fecha.getMonth()}/${fecha.getFullYear()}`
+
+    let keys = Object.keys(obj)
+
+    keys.forEach(key => {
+        let objActual = obj[key]
+        let fecha
+        //let fechaFormateada = `${fecha.getDate()}/${fecha.getMonth()}/${fecha.getFullYear()}`
         html += `
 
             <tr>
-                <td>${index+1}</td>
-                <td>${fechaFormateada}</td>
-                <td>${sistemaDescripcion[index]}</td>
-                <td>${sistemaValor[index]}</td>
+                <td>${key+1}</td>
+                <td>${objActual.date}</td>
+                <td>${objActual.descripcion}</td>
+                <td>${objActual.value}</td>
             </tr>
         `
     });
