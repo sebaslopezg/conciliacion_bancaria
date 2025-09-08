@@ -29,13 +29,14 @@ export const getData = (data, args) => {
         console.log(response)
     }else{
         let counter = 0
+        let yearSetter = ''
         data.forEach(dataRows => {
             if(counter >= initialRow){
                 'readByRegex' in args.date ? (
-                    console.log(dataRows[dateColumn]),
+                    'setYear' in args.date ? yearSetter = '/' + args.date.setYear : '',
                     args.date.readByRegex.test(dataRows[dateColumn]) ? (
                         response.push({
-                            date:dataRows[dateColumn],
+                            date:  dataRows[dateColumn] + yearSetter,
                             descripcion:dataRows[descriptionColumn],
                             value:dataRows[valueColumn]
                         })
@@ -53,19 +54,3 @@ export const getData = (data, args) => {
     }
     return response
 }
-
-/*
-ejemplo de identificacion de fechas por medio de regex
-
-const regex = /^\d{1,2}\/\d{1,2}$/;
-
-// Example usage
-const dateString1 = "7/8";
-const dateString2 = "12/25";
-const textString = "N/A";
-
-console.log(regex.test(dateString1)); // Output: true
-console.log(regex.test(dateString2)); // Output: true
-console.log(regex.test(textString));  // Output: false
-
-*/

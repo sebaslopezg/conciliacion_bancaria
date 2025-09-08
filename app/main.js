@@ -59,7 +59,8 @@ const readData = () =>{
         rowLimit:false,
         date:{
             column:'A',
-            readByRegex:/^\d{1,2}\/\d{1,2}$/
+            readByRegex:/^\d{1,2}\/\d{1,2}$/,
+            setYear:courrentYearInput.value
         },
         description:{
             column:'B'
@@ -80,7 +81,7 @@ const readData = () =>{
         },
         value:{
             column:'C',
-            t_acount:true
+            t_acount:'D'
         }
     })
 
