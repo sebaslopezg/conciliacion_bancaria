@@ -1,6 +1,3 @@
-import { getCol } from "./getCol.js"
-import {getData} from './getData.js'
-
 //const input = document.getElementById('exSistema')
 const courrentYearInput = document.querySelector('#courrentYear')
 const inputs = document.getElementsByClassName('excelInput')
