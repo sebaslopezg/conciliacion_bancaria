@@ -1,9 +1,3 @@
-/*
-TODO:
--Relacionamiento de columnas, el sistema avansis presenta columna en positivos y en negativos,
-de esta manera se debe ajustar la funcion para permitir juntar todo en un solo array
-*/
-
 const cols = [];
 for (let i = 65; i <= 90; i++) {
   cols.push(String.fromCharCode(i));

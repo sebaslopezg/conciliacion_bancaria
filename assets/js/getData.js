@@ -1,5 +1,3 @@
-import errMsg from './errors.js'
-
 const cols = [];
 for (let i = 65; i <= 90; i++) {
   cols.push(String.fromCharCode(i));
@@ -9,7 +7,7 @@ const setNegative = (text) =>{
     return parseFloat(text)*-1
 }
 
-export const getData = (data, args) => {
+const getData = (data, args) => {
 
     let response = []
     let errors = []

@@ -17,7 +17,7 @@ btnExecute.addEventListener('click', () =>{
             icon: "error",
             title: "Error",
             text: `Debe cargar los dos archivos de excel`
-        }) 
+        })
     }else{
         readData()
     }
