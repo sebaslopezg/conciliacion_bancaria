@@ -1,39 +1,39 @@
-function findMismatchedTransactions(arr1, arr2) {
+function setTransactions(arrMain, arrSecond){
+    let response = {}
     const mismatches = []
-    const matchedTransactions = new Set()
+    const matchedTransactions = []
 
-    // Helper function to create a unique key for each transaction
-    const getTransactionKey = (transaction) => {
-        // Use a consistent date format (e.g., YYYY-MM-DD) for comparison
-        const dateParts = transaction.date.split('/')
-        const formattedDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`
-        return `${formattedDate}-${transaction.value}`
-    }
+    const arrMainKeys = new Set(arrMain.map(getTransactionKey))
 
-    // Build a set of unique keys from the first array for efficient lookup
-    const arr1Keys = new Set(arr1.map(getTransactionKey))
-
-    // Iterate through the second array and find mismatches
-    for (const transaction of arr2) {
+    for (const transaction of arrSecond) {
         const key = getTransactionKey(transaction);
-        if(!arr1Keys.has(key)) {
+        if(!arrMainKeys.has(key)) {
             mismatches.push(transaction)
-        } else {
-            // Keep track of matched transactions in arr2 to handle duplicates
-            matchedTransactions.add(key)
+        }else {
+            matchedTransactions.push(transaction)
         }
     }
 
-    // Now, iterate through the first array to find transactions not matched in the second
-    const arr2Keys = new Set(arr2.map(getTransactionKey))
-    for (const transaction of arr1) {
+    const arrSecondKeys = new Set(arrSecond.map(getTransactionKey))
+    for (const transaction of arrMain) {
         const key = getTransactionKey(transaction)
-        if (!arr2Keys.has(key)) {
+        if (!arrSecondKeys.has(key)) {
             mismatches.push(transaction)
+        }else{
+            matchedTransactions.push(transaction)
         }
     }
 
-    return mismatches
+    return response = {
+        noCoincide: mismatches,
+        coincide:matchedTransactions
+    }
+}
+
+const getTransactionKey = (transaction) => {
+    const dateParts = transaction.date.split('/')
+    const formattedDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`
+    return `${formattedDate}-${transaction.value}`
 }
 
 const object1 = [
@@ -172,6 +172,5 @@ const object2 = [
     }
 ]
 
-const mismatches = findMismatchedTransactions(object1, object2)
-console.log('No coinciden: ')
-console.log(mismatches)
+const result = setTransactions(object1, object2)
+console.log(result)
