@@ -7,7 +7,7 @@ const errCode = {
     description:{
         column:'No se encuentra la llave "column" en el objeto "description", revise la configuración',
     },
-    value:{
+    value:{             
         column:'No se encuentra la llave "column" en el objeto "value", revise la configuración',               
     }
 }

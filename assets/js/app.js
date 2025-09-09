@@ -89,7 +89,10 @@ Array.from(inputs).forEach(input => {
 
 const readData = () =>{
 
-    bankDataRows = getData(bankData, {
+    let bankDataResponse
+    let systemDataResponse
+
+    bankDataResponse = getData(bankData, {
         rowStart: 2,
         rowLimit:false,
         date:{
@@ -105,8 +108,8 @@ const readData = () =>{
         }
     })
 
-    systemDataRows = getData(systemData, {
-        rowStart: 2,
+    systemDataResponse = getData(systemData, {
+        //rowStart: 2,
         rowLimit:false,
         date:{
             column:'A'
@@ -119,7 +122,15 @@ const readData = () =>{
             t_acount:'D'
         }
     })
-    
+
+    if (bankDataResponse.status && systemDataResponse.status) {
+        
+    }else{
+        
+    }
+
+    console.log(bankDataRows);
+    console.log(systemDataRows);
 }
 
 const print = (data) =>{
