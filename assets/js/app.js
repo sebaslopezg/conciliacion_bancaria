@@ -6,11 +6,14 @@ const display = document.querySelector('#display')
 const btnShowSystemTable = document.querySelector('#btnShowSystemTable')
 const btnShowBankTable = document.querySelector('#btnShowBankTable')
 const btnShowAll = document.querySelector('#btnShowAll')
+const exSistema = document.querySelector('#exSistema')
+const exBanco = document.querySelector('#exBanco')
 let systemData = null
 let bankData = null
 
 let bankDataRows
 let systemDataRows
+let filesProp = {}
 
 let date = new Date()
 courrentYearInput.value = date.getFullYear()
@@ -36,7 +39,9 @@ btnExecute.addEventListener('click', () =>{
 
 btnShowSystemTable.addEventListener('click', () =>{
     if (systemDataRows.length > 0) {
-        printTable(systemDataRows, true, 'info')
+        const fname = exSistema.files[0].name
+        printTable(systemDataRows, true, 'info', fname)
+        console.log(systemDataRows)
     }else{
         Swal.fire({
             icon: "error",
@@ -47,7 +52,9 @@ btnShowSystemTable.addEventListener('click', () =>{
 })
 btnShowBankTable.addEventListener('click', () =>{
     if (bankDataRows.length > 0) {
-        printTable(bankDataRows, true, 'warning')
+        const fname = exBanco.files[0].name
+        printTable(bankDataRows, true, 'warning',fname)
+        console.log(bankDataRows)
     }else{
         Swal.fire({
             icon: "error",
@@ -109,7 +116,7 @@ const readData = () =>{
     })
 
     systemDataResponse = getData(systemData, {
-        //rowStart: 2,
+        rowStart: 2,
         rowLimit:false,
         date:{
             column:'A'
@@ -124,20 +131,19 @@ const readData = () =>{
     })
 
     if (bankDataResponse.status && systemDataResponse.status) {
-        
+        bankDataRows = bankDataResponse.data
+        systemDataRows = systemDataResponse.data
     }else{
-        
+        !bankDataResponse.status ? printError(bankDataResponse.data) : ''
+        !systemDataResponse.status ? printError(systemDataResponse.data) : ''
     }
-
-    console.log(bankDataRows);
-    console.log(systemDataRows);
 }
 
 const print = (data) =>{
     display.innerHTML += data
 }
 
-const printTable = (obj, reset, headerColor) => {
+const printTable = (obj, reset, headerColor, fileName) => {
 
     let tableHeaderColor = ''
 
@@ -148,6 +154,13 @@ const printTable = (obj, reset, headerColor) => {
     headerColor ? tableHeaderColor = `class="table-${headerColor}"` : tableHeaderColor = ''
 
     let html = `
+
+        <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">${fileName}</h5>
+        </div>
+        </div>
+        <br>
         <table class="table table-striped table-hover">
         <thead>
             <tr ${tableHeaderColor}>
@@ -176,10 +189,43 @@ const printTable = (obj, reset, headerColor) => {
                 <td>${objActual.value}</td>
             </tr>
         `
-        //console.log(typeof objActual.value)
-    });
+    })
 
     html += `</tbody></table>`
     print(html)
 }
 
+const printError = (data) =>{
+
+    Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `Hubo uno o mas errores al ejecutar`
+    })
+
+    let html = `
+        <table class="table table-striped table-hover">
+        <thead>
+            <tr class="table-danger">
+                <th scope="col">#</th>
+                <th scope="col">Error</th>
+            </tr>
+        </thead>
+        <tbody>
+    `
+    let keys = Object.keys(data)
+
+    keys.forEach(key => {
+        let objActual = data[key]
+        index = parseInt(key) + 1
+        html += `
+            <tr>
+                <td>${index}</td>
+                <td>${objActual.msg}</td>
+            </tr>
+        `
+    })
+
+    html += `</tbody></table>`
+    print(html)
+} 
