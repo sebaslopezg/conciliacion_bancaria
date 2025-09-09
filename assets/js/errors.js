@@ -11,5 +11,3 @@ const errCode = {
         column:'No se encuentra la llave "column" en el objeto "value", revise la configuración',               
     }
 }
-
-export default errCode
