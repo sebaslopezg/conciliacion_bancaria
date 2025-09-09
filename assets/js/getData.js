@@ -35,30 +35,53 @@ const getData = (data, args) => {
         let counter = 0
         let yearSetter = ''
         let valueData
+        let dateData
+
         data.forEach(dataRows => {
             if(counter >= initialRow){
 
-                't_acount' in args.value ? (
+/*                 't_acount' in args.value ? (
                     dataRows[valueColumn] == 0 || dataRows[valueColumn] == null ? valueData = setNegative(dataRows[t_acountColumn]) : ''
                 ) : valueData = dataRows[valueColumn],
 
                 'readByRegex' in args.date ? (
                     'setYear' in args.date ? yearSetter = '/' + args.date.setYear : '',
-                    args.date.readByRegex.test(dataRows[dateColumn]) ? (
-                        response.push({
-                            date:  dataRows[dateColumn] + yearSetter,
-                            descripcion:dataRows[descriptionColumn],
-                            value:valueData
-                        })
+                    args.date.readByRegex.test(dataRows[dateColumn]) ? dateData = dataRows[dateColumn] + yearSetter : dateData = dataRows[dateColumn]
+                ) : dateData = dataRows[dateColumn] */
 
-                    ) : ''
-                ) : (
-                    response.push({
-                        date:dataRows[dateColumn],
-                        descripcion:dataRows[descriptionColumn],
-                        value:valueData
-                    })     
-                )
+
+
+                if ('t_acount' in args.value) {
+                    const valueFromValueColumn = parseFloat(dataRows[valueColumn]);
+                    const valueFromT_acountColumn = parseFloat(dataRows[t_acountColumn]);
+                    
+                    // If the value in the main column is not a valid number or is zero,
+                    // use the value from the 't_acount' column.
+                    if (isNaN(valueFromValueColumn) || valueFromValueColumn === 0) {
+                        valueData = valueFromT_acountColumn;
+                    } else {
+                        valueData = valueFromValueColumn;
+                    }
+                } else {
+                    valueData = parseFloat(dataRows[valueColumn]);
+                }
+
+                if (dataRows[valueColumn] == 0 || dataRows[valueColumn] == null && dataRows[t_acountColumn] !== 0) {
+                    valueData = setNegative(dataRows[t_acountColumn]);
+                } else {
+                    valueData = parseFloat(dataRows[valueColumn]);
+                }
+
+                'readByRegex' in args.date ? (
+                    'setYear' in args.date ? yearSetter = '/' + args.date.setYear : '',
+                    args.date.readByRegex.test(dataRows[dateColumn]) ? dateData = dataRows[dateColumn] + yearSetter : dateData = dataRows[dateColumn]
+                ) : dateData = dataRows[dateColumn]
+
+                response.push({
+                    date:dateData,
+                    descripcion:dataRows[descriptionColumn],
+                    value:valueData
+                })
             }
             counter++
         });
