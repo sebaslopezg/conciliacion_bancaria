@@ -25,6 +25,8 @@ const enableButtons = () =>{
     btnShowAll.disabled = false
 }
 
+setConfigInput('regex', 'regex')
+
 btnExecute.addEventListener('click', () =>{
     if (systemData === null || bankData === null) {
             Swal.fire({

@@ -32,6 +32,7 @@ const defaultConf = {
 
 const defaultRegex = [
     {
-        regex: /^\d{1,2}\/\d{1,2}$/
+        regex: /^\d{1,2}\/\d{1,2}$/,
+        description:'Permitir solo fecha de dos valores sin año EJ: 01/01'
     }
 ]

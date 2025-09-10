@@ -98,3 +98,16 @@ function loadConfig() {
     reader.readAsText(file);
   })
 }
+
+function setConfigInput(id, configType){
+
+    if (configType = 'regex') {
+        const input = document.getElementById(id)
+        if (input) {
+            input.innerHTML = `<option value="false" selected>No</option> `
+            defaultRegex.forEach((el, index) =>{
+                input.innerHTML += `<option value="${index}">${el.description}</option>`
+            })
+        }
+    }
+}

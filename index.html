@@ -18,6 +18,9 @@
       <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loadJsonModal">
         Cargar configuración
       </button>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#generateJsonModal">
+        Generar configuración
+      </button>
       <button type="button" class="btn btn-danger" onclick="localStorage.clear()">
         Limpiar Datos
       </button>
@@ -80,7 +83,7 @@
     <div id="display"></div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Load Conf -->
 <div class="modal fade" id="loadJsonModal" tabindex="-1" aria-labelledby="loadJsonModalLabel">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
@@ -99,15 +102,110 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Generate Conf -->
+<div class="modal fade" id="generateJsonModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="generateJsonModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="generateJsonModalLabel">Generar Archivo de Configuración .json</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <p>Aquí se puede generar el archivo de configuración .json necesario para la correcta lectura de los archivos</p>
+
+        <div class="row mb-2">
+          <button class="btn btn-info mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#systemForm">
+            Configuracion para Excel del Systema
+          </button>
+  
+          <div class="collapse" id="systemForm">
+            <div class="card card-body">
+
+            <div class="mb-3">
+              <label for="rowStart" class="form-label">Fila inicial</label>
+              <input type="text" class="form-control" id="rowStart" aria-describedby="rowStartHelp">
+              <div id="rowStartHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="rowLimit" class="form-label">Fila limite</label>
+              <input type="text" class="form-control" id="rowLimit" aria-describedby="rowLimitHelp">
+              <div id="rowLimitHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="dateColumn" class="form-label">Columna de la fecha</label>
+              <input type="text" class="form-control" id="dateColumn" aria-describedby="dateColumnHelp">
+              <div id="dateColumnHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="descriptionColumn" class="form-label">Columna de la Descripción</label>
+              <input type="text" class="form-control" id="descriptionColumn" aria-describedby="descriptionColumnHelp">
+              <div id="descriptionColumnHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="valueColumn" class="form-label">Columna del Valor</label>
+              <input type="text" class="form-control" id="valueColumn" aria-describedby="valueColumnHelp">
+              <div id="valueColumnHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="regex" class="form-label">Condicional de lectura</label>
+              <select class="form-select" id="regex" aria-describedby="regexHelp">
+                <option value="false" selected>No</option>              
+              </select>
+              <div id="regexHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="setYear" class="form-label">Concatenar Año</label>
+              <select class="form-select" id="setYear" aria-describedby="regexHelp">
+                <option value="0" selected>No</option>              
+                <option value="1" selected>Si</option>              
+              </select>
+              <div id="setYearHelp" class="form-text">descripcion del form</div>
+            </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <button class="btn btn-warning mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#bankForm">
+            Configuracion para Excel del Banco
+          </button>
+    
+          <div class="collapse" id="bankForm">
+            <div class="card card-body">
+              bank
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnGenConfig" class="btn btn-primary">Generar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <script src="./assets/js/vendor/bootstrap.js"></script>
   <script src="./assets/js/vendor/sweetalert2.all.min.js"></script>
   <script src="./assets/js/vendor/excelReader.js"></script>
   <script src="./assets/js/vendor/xlsx.full.min.js"></script>
+  <script src="./assets/js/config.js"></script>
   <script src="./assets/js/helpers/helpers.js"></script>
   <script src="./assets/js/errors.js"></script>
   <script src="./assets/js/getData.js"></script>
   <script src="./assets/js/setTransactions.js"></script>
-  <script src="./assets/js/config.js"></script>
   <script src="./assets/js/app.js"></script>
 </body>
 </html>
