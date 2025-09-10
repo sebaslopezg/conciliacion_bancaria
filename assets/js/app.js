@@ -152,16 +152,20 @@ const printTable = (obj, reset, headerColor, fileName) => {
     }
 
     headerColor ? tableHeaderColor = `class="table-${headerColor}"` : tableHeaderColor = ''
+    const uuid = crypto.randomUUID()
 
     let html = `
 
         <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">${fileName}</h5>
-        </div>
+            <div class="card-header">
+                ${fileName}
+            </div>
+            <div class="card-body">
+                <button class="btn btn-success" onclick="exportTableToExcel('table_${uuid}', 'excel_exportado.xlsx')">Exportar Excel</button>
+            </div>
         </div>
         <br>
-        <table class="table table-striped table-hover">
+        <table id="table_${uuid}" class="table table-striped table-hover">
         <thead>
             <tr ${tableHeaderColor}>
                 <th scope="col">#</th>
@@ -229,3 +233,4 @@ const printError = (data) =>{
     html += `</tbody></table>`
     print(html)
 } 
+
