@@ -7,6 +7,8 @@ const btnShowBankTable = document.querySelector('#btnShowBankTable')
 const btnShowAll = document.querySelector('#btnShowAll')
 const exSistema = document.querySelector('#exSistema')
 const exBanco = document.querySelector('#exBanco')
+const btnLoadConfig = document.querySelector('#btnLoadConfig')
+
 let systemData = null
 let bankData = null
 
@@ -49,6 +51,7 @@ btnShowSystemTable.addEventListener('click', () =>{
         })
     }
 })
+
 btnShowBankTable.addEventListener('click', () =>{
     if (bankDataRows.length > 0) {
         const fname = exBanco.files[0].name
@@ -65,6 +68,33 @@ btnShowBankTable.addEventListener('click', () =>{
 })
 btnShowAll.addEventListener('click', () =>{
 
+})
+
+btnLoadConfig.addEventListener('click', () =>{
+    const jsonfileModal = document.getElementById('loadJsonModal')
+    const modalInstance = bootstrap.Modal.getInstance(jsonfileModal)
+    loadConfig()
+    .then(response => {
+        console.log(response)
+        
+        if (response.status) {
+
+            modalInstance.hide()
+            console.log(response)
+            Swal.fire({
+                icon: "success",
+                title: "Archivo Cargado",
+                text: `Se ha leido correctamente el archivo`
+            })
+        }
+    })
+    .catch(error =>{
+        Swal.fire({
+            icon: "error",
+            title: error.title,
+            text: error.msg
+        })
+    })
 })
 
 Array.from(inputs).forEach(input => {

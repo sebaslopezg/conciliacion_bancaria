@@ -1,0 +1,46 @@
+{
+    "bankFile":{
+        "rowStart":2,
+        "rowLimit":false,
+        "date":{
+            "column":"A"
+        },
+        "description":{
+            "column":"B"
+        },
+        "value":{
+            "column":"D"
+        },
+        "saveValues":[
+            {
+                "column":"B",
+                "setValue":{
+                    "type":"literal",
+                    "value":"IMPUESTO GBNO 4X1000"
+                }
+            },
+            {
+                "column":"B",
+                "setValue":{
+                    "type":"relative",
+                    "value":"PAGO N?"
+                } 
+            }
+        ]
+    },
+
+    "systemFile":{
+        "rowStart": 2,
+        "rowLimit":false,
+        "date":{
+            "column":"A"
+        },
+        "description":{
+            "column":"B"
+        },
+        "value":{
+            "credit":"C",
+            "debit":"D"
+        }
+    }
+}

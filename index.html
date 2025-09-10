@@ -12,12 +12,17 @@
 
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
-    <button id="execute" class="btn btn-primary mb-3">Conciliar Datos</button>
 
+    <div class="col-6">
+      <button id="execute" class="btn btn-primary">Cargar Datos</button>
+      <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loadJsonModal">
+        Cargar configuración
+      </button>
+    </div>
     <div class="col-3">
-    <span>
-      <label for="courrentYear">Año del extracto: </label>  <input id="courrentYear" class="form-control" type="text"> 
-    </span>
+      <span>
+        <label for="courrentYear">Año del extracto: </label>  <input id="courrentYear" class="form-control" type="text"> 
+      </span>
     </div>
 
   </div>
@@ -31,9 +36,8 @@
             <div class="card text-bg-info">
               <div class="card-header">Inserta aquí el excel del sistema</div>
               <div class="card-body">
-
                 <div class="mb-3">
-                    <input class="form-control excelInput" type="file" id="exSistema">
+                    <input class="form-control excelInput" type="file" id="exSistema" accept=".xls, .xlsx">
                 </div>
     
               </div>
@@ -51,9 +55,8 @@
               <div class="card-header">Inserta aquí el excel del Banco</div>
               <div class="card-body">
                 <div class="mb-3">
-                    <input class="form-control excelInput" type="file" id="exBanco">
+                    <input class="form-control excelInput" type="file" id="exBanco" accept=".xls, .xlsx">
                 </div>
-    
               </div>
             </div>
         </div>
@@ -74,8 +77,25 @@
     <div id="display"></div>
 </div>
 
-
-
+<!-- Modal -->
+<div class="modal fade" id="loadJsonModal" tabindex="-1" aria-labelledby="loadJsonModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="loadJsonModalLabel">Cargar Archivo de Configuración</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Cargue aquí el archivo de configuración "config.json"</p>
+        <input class="form-control" type="file" id="jsonConfigInput" accept=" .json">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" id="btnLoadConfig" class="btn btn-primary">Cargar</button>
+      </div>
+    </div>
+  </div>
+</div>
   <script src="./assets/js/vendor/bootstrap.js"></script>
   <script src="./assets/js/vendor/sweetalert2.all.min.js"></script>
   <script src="./assets/js/vendor/excelReader.js"></script>
