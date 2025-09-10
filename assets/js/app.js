@@ -1,4 +1,3 @@
-//const input = document.getElementById('exSistema')
 const courrentYearInput = document.querySelector('#courrentYear')
 const inputs = document.getElementsByClassName('excelInput')
 const btnExecute = document.querySelector('#execute')
@@ -139,10 +138,6 @@ const readData = () =>{
     }
 }
 
-const print = (data) =>{
-    display.innerHTML += data
-}
-
 const printTable = (obj, reset, headerColor, fileName) => {
 
     let tableHeaderColor = ''
@@ -198,39 +193,4 @@ const printTable = (obj, reset, headerColor, fileName) => {
     html += `</tbody></table>`
     print(html)
 }
-
-const printError = (data) =>{
-
-    Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `Hubo uno o mas errores al ejecutar`
-    })
-
-    let html = `
-        <table class="table table-striped table-hover">
-        <thead>
-            <tr class="table-danger">
-                <th scope="col">#</th>
-                <th scope="col">Error</th>
-            </tr>
-        </thead>
-        <tbody>
-    `
-    let keys = Object.keys(data)
-
-    keys.forEach(key => {
-        let objActual = data[key]
-        index = parseInt(key) + 1
-        html += `
-            <tr>
-                <td>${index}</td>
-                <td>${objActual.msg}</td>
-            </tr>
-        `
-    })
-
-    html += `</tbody></table>`
-    print(html)
-} 
 
