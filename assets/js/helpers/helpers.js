@@ -1,3 +1,5 @@
+const courrentYearInput = document.querySelector('#courrentYear')
+
 //Function for export an html table into excel file
 function exportTableToExcel(tableID, filename = '') {
     var table = document.getElementById(tableID);

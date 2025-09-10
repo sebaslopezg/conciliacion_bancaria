@@ -1,4 +1,3 @@
-const courrentYearInput = document.querySelector('#courrentYear')
 const inputs = document.getElementsByClassName('excelInput')
 const btnExecute = document.querySelector('#execute')
 const display = document.querySelector('#display')
@@ -15,6 +14,7 @@ let bankData = null
 let bankDataRows
 let systemDataRows
 let filesProp = {}
+let savedConf = localStorage.getItem('conf')
 
 let date = new Date()
 courrentYearInput.value = date.getFullYear()
@@ -105,11 +105,20 @@ Array.from(inputs).forEach(input => {
                     input.id === 'exSistema' ? systemData = rows : '' 
                     input.id === 'exBanco' ? bankData = rows : '' 
                 })
+
+                if (!savedConf) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Atención",
+                        text: `No se encontró ninguna configuración guardada, esto podría causar errores`
+                    })
+                }
+
             }else{
                 Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: `El archivo es de extención .${fileExtention}, solo se permiten archivos de excel .xlsx o .xls`
+                    icon: "error",
+                    title: "Error",
+                    text: `El archivo es de extención .${fileExtention}, solo se permiten archivos de excel .xlsx o .xls`
                 })
                 input.value = ''
             }
@@ -122,36 +131,22 @@ const readData = () =>{
     let bankDataResponse
     let systemDataResponse
 
-    bankDataResponse = getData(bankData, {
-        rowStart: 2,
-        rowLimit:false,
-        date:{
-            column:'A',
-            readByRegex:/^\d{1,2}\/\d{1,2}$/,
-            setYear:courrentYearInput.value
-        },
-        description:{
-            column:'B'
-        },
-        value:{
-            column:'D'
-        }
-    })
+    let bankParams
+    let systemParams
 
-    systemDataResponse = getData(systemData, {
-        rowStart: 2,
-        rowLimit:false,
-        date:{
-            column:'A'
-        },
-        description:{
-            column:'B'
-        },
-        value:{
-            column:'C',
-            t_acount:'D'
-        }
-    })
+    
+    
+    if (savedConf) {    
+        const userConf = JSON.parse(savedConf)
+        bankParams = userConf.bankConf
+        systemParams = userConf.systemConf 
+    }else{
+        bankParams = defaultConf.bankConf
+        systemParams = defaultConf.systemConf
+    }
+
+    bankDataResponse = getData(bankData, bankParams)
+    systemDataResponse = getData(systemData, systemParams)
 
     if (bankDataResponse.status && systemDataResponse.status) {
         bankDataRows = bankDataResponse.data

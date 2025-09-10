@@ -1,0 +1,37 @@
+const defaultConf = {
+    bankConf:{
+        rowStart: 2,
+        rowLimit:false,
+        date:{
+            column:'A',
+            readByRegex: 0,
+            setYear:true
+        },
+        description:{
+            column:'B'
+        },
+        value:{
+            column:'D'
+        }
+    },
+    systemConf:{
+        rowStart: 2,
+        rowLimit:false,
+        date:{
+            column:'A'
+        },
+        description:{
+            column:'B'
+        },
+        value:{
+            column:'C',
+            t_acount:'D'
+        }
+    }
+}
+
+const defaultRegex = [
+    {
+        regex: /^\d{1,2}\/\d{1,2}$/
+    }
+]

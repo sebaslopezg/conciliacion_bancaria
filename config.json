@@ -1,9 +1,11 @@
 {
-    "bankFile":{
+    "bankConf":{
         "rowStart":2,
         "rowLimit":false,
         "date":{
-            "column":"A"
+            "column":"A",
+            "readByRegex": 0,
+            "setYear":true
         },
         "description":{
             "column":"B"
@@ -29,7 +31,7 @@
         ]
     },
 
-    "systemFile":{
+    "systemConf":{
         "rowStart": 2,
         "rowLimit":false,
         "date":{
@@ -39,8 +41,8 @@
             "column":"B"
         },
         "value":{
-            "credit":"C",
-            "debit":"D"
+            "column":"C",
+            "t_acount":"D"
         }
     }
 }

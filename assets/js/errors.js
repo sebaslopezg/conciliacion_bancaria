@@ -3,6 +3,7 @@ const errCode = {
     rowLimit:'No se encuentra la llave "rowStart" revise la configuración',
     date:{
         column:'No se encuentra la llave "column" en el objeto "date", revise la configuración',
+        regex:'No se encontró una Expresión regular valida en el registro de configuración del sistema, revise configuración.'
     },
     description:{
         column:'No se encuentra la llave "column" en el objeto "description", revise la configuración',

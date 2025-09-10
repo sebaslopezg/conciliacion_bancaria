@@ -59,19 +59,24 @@ const getData = (data, args) => {
                 }
 
                 if ('readByRegex' in args.date) {
+                    let regex
+                    try {
+                        regex = defaultRegex[args.date.readByRegex].regex
+                        'setYear' in args.date && args.date.setYear === true ? yearSetter = '/' + courrentYearInput.value : yearSetter = ''
 
-                    'setYear' in args.date ? yearSetter = '/' + args.date.setYear : yearSetter = ''
-
-                    if (args.date.readByRegex.test(dataRows[dateColumn])) {
-                        dateData = dataRows[dateColumn] + yearSetter
-                    }else{
-                        dataState = false
+                        if (regex.test(dataRows[dateColumn])) {
+                            dateData = dataRows[dateColumn] + yearSetter
+                        }else{
+                            dataState = false
+                        }
+                    } catch (error) {
+                        errors.push({status:false,msg:errCode.date.regex})
                     }
                 }else{
                     dateData = dataRows[dateColumn]
                 }
                 if (isNaN(valueData)) {
-                    errors.push({status:false,msg:errCode.value.notANumber})
+                    errors.push({status:false,msg:errCode.value.notANumber + ` | Intentando leer Celda: ${args.value.column}${counter+1}`})
                 }
 
                 if (dataState) {                    
