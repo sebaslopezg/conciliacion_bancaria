@@ -18,18 +18,17 @@ const getData = (data, args) => {
     let t_acountColumn
 
     if('date' in args && 'description' in args && 'value' in args){
-        'rowStart' in args ?  initialRow = (args.rowStart) - 1 : errors.push({status:true, msg:errCode.rowStart})
-        'rowLimit' in args ?  '' : errors.push({status:true, msg:errCode.rowLimit})
+        'rowStart' in args ?  initialRow = (args.rowStart) - 1 : errors.push({status:false, msg:errCode.rowStart})
+        'rowLimit' in args ?  '' : errors.push({status:false, msg:errCode.rowLimit})
 
-        'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:true, msg:errCode.date.column})
-        'column' in args.description ?  descriptionColumn = cols.indexOf(args.description.column) : errors.push({status:true, msg:errCode.description.column})
-        'column' in args.value ?  valueColumn = cols.indexOf(args.value.column) : errors.push({status:true, msg:errCode.value.column})
+        'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:false, msg:errCode.date.column})
+        'column' in args.description ?  descriptionColumn = cols.indexOf(args.description.column) : errors.push({status:false, msg:errCode.description.column})
+        'column' in args.value ?  valueColumn = cols.indexOf(args.value.column) : errors.push({status:false, msg:errCode.value.column})
         't_acount' in args.value ? t_acountColumn = cols.indexOf(args.value.t_acount) : ''
     }
 
     if (errors.length > 0) {
         response = {status:false, data:errors}
-        console.log("Han ocurrido uno o mas errores")
     }else{
         let counter = 0
         let yearSetter = ''
@@ -71,6 +70,9 @@ const getData = (data, args) => {
                 }else{
                     dateData = dataRows[dateColumn]
                 }
+                if (isNaN(valueData)) {
+                    errors.push({status:false,msg:errCode.value.notANumber})
+                }
 
                 if (dataState) {                    
                     responseData.push({
@@ -82,7 +84,11 @@ const getData = (data, args) => {
             }
             counter++
         });
-        response = {status:true,data:responseData}
+        if (errors.length > 0) {
+            response = {status:false, data:errors}
+        }else{
+            response = {status:true,data:responseData}
+        }
     }
     return response
 }

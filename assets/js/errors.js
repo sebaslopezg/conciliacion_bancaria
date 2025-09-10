@@ -8,6 +8,7 @@ const errCode = {
         column:'No se encuentra la llave "column" en el objeto "description", revise la configuración',
     },
     value:{             
-        column:'No se encuentra la llave "column" en el objeto "value", revise la configuración',               
+        column:'No se encuentra la llave "column" en el objeto "value", revise la configuración',
+        notANumber:'El número en esta celda es invalido, esto puede deberse a una incorrecta lectura de la columna, revise la configuración'               
     }
 }

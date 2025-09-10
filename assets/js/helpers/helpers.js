@@ -48,13 +48,13 @@ const printError = (data) =>{
     print(html)
 } 
 
-function getConfig(){
-
+function saveConfig(data){
+    localStorage.setItem('conf', data);
 }
 
 function loadConfig() {
   return new Promise((resolve, reject) => {
-    const fileInput = document.getElementById('jsonConfigInput');
+    const fileInput = document.getElementById('jsonConfigInput')
 
     if (fileInput.files.length === 0) {
       reject({
@@ -62,37 +62,37 @@ function loadConfig() {
         title: 'No se ha seleccionado ningún archivo',
         msg: 'Por favor seleccione un archivo primero.'
       });
-      return;
+      return
     }
 
-    const file = fileInput.files[0];
-    const reader = new FileReader();
+    const file = fileInput.files[0]
+    const reader = new FileReader()
 
     reader.onload = function(event) {
-      try {
-        const jsonString = event.target.result;
-        const data = JSON.parse(jsonString);
-        resolve({
-          status: true,
-          data: data
-        });
-      } catch (error) {
-        reject({
-          status: false,
-          title: 'Error',
-          msg: `Error al intentar convertir el formato: ${error.message}`
-        });
-      }
-    };
+        try {
+            const data = event.target.result;
+            //const data = JSON.parse(jsonString);
+            resolve({
+                status: true,
+                data: data
+            });
+        } catch (error) {
+          reject({
+              status: false,
+              title: 'Error',
+              msg: `Error al intentar convertir el formato: ${error.message}`
+          });
+        }
+    }
 
     reader.onerror = function(event) {
-      reject({
-        status: false,
-        title: 'Error al leer el archivo',
-        msg: `Error reading file: ${event.target.error.name}`
-      });
-    };
+        reject({
+            status: false,
+            title: 'Error al leer el archivo',
+            msg: `Error reading file: ${event.target.error.name}`
+        })
+    }
 
     reader.readAsText(file);
-  });
+  })
 }

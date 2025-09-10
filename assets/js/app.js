@@ -75,18 +75,13 @@ btnLoadConfig.addEventListener('click', () =>{
     const modalInstance = bootstrap.Modal.getInstance(jsonfileModal)
     loadConfig()
     .then(response => {
-        console.log(response)
-        
-        if (response.status) {
-
-            modalInstance.hide()
-            console.log(response)
-            Swal.fire({
-                icon: "success",
-                title: "Archivo Cargado",
-                text: `Se ha leido correctamente el archivo`
-            })
-        }
+        modalInstance.hide()
+        Swal.fire({
+            icon: "success",
+            title: "Archivo Cargado",
+            text: `Se ha leido correctamente el archivo`
+        })
+        saveConfig(response.data)
     })
     .catch(error =>{
         Swal.fire({
@@ -99,7 +94,6 @@ btnLoadConfig.addEventListener('click', () =>{
 
 Array.from(inputs).forEach(input => {
     input.addEventListener('change', () => {
-
         if(input.files.length > 0){
             let fileName = input.files[0].name;
             let fileExtention = fileName.split('.')
