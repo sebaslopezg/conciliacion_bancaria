@@ -105,7 +105,7 @@
 
 <!-- Modal Generate Conf -->
 <div class="modal fade" id="generateJsonModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="generateJsonModalLabel">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="generateJsonModalLabel">Generar Archivo de Configuración .json</h1>
@@ -117,40 +117,60 @@
 
         <div class="row mb-2">
           <button class="btn btn-info mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#systemForm">
-            Configuracion para Excel del Systema
+            Configuracion para Excel del Sistema
           </button>
   
           <div class="collapse" id="systemForm">
             <div class="card card-body">
 
               <div class="mb-3">
-                <label for="SystemRowStart" class="form-label">Fila inicial</label>
-                <input type="text" class="form-control" id="SystemRowStart" aria-describedby="SystemRowStartHelp">
-                <div id="SystemRowStartHelp" class="form-text">Indica desde que fila se iniciará la lectura del archivo</div>
+                <label for="systemRowStart" class="form-label">Fila inicial</label>
+                <input type="text" class="form-control" id="systemRowStart" aria-describedby="systemRowStartHelp">
+                <div id="systemRowStartHelp" class="form-text">Indica desde que fila se iniciará la lectura del archivo</div>
               </div>
 
               <div class="mb-3">
-                <label for="SystemRowLimit" class="form-label">Fila limite</label>
-                <input type="text" class="form-control" id="SystemRowLimit" aria-describedby="SystemRowLimitHelp">
-                <div id="SystemRowLimitHelp" class="form-text">Indica hasta que fila se hará la lectura del archivo</div>
+                <label for="systemRowLimit" class="form-label">Fila limite</label>
+                <input type="text" class="form-control" id="systemRowLimit" aria-describedby="systemRowLimitHelp">
+                <div id="systemRowLimitHelp" class="form-text">Indica hasta que fila se hará la lectura del archivo</div>
               </div>
 
               <div class="mb-3">
-                <label for="SystemDateColumn" class="form-label">Columna de la fecha</label>
-                <input type="text" class="form-control" id="SystemDateColumn" aria-describedby="SystemDateColumnHelp">
-                <div id="SystemDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
+                <label for="systemDateColumn" class="form-label">Columna de la fecha</label>
+                <input type="text" class="form-control" id="systemDateColumn" aria-describedby="systemDateColumnHelp">
+                <div id="systemDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
               </div>
 
               <div class="mb-3">
-                <label for="SystemDescriptionColumn" class="form-label">Columna de la Descripción</label>
-                <input type="text" class="form-control" id="SystemDescriptionColumn" aria-describedby="SystemDescriptionColumnHelp">
-                <div id="SystemDescriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
+                <label for="systemDescriptionColumn" class="form-label">Columna de la Descripción</label>
+                <input type="text" class="form-control" id="systemDescriptionColumn" aria-describedby="systemDescriptionColumnHelp">
+                <div id="systemDescriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
               </div>
 
               <div class="mb-3">
-                <label for="SystemValueColumn" class="form-label">Columna del Valor</label>
-                <input type="text" class="form-control" id="SystemValueColumn" aria-describedby="SystemValueColumnHelp">
-                <div id="SystemValueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+                <input class="form-check-input" type="checkbox" value="" id="systemValueTAcount">
+                <label class="form-check-label" for="systemValueTAcount">
+                  Cuenta T
+                </label>
+                <div id="systemValueTAcountHelp" class="form-text">Selecciona para indicar que el archivo contiene una cuenta de tipo T (Credito/Debito)</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="systemValueColumn" class="form-label">Columna del Valor</label>
+                <input type="text" class="form-control" id="systemValueColumn" aria-describedby="systemValueColumnHelp">
+                <div id="systemValueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="systemValueCreditColumn" class="form-label">Columna del Credito</label>
+                <input type="text" class="form-control" id="systemValueCreditColumn" aria-describedby="systemValueCreditColumnHelp" disabled>
+                <div id="systemValueCreditColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro en Cuenta T</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="systemValueDebitColumn" class="form-label">Columna del Debito</label>
+                <input type="text" class="form-control" id="systemValueDebitColumn" aria-describedby="systemValueDebitColumnHelp" disabled>
+                <div id="systemValueDebitColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro en Cuenta T</div>
               </div>
 
             </div>
@@ -234,6 +254,7 @@
   <script src="./assets/js/errors.js"></script>
   <script src="./assets/js/getData.js"></script>
   <script src="./assets/js/setTransactions.js"></script>
+  <script src="./assets/js/setConf.js"></script>
   <script src="./assets/js/app.js"></script>
 </body>
 </html>

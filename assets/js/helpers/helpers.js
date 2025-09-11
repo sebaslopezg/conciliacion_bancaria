@@ -108,7 +108,7 @@ function loadConfig(){
 
 function setConfigInput(id, configType){
 
-    if (configType = 'regex') {
+    if (configType == 'regex') {
         const input = document.getElementById(id)
         if (input) {
             input.innerHTML = `<option value="false" selected>No</option> `

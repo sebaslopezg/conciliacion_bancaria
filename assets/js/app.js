@@ -6,15 +6,13 @@ const btnShowBankTable = document.querySelector('#btnShowBankTable')
 const btnShowAll = document.querySelector('#btnShowAll')
 const exSistema = document.querySelector('#exSistema')
 const exBanco = document.querySelector('#exBanco')
-const btnLoadConfig = document.querySelector('#btnLoadConfig')
+
 
 let systemData = null
 let bankData = null
 
 let bankDataRows
 let systemDataRows
-let filesProp = {}
-let savedConf = localStorage.getItem('conf')
 
 let date = new Date()
 courrentYearInput.value = date.getFullYear()
@@ -25,11 +23,9 @@ const enableButtons = () =>{
     btnShowAll.disabled = false
 }
 
-setConfigInput('bankRegex', 'regex')
-
 btnExecute.addEventListener('click', () =>{
     if (systemData === null || bankData === null) {
-            Swal.fire({
+        Swal.fire({
             icon: "error",
             title: "Error",
             text: `Debe cargar los dos archivos de excel`
@@ -68,30 +64,9 @@ btnShowBankTable.addEventListener('click', () =>{
     }
 
 })
+
 btnShowAll.addEventListener('click', () =>{
 
-})
-
-btnLoadConfig.addEventListener('click', () =>{
-    const jsonfileModal = document.getElementById('loadJsonModal')
-    const modalInstance = bootstrap.Modal.getInstance(jsonfileModal)
-    loadConfig()
-    .then(response => {
-        modalInstance.hide()
-        Swal.fire({
-            icon: "success",
-            title: "Archivo Cargado",
-            text: `Se ha leido correctamente el archivo`
-        })
-        saveConfig(response.data)
-    })
-    .catch(error =>{
-        Swal.fire({
-            icon: "error",
-            title: error.title,
-            text: error.msg
-        })
-    })
 })
 
 Array.from(inputs).forEach(input => {
@@ -151,6 +126,13 @@ const readData = () =>{
     if (bankDataResponse.status && systemDataResponse.status) {
         bankDataRows = bankDataResponse.data
         systemDataRows = systemDataResponse.data
+
+        Swal.fire({
+            icon: "success",
+            title: "Datos Procesados",
+            text: `Los datos han sido leídos correctamente.`
+        })
+
     }else{
         !bankDataResponse.status ? printError(bankDataResponse.data) : ''
         !systemDataResponse.status ? printError(systemDataResponse.data) : ''
@@ -182,8 +164,6 @@ const printTable = (obj, reset, headerColor, fileName) => {
                         <input type="text" class="form-control" placeholder="Nombre del archivo" id="excelExportFileName">
                     </div>
                 </div>
-
-
 
             </div>
         </div>
