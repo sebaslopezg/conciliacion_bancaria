@@ -173,4 +173,4 @@ const object2 = [
 ]
 
 const result = setTransactions(object1, object2)
-console.log(result)
+//console.log(result)

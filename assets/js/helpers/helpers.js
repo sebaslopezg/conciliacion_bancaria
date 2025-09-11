@@ -101,7 +101,6 @@ function loadConfig(){
             msg: `Error reading file: ${event.target.error.name}`
         })
     }
-
     reader.readAsText(file);
   })
 }
