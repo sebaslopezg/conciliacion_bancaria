@@ -7,19 +7,19 @@
     <link rel="icon" type="image/x-icon" href="./assets/favicon/AR-favicon.png">
     <link rel="stylesheet" href="./assets/css/bootstrap.css">
     <link rel="stylesheet" href="./assets/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
 <body>
 
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
-
     <div class="col-6">
-      <button id="execute" class="btn btn-primary">Cargar Datos</button>
+      <button id="execute" class="btn btn-primary"><i class="bi bi-file-earmark-break-fill"></i> Procesar</button>
       <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loadJsonModal">
-        Cargar configuración
+        <i class="bi bi-upload"></i> Cargar configuración
       </button>
       <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#generateJsonModal">
-        Generar configuración
+        <i class="bi bi-gear-fill"></i> Configurar
       </button>
       <button type="button" class="btn btn-danger" onclick="localStorage.clear()">
         Limpiar Datos
@@ -37,10 +37,9 @@
 <div class="container">
     <div class="row align-items-center">
         <div class="col"></div>
-    
         <div class="col-6">
             <div class="card text-bg-info">
-              <div class="card-header">Inserta aquí el excel del sistema</div>
+              <div class="card-header"><i class="bi bi-window-stack"></i> Inserta aquí el excel del sistema</div>
               <div class="card-body">
                 <div class="mb-3">
                     <input class="form-control excelInput" type="file" id="exSistema" accept=".xls, .xlsx">
@@ -58,7 +57,7 @@
     
         <div class="col-6">
             <div class="card text-bg-warning">
-              <div class="card-header">Inserta aquí el excel del Banco</div>
+              <div class="card-header"><i class="bi bi-bank2"></i> Inserta aquí el excel del Banco</div>
               <div class="card-body">
                 <div class="mb-3">
                     <input class="form-control excelInput" type="file" id="exBanco" accept=".xls, .xlsx">
@@ -108,12 +107,17 @@
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="generateJsonModalLabel">Generar Archivo de Configuración .json</h1>
+        <h1 class="modal-title fs-5" id="generateJsonModalLabel">Configurar</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
-        <p>Aquí se puede generar el archivo de configuración .json necesario para la correcta lectura de los archivos</p>
+        <p>Configuración general de lectura de archivos</p>
+        <p>
+          <button type="button" class="btn btn-secondary">
+            <i class="bi bi-download"></i> Descargar archivo de configuración
+          </button>
+        </p>
 
         <div class="row mb-2">
           <button class="btn btn-info mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#systemForm">
@@ -227,7 +231,7 @@
                 <label for="bankSetYear" class="form-label">Concatenar Año</label>
                 <select class="form-select" id="bankSetYear" aria-describedby="bankSetYear">
                   <option value="0" selected>No</option>              
-                  <option value="1" selected>Si</option>              
+                  <option value="1">Si</option>              
                 </select>
                 <div id="bankSetYearHelp" class="form-text">Se selecciona cuando la columna de fecha no trae el año incluido</div>
               </div>
@@ -239,7 +243,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" id="btnGenConfig" class="btn btn-primary">Generar</button>
+        <button type="button" id="btnGenConfig" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>

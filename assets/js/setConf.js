@@ -58,7 +58,63 @@ btnLoadConfig.addEventListener('click', () =>{
     })
 })
 
-const generateConfig = () =>{
+/// PENDIENTE TERMINAR ESTA FUNCION
+const getFormConfig = () =>{
+    let response = {}
+    let bankRowLimitValue
+    let bankDateConf
+
+    if (!bankRowStart.value) {
+        return {status:false,msg:'La fila inicial es obligatoria'}
+    }
+
+    bankRowLimit.value ? bankRowLimitValue = bankRowLimit.value : bankRowLimitValue = false
+
+    if (bankRegex.value === 'false') {
+        //PENDIENTE
+    }else{
+//PENDIENTE
+    }
+
+
+    let configObject = {
+
+        bankConf:{
+            rowStart:bankRowStart.value,
+            rowLimit:bankRowLimitValue,
+            date:{ //AQUI VAMOS
+                column:bankDateColumn.value,
+                readByRegex: bankRegex.value,
+                setYear:bankSetYear.value
+            },
+            description:{
+                column:bankDescriptionColumn.value
+            },
+            value:{
+                column:bankValueColumn.value
+            }
+        },
+        systemConf:{
+            rowStart: systemRowStart.value,
+            rowLimit:systemRowLimit.value,
+            date:{
+                column:systemDateColumn.value
+            },
+            description:{
+                column:systemDescriptionColumn.value
+            },
+            value:{
+                t_acount:{
+                    credit:systemValueCreditColumn.value,
+                    debit:systemValueDebitColumn.value
+                }
+            }
+        }
+    }
+
+//Estos values se usaran mas tarde cuando se llegue la configuracion.
+//systemValueTAcount.value
+//systemValueColumn.value
 
 }
 

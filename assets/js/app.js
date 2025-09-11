@@ -160,7 +160,9 @@ const printTable = (obj, reset, headerColor, fileName) => {
 
                 <div class="col-3">
                     <div class="input-group mb-3">
-                        <button class="btn btn-success" type="button"  onclick="exportTableToExcel('table_${uuid}', 'excelExportFileName')">Exportar a Excel</button>
+                        <button class="btn btn-success" type="button"  onclick="exportTableToExcel('table_${uuid}', 'excelExportFileName')">
+                        <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+                        </button>
                         <input type="text" class="form-control" placeholder="Nombre del archivo" id="excelExportFileName">
                     </div>
                 </div>
