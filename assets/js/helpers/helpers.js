@@ -5,7 +5,9 @@ function exportTableToExcel(tableID, idFileName = '') {
     let fileName = 'excel_exportado.xlsx'
     if (idFileName) {
         let fileNameInput = document.querySelector(`#${idFileName}`)
-        fileNameInput ? fileName = fileNameInput.value + '.xlsx' : ''
+        if (fileNameInput) {
+            fileNameInput.value ? fileName = fileNameInput.value + '.xlsx' : fileName = 'excel_exportado.xlsx'
+        }
     }
 
     var table = document.getElementById(tableID)
@@ -60,7 +62,7 @@ function saveConfig(data){
     localStorage.setItem('conf', data);
 }
 
-function loadConfig() {
+function loadConfig(){
   return new Promise((resolve, reject) => {
     const fileInput = document.getElementById('jsonConfigInput')
 
@@ -79,7 +81,6 @@ function loadConfig() {
     reader.onload = function(event) {
         try {
             const data = event.target.result;
-            //const data = JSON.parse(jsonString);
             resolve({
                 status: true,
                 data: data

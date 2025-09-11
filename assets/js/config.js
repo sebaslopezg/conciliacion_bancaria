@@ -24,8 +24,10 @@ const defaultConf = {
             column:'B'
         },
         value:{
-            column:'C',
-            t_acount:'D'
+            t_acount:{
+                credit:'C',
+                debit:'D'
+            }
         }
     }
 }

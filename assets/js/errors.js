@@ -10,6 +10,10 @@ const errCode = {
     },
     value:{             
         column:'No se encuentra la llave "column" en el objeto "value", revise la configuración',
-        notANumber:'El número en esta celda es invalido, esto puede deberse a una incorrecta lectura de la columna, revise la configuración'               
+        notANumber:'El número en esta celda es invalido, esto puede deberse a una incorrecta lectura de la columna, revise la configuración',
+        t_acount:{
+            credit:'No se encuentra la llave "credit" en el objeto "value.t_acount", revise la configuración',
+            debit:'No se encuentra la llave "debit" en el objeto "value.t_acount", revise la configuración',
+        }              
     }
 }

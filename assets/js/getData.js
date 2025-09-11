@@ -23,8 +23,13 @@ const getData = (data, args) => {
 
         'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:false, msg:errCode.date.column})
         'column' in args.description ?  descriptionColumn = cols.indexOf(args.description.column) : errors.push({status:false, msg:errCode.description.column})
-        'column' in args.value ?  valueColumn = cols.indexOf(args.value.column) : errors.push({status:false, msg:errCode.value.column})
-        't_acount' in args.value ? t_acountColumn = cols.indexOf(args.value.t_acount) : ''
+
+        if ('t_acount' in args.value) {
+            'credit' in args.value.t_acount ? valueColumn = cols.indexOf(args.value.t_acount.credit) : errors.push({status:false, msg:errCode.value.t_acount.credit})
+            'debit' in args.value.t_acount ? t_acountColumn = cols.indexOf(args.value.t_acount.debit) : errors.push({status:false, msg:errCode.value.t_acount.debit})
+        }else{
+            'column' in args.value ?  valueColumn = cols.indexOf(args.value.column) : errors.push({status:false, msg:errCode.value.column})
+        }
     }
 
     if (errors.length > 0) {
