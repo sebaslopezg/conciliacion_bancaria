@@ -123,52 +123,35 @@
           <div class="collapse" id="systemForm">
             <div class="card card-body">
 
-            <div class="mb-3">
-              <label for="rowStart" class="form-label">Fila inicial</label>
-              <input type="text" class="form-control" id="rowStart" aria-describedby="rowStartHelp">
-              <div id="rowStartHelp" class="form-text">descripcion del form</div>
-            </div>
+              <div class="mb-3">
+                <label for="rowStart" class="form-label">Fila inicial</label>
+                <input type="text" class="form-control" id="rowStart" aria-describedby="rowStartHelp">
+                <div id="rowStartHelp" class="form-text">Indica desde que fila se iniciará la lectura del archivo</div>
+              </div>
 
-            <div class="mb-3">
-              <label for="rowLimit" class="form-label">Fila limite</label>
-              <input type="text" class="form-control" id="rowLimit" aria-describedby="rowLimitHelp">
-              <div id="rowLimitHelp" class="form-text">descripcion del form</div>
-            </div>
+              <div class="mb-3">
+                <label for="rowLimit" class="form-label">Fila limite</label>
+                <input type="text" class="form-control" id="rowLimit" aria-describedby="rowLimitHelp">
+                <div id="rowLimitHelp" class="form-text">Indica hasta que fila se hará la lectura del archivo</div>
+              </div>
 
-            <div class="mb-3">
-              <label for="dateColumn" class="form-label">Columna de la fecha</label>
-              <input type="text" class="form-control" id="dateColumn" aria-describedby="dateColumnHelp">
-              <div id="dateColumnHelp" class="form-text">descripcion del form</div>
-            </div>
+              <div class="mb-3">
+                <label for="dateColumn" class="form-label">Columna de la fecha</label>
+                <input type="text" class="form-control" id="dateColumn" aria-describedby="dateColumnHelp">
+                <div id="dateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
+              </div>
 
-            <div class="mb-3">
-              <label for="descriptionColumn" class="form-label">Columna de la Descripción</label>
-              <input type="text" class="form-control" id="descriptionColumn" aria-describedby="descriptionColumnHelp">
-              <div id="descriptionColumnHelp" class="form-text">descripcion del form</div>
-            </div>
+              <div class="mb-3">
+                <label for="descriptionColumn" class="form-label">Columna de la Descripción</label>
+                <input type="text" class="form-control" id="descriptionColumn" aria-describedby="descriptionColumnHelp">
+                <div id="descriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
+              </div>
 
-            <div class="mb-3">
-              <label for="valueColumn" class="form-label">Columna del Valor</label>
-              <input type="text" class="form-control" id="valueColumn" aria-describedby="valueColumnHelp">
-              <div id="valueColumnHelp" class="form-text">descripcion del form</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="regex" class="form-label">Condicional de lectura</label>
-              <select class="form-select" id="regex" aria-describedby="regexHelp">
-                <option value="false" selected>No</option>              
-              </select>
-              <div id="regexHelp" class="form-text">descripcion del form</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="setYear" class="form-label">Concatenar Año</label>
-              <select class="form-select" id="setYear" aria-describedby="regexHelp">
-                <option value="0" selected>No</option>              
-                <option value="1" selected>Si</option>              
-              </select>
-              <div id="setYearHelp" class="form-text">descripcion del form</div>
-            </div>
+              <div class="mb-3">
+                <label for="valueColumn" class="form-label">Columna del Valor</label>
+                <input type="text" class="form-control" id="valueColumn" aria-describedby="valueColumnHelp">
+                <div id="valueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+              </div>
 
             </div>
           </div>
@@ -181,12 +164,57 @@
     
           <div class="collapse" id="bankForm">
             <div class="card card-body">
-              bank
+
+              <div class="mb-3">
+                <label for="bankRowStart" class="form-label">Fila inicial</label>
+                <input type="text" class="form-control" id="bankRowStart" aria-describedby="bankRowStartHelp">
+                <div id="bankRowStartHelp" class="form-text">Indica desde que fila se iniciará la lectura del archivo</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="bankRowLimit" class="form-label">Fila limite</label>
+                <input type="text" class="form-control" id="bankRowLimit" aria-describedby="bankRowLimitHelp">
+                <div id="bankRowLimitHelp" class="form-text">Indica hasta que fila se hará la lectura del archivo</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="bankDateColumn" class="form-label">Columna de la fecha</label>
+                <input type="text" class="form-control" id="bankDateColumn" aria-describedby="bankDateColumnHelp">
+                <div id="bankDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="bankDescriptionColumn" class="form-label">Columna de la Descripción</label>
+                <input type="text" class="form-control" id="bankDescriptionColumn" aria-describedby="bankDescriptionColumnHelp">
+                <div id="bankDescriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="valueColumn" class="form-label">Columna del Valor</label>
+                <input type="text" class="form-control" id="bankValueColumn" aria-describedby="bankValueColumnHelp">
+                <div id="bankValueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="bankRegex" class="form-label">Condicional de lectura</label>
+                <select class="form-select" id="bankRegex" aria-describedby="bankRegexHelp">
+                  <option value="false" selected>No</option>              
+                </select>
+                <div id="bankRegexHelp" class="form-text">Selecciona la regla que permite descartar registros que no cumplan con el formato adecuado</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="bankSetYear" class="form-label">Concatenar Año</label>
+                <select class="form-select" id="bankSetYear" aria-describedby="bankSetYear">
+                  <option value="0" selected>No</option>              
+                  <option value="1" selected>Si</option>              
+                </select>
+                <div id="bankSetYearHelp" class="form-text">Se selecciona cuando la columna de fecha no trae el año incluido</div>
+              </div>
+
             </div>
           </div>
         </div>
-
-
       </div>
 
       <div class="modal-footer">

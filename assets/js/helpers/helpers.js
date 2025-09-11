@@ -1,12 +1,18 @@
 const courrentYearInput = document.querySelector('#courrentYear')
 
 //Function for export an html table into excel file
-function exportTableToExcel(tableID, filename = '') {
-    var table = document.getElementById(tableID);
-    var ws = XLSX.utils.table_to_sheet(table);
+function exportTableToExcel(tableID, idFileName = '') {
+    let fileName = 'excel_exportado.xlsx'
+    if (idFileName) {
+        let fileNameInput = document.querySelector(`#${idFileName}`)
+        fileNameInput ? fileName = fileNameInput.value + '.xlsx' : ''
+    }
+
+    var table = document.getElementById(tableID)
+    var ws = XLSX.utils.table_to_sheet(table)
     var wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "hoja 1");
-    XLSX.writeFile(wb, filename);
+    XLSX.utils.book_append_sheet(wb, ws, "hoja 1")
+    XLSX.writeFile(wb, fileName)
 }
 
 //function for printing into the display tag

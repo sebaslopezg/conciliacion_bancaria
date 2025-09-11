@@ -25,7 +25,7 @@ const enableButtons = () =>{
     btnShowAll.disabled = false
 }
 
-setConfigInput('regex', 'regex')
+setConfigInput('bankRegex', 'regex')
 
 btnExecute.addEventListener('click', () =>{
     if (systemData === null || bankData === null) {
@@ -136,8 +136,6 @@ const readData = () =>{
     let bankParams
     let systemParams
 
-    
-    
     if (savedConf) {    
         const userConf = JSON.parse(savedConf)
         bankParams = userConf.bankConf
@@ -177,7 +175,16 @@ const printTable = (obj, reset, headerColor, fileName) => {
                 ${fileName}
             </div>
             <div class="card-body">
-                <button class="btn btn-success" onclick="exportTableToExcel('table_${uuid}', 'excel_exportado.xlsx')">Exportar Excel</button>
+
+                <div class="col-3">
+                    <div class="input-group mb-3">
+                        <button class="btn btn-success" type="button"  onclick="exportTableToExcel('table_${uuid}', 'excelExportFileName')">Exportar a Excel</button>
+                        <input type="text" class="form-control" placeholder="Nombre del archivo" id="excelExportFileName">
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
         <br>
