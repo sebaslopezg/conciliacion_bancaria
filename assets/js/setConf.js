@@ -201,7 +201,6 @@ function loadCurrentConf(){
     if (savedConf) {
         //system conf getters
         currentConf = JSON.parse(savedConf)
-        console.log(currentConf)
 
         if ('systemConf' in currentConf) {
             'rowStart' in currentConf.systemConf ? setInput('text', systemRowStart, currentConf.systemConf.rowStart) : ''

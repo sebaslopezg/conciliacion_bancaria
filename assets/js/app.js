@@ -3,16 +3,18 @@ const btnExecute = document.querySelector('#execute')
 const display = document.querySelector('#display')
 const btnShowSystemTable = document.querySelector('#btnShowSystemTable')
 const btnShowBankTable = document.querySelector('#btnShowBankTable')
-const btnShowAll = document.querySelector('#btnShowAll')
+const btnShowFind = document.querySelector('#btnShowFind')
+const btnShowNotFind = document.querySelector('#btnShowNotFind')
 const exSistema = document.querySelector('#exSistema')
 const exBanco = document.querySelector('#exBanco')
-
 
 let systemData = null
 let bankData = null
 
 let bankDataRows
 let systemDataRows
+let resultDataRows
+
 
 let date = new Date()
 courrentYearInput.value = date.getFullYear()
@@ -20,7 +22,8 @@ courrentYearInput.value = date.getFullYear()
 const enableButtons = () =>{
     btnShowSystemTable.disabled = false
     btnShowBankTable.disabled = false
-    btnShowAll.disabled = false
+    btnShowFind.disabled = false
+    btnShowNotFind.disabled = false
 }
 
 btnExecute.addEventListener('click', () =>{
@@ -40,7 +43,6 @@ btnShowSystemTable.addEventListener('click', () =>{
     if (systemDataRows.length > 0) {
         const fname = exSistema.files[0].name
         printTable(systemDataRows, true, 'info', fname)
-        console.log(systemDataRows)
     }else{
         Swal.fire({
             icon: "error",
@@ -54,7 +56,6 @@ btnShowBankTable.addEventListener('click', () =>{
     if (bankDataRows.length > 0) {
         const fname = exBanco.files[0].name
         printTable(bankDataRows, true, 'warning',fname)
-        console.log(bankDataRows)
     }else{
         Swal.fire({
             icon: "error",
@@ -62,11 +63,15 @@ btnShowBankTable.addEventListener('click', () =>{
             text: `No se encontraron datos validos en el archivo`
         })
     }
-
 })
 
-btnShowAll.addEventListener('click', () =>{
+btnShowFind.addEventListener('click', () =>{
 
+    printTable(resultDataRows.coincide, true, 'primary','Resultados que coinciden')
+})
+
+btnShowNotFind.addEventListener('click', () =>{
+    printTable(resultDataRows.noCoincide, true, 'primary','Resultados que no coinciden')
 })
 
 Array.from(inputs).forEach(input => {
@@ -123,9 +128,12 @@ const readData = () =>{
     bankDataResponse = getData(bankData, bankParams)
     systemDataResponse = getData(systemData, systemParams)
 
+
     if (bankDataResponse.status && systemDataResponse.status) {
         bankDataRows = bankDataResponse.data
         systemDataRows = systemDataResponse.data
+
+        resultDataRows = setTransactions(systemDataRows,bankDataRows)
 
         Swal.fire({
             icon: "success",
@@ -139,7 +147,7 @@ const readData = () =>{
     }
 }
 
-const printTable = (obj, reset, headerColor, fileName) => {
+const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido') => {
 
     let tableHeaderColor = ''
 
@@ -149,6 +157,7 @@ const printTable = (obj, reset, headerColor, fileName) => {
 
     headerColor ? tableHeaderColor = `class="table-${headerColor}"` : tableHeaderColor = ''
     const uuid = crypto.randomUUID()
+    let keys = Object.keys(obj)
 
     let html = `
 
@@ -157,6 +166,8 @@ const printTable = (obj, reset, headerColor, fileName) => {
                 ${fileName}
             </div>
             <div class="card-body">
+            
+            <div class="row">
 
                 <div class="col-3">
                     <div class="input-group mb-3">
@@ -166,6 +177,12 @@ const printTable = (obj, reset, headerColor, fileName) => {
                         <input type="text" class="form-control" placeholder="Nombre del archivo" id="excelExportFileName">
                     </div>
                 </div>
+
+                <div class="col-3">
+                    <h6>Número de Registros: <span class="badge text-bg-secondary">${keys.length}</span></h6>
+                </div>
+
+            </div>
 
             </div>
         </div>
@@ -181,8 +198,6 @@ const printTable = (obj, reset, headerColor, fileName) => {
         </thead>
         <tbody>
     `
-
-    let keys = Object.keys(obj)
 
     keys.forEach(key => {
         let objActual = obj[key]
@@ -202,5 +217,13 @@ const printTable = (obj, reset, headerColor, fileName) => {
 
     html += `</tbody></table>`
     print(html)
+}
+
+
+const printResult = () => {
+    //resultDataRows
+
+    //printTable = (obj, reset, headerColor, fileName)
+
 }
 
