@@ -88,6 +88,29 @@ Array.from(inputs).forEach(input => {
                     input.id === 'exBanco' ? bankData = rows : '' 
                 })
 
+
+
+
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // Process the workbook data
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+
+                console.log(worksheet); 
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+
+
+
+
                 if (!savedConf) {
                     Swal.fire({
                         icon: "warning",
