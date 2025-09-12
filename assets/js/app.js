@@ -83,32 +83,23 @@ Array.from(inputs).forEach(input => {
         
             if (fileExtention === 'xlsx' || fileExtention === 'xls') {
 
-                readXlsxFile(input.files[0]).then((rows) => {
+/*                 readXlsxFile(input.files[0]).then((rows) => {
                     input.id === 'exSistema' ? systemData = rows : '' 
                     input.id === 'exBanco' ? bankData = rows : '' 
+                }) */
+
+                readExcel(input.files[0])
+                .then(rows => {
+                    input.id === 'exSistema' ? systemData = rows : '' 
+                    input.id === 'exBanco' ? bankData = rows : ''
                 })
-
-
-
-
-        const file = input.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-
-                // Process the workbook data
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-
-                console.log(worksheet); 
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-
-
+                .catch(error => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al intentar leer el archivo",
+                        text: `El lector ha presentado uno o varios errores: ${error}`
+                    })
+                })
 
 
                 if (!savedConf) {
