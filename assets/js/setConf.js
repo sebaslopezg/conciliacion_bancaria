@@ -1,6 +1,7 @@
 let savedConf = localStorage.getItem('conf')
 const btnLoadConfig = document.querySelector('#btnLoadConfig')
 const tacountCkeckBox = document.querySelector('#systemValueTAcount')
+const btnSaveConfig = document.querySelector('#btnSaveConfig')
 
 //System consts
 const systemRowStart = document.querySelector('#systemRowStart')
@@ -58,35 +59,121 @@ btnLoadConfig.addEventListener('click', () =>{
     })
 })
 
-/// PENDIENTE TERMINAR ESTA FUNCION
+//downloadJsonFile
+
+btnDownLoadJsonFile.addEventListener('click', () =>{
+    const txtJsonFileName = document.querySelector('#txtJsonFileName')
+    const jsonData = JSON.parse(savedConf)
+    downloadJsonFile(jsonData, txtJsonFileName.value)
+})
+
+btnSaveConfig.addEventListener('click', () =>{
+    const getConfigResponse = getFormConfig()
+    if(getConfigResponse.status){
+        try {
+            const confString = JSON.stringify(getConfigResponse.data)
+            saveConfig(confString)  
+            Swal.fire({
+                icon: "success",
+                title: "Guardado",
+                text: "Configuración guardada correctamente. Actualice el navegador para aplicar los cambios correctamente."
+            })
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error al intentar almacenar configuración",
+                text: error
+            })
+        }
+    }else{
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: getConfigResponse.msg
+        })
+    }
+})
+
+/// pendiente tramitar errores en cada parte | revisar todo
 const getFormConfig = () =>{
-    let response = {}
     let bankRowLimitValue
     let bankDateConf
+    let systemValueConf
+    let systemRowLimitValue
 
     if (!bankRowStart.value) {
-        return {status:false,msg:'La fila inicial es obligatoria'}
+        return {status:false,msg:'La fila inicial en configuracion - Banco, es obligatoria'}
     }
 
-    bankRowLimit.value ? bankRowLimitValue = bankRowLimit.value : bankRowLimitValue = false
+    bankRowLimit.value ? bankRowLimitValue = parseInt(bankRowLimit.value) : bankRowLimitValue = false
 
     if (bankRegex.value === 'false') {
-        //PENDIENTE
+        bankDateConf = {
+            column:bankDateColumn.value
+        }
     }else{
-//PENDIENTE
+        let bankSetYearBolean
+        bankSetYear.value === '1' ? bankSetYearBolean = true : bankSetYearBolean = false
+        bankDateConf = {
+            column:bankDateColumn.value,
+            readByRegex: parseInt(bankRegex.value),
+            setYear:bankSetYearBolean
+        }
     }
 
+    if (!bankDescriptionColumn.value) {
+        return {status:false,msg:'La descripción en configuracion - Banco, es obligatoria'}
+    }
+
+    if (!bankValueColumn.value) {
+        return {status:false,msg:'El la columna valor en configuracion - Banco, es obligatorio'}
+    }
+
+    if (!systemRowStart.value) {
+        return {status:false,msg:'La fila inicial en configuracion - Sistema, es obligatoria'}
+    }
+
+    systemRowLimit.value ? systemRowLimitValue = parseInt(systemRowLimit.value) : systemRowLimitValue = false
+
+    if (!systemDateColumn.value) {
+        return {status:false,msg:'La columna fecha en configuracion - Sistema, es obligatoria'}
+    }
+
+    if (!systemDescriptionColumn.value) {
+        return {status:false,msg:'La columna descripcion en configuracion - Sistema, es obligatoria'}
+    }
+
+    if (systemValueTAcount.checked) {
+
+        if (!systemValueCreditColumn.value) {
+            return {status:false,msg:'La columna credito en configuracion - Sistema, es obligatoria'}
+        }
+        if (!systemValueDebitColumn.value) {
+            return {status:false,msg:'La columna debito en configuracion - Sistema, es obligatoria'}
+        }
+
+        systemValueConf = {
+            t_acount:{
+                credit:systemValueCreditColumn.value,
+                debit:systemValueDebitColumn.value
+            }
+        }
+
+    }else{
+        if (!systemValueColumn.value) {
+            return {status:false,msg:'La columna valor en configuracion - Sistema, es obligatoria'}
+        }
+        systemValueConf = {
+            column:systemValueColumn.value
+        }
+    }
 
     let configObject = {
 
         bankConf:{
-            rowStart:bankRowStart.value,
+            rowStart:parseInt(bankRowStart.value),
             rowLimit:bankRowLimitValue,
-            date:{ //AQUI VAMOS
-                column:bankDateColumn.value,
-                readByRegex: bankRegex.value,
-                setYear:bankSetYear.value
-            },
+            date:bankDateConf,
             description:{
                 column:bankDescriptionColumn.value
             },
@@ -95,27 +182,19 @@ const getFormConfig = () =>{
             }
         },
         systemConf:{
-            rowStart: systemRowStart.value,
-            rowLimit:systemRowLimit.value,
+            rowStart: parseInt(systemRowStart.value),
+            rowLimit:systemRowLimitValue,
             date:{
                 column:systemDateColumn.value
             },
             description:{
                 column:systemDescriptionColumn.value
             },
-            value:{
-                t_acount:{
-                    credit:systemValueCreditColumn.value,
-                    debit:systemValueDebitColumn.value
-                }
-            }
+            value:systemValueConf
         }
     }
 
-//Estos values se usaran mas tarde cuando se llegue la configuracion.
-//systemValueTAcount.value
-//systemValueColumn.value
-
+    return {status:true, data: configObject}
 }
 
 function loadCurrentConf(){

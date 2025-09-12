@@ -117,3 +117,42 @@ function setConfigInput(id, configType){
         }
     }
 }
+
+function downloadJsonFile(jsonData, fileName = 'config.json'){
+    const jsonString = JSON.stringify(jsonData, null, 2)
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function deleteConfData(){
+
+    Swal.fire({
+        icon: "warning",
+        title: "¿Seguro que desea eliminar todos los datos de configuración?",
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: `No`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            try {
+                localStorage.removeItem('conf')
+                Swal.fire({
+                    icon: "success",
+                    title: "Configuración eliminada",
+                    text: `Los datos de configuración se han eliminado correctamente, debe actualizar el navegador para aplicar los cambios correctamente.`
+                })
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: `Error al intentar eliminar datos: ${error}`
+                })
+            }
+        }
+    })
+}

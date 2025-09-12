@@ -21,9 +21,6 @@
       <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#generateJsonModal">
         <i class="bi bi-gear-fill"></i> Configurar
       </button>
-      <button type="button" class="btn btn-danger" onclick="localStorage.clear()">
-        Limpiar Datos
-      </button>
     </div>
     <div class="col-3">
       <span>
@@ -113,11 +110,13 @@
       <div class="modal-body">
 
         <p>Configuración general de lectura de archivos</p>
-        <p>
-          <button type="button" class="btn btn-secondary">
-            <i class="bi bi-download"></i> Descargar archivo de configuración
-          </button>
-        </p>
+
+        <div class="input-group mb-3">
+            <button class="btn btn-secondary" type="button" id="btnDownLoadJsonFile">
+              <i class="bi bi-download"></i> Descargar archivo de configuración
+            </button>
+            <input type="text" class="form-control" placeholder="Nombre del archivo" id="txtJsonFileName">
+        </div>
 
         <div class="row mb-2">
           <button class="btn btn-info mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#systemForm">
@@ -239,11 +238,28 @@
             </div>
           </div>
         </div>
+
+        <hr class="border border-secondary border-1 opacity-75">
+
+        <div class="row">
+          <button class="btn btn-danger mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#dangerZone">
+            Zona de peligro
+          </button>
+        </div>
+
+        <div class="collapse" id="dangerZone">
+          <div class="card border-danger card-body">
+            <button type="button" class="btn btn-danger" onclick="deleteConfData()">
+              Borrar datos de Configuración
+            </button>            
+          </div>
+        </div>
+
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" id="btnGenConfig" class="btn btn-primary">Guardar</button>
+        <button type="button" id="btnSaveConfig" class="btn btn-primary">Guardar</button>
       </div>
     </div>
   </div>
