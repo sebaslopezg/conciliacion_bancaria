@@ -7,18 +7,26 @@ const btnSaveConfig = document.querySelector('#btnSaveConfig')
 const systemRowStart = document.querySelector('#systemRowStart')
 const systemRowLimit = document.querySelector('#systemRowLimit')
 const systemDateColumn = document.querySelector('#systemDateColumn')
+const systemDateNulls = document.querySelector('#systemDateNulls')
 const systemValueTAcount = document.querySelector('#systemValueTAcount')
 const systemDescriptionColumn = document.querySelector('#systemDescriptionColumn')
+const systemDescriptionNulls = document.querySelector('#systemDescriptionNulls')
 const systemValueColumn = document.querySelector('#systemValueColumn')
+const systemValueNulls = document.querySelector('#systemValueNulls')
 const systemValueCreditColumn = document.querySelector('#systemValueCreditColumn')
+const systemValueCreditNulls = document.querySelector('#systemValueCreditNulls')
 const systemValueDebitColumn = document.querySelector('#systemValueDebitColumn')
+const systemValueDebitNulls = document.querySelector('#systemValueDebitNulls')
 
 //Bank consts
 const bankRowStart = document.querySelector('#bankRowStart')
 const bankRowLimit = document.querySelector('#bankRowLimit')
 const bankDateColumn = document.querySelector('#bankDateColumn')
+const bankDateNulls = document.querySelector('#bankDateNulls')
 const bankDescriptionColumn = document.querySelector('#bankDescriptionColumn')
+const bankDescriptionNulls = document.querySelector('#bankDescriptionNulls')
 const bankValueColumn = document.querySelector('#bankValueColumn')
+const bankValueNulls = document.querySelector('#bankValueNulls')
 const bankRegex = document.querySelector('#bankRegex')
 const bankSetYear = document.querySelector('#bankSetYear')
 
@@ -28,12 +36,18 @@ loadCurrentConf()
 tacountCkeckBox.addEventListener('change', () =>{
     if (tacountCkeckBox.checked) {
         systemValueColumn.setAttribute('disabled','')
+        systemValueNulls.setAttribute('disabled','')
         systemValueCreditColumn.removeAttribute('disabled')
+        systemValueCreditNulls.removeAttribute('disabled')
         systemValueDebitColumn.removeAttribute('disabled')
+        systemValueDebitNulls.removeAttribute('disabled')
     }else{
         systemValueColumn.removeAttribute('disabled')
+        systemValueNulls.removeAttribute('disabled')
         systemValueCreditColumn.setAttribute('disabled','')
+        systemValueCreditNulls.setAttribute('disabled','')
         systemValueDebitColumn.setAttribute('disabled','')
+        systemValueDebitNulls.setAttribute('disabled','')
     }
 })
 
@@ -58,8 +72,6 @@ btnLoadConfig.addEventListener('click', () =>{
         })
     })
 })
-
-//downloadJsonFile
 
 btnDownLoadJsonFile.addEventListener('click', () =>{
     const txtJsonFileName = document.querySelector('#txtJsonFileName')

@@ -66,7 +66,6 @@ btnShowBankTable.addEventListener('click', () =>{
 })
 
 btnShowFind.addEventListener('click', () =>{
-
     printTable(resultDataRows.coincide, true, 'primary','Resultados que coinciden')
 })
 
@@ -77,7 +76,7 @@ btnShowNotFind.addEventListener('click', () =>{
 Array.from(inputs).forEach(input => {
     input.addEventListener('change', () => {
         if(input.files.length > 0){
-            let fileName = input.files[0].name;
+            let fileName = input.files[0].name
             let fileExtention = fileName.split('.')
             fileExtention = fileExtention[fileExtention.length-1]
         

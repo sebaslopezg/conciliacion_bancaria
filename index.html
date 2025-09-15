@@ -124,7 +124,7 @@
             Configuracion para Excel del Sistema
           </button>
   
-          <div class="collapse" id="systemForm">
+          <div class="show" id="systemForm">
             <div class="card card-body">
 
               <div class="mb-3">
@@ -139,16 +139,40 @@
                 <div id="systemRowLimitHelp" class="form-text">Indica hasta que fila se hará la lectura del archivo</div>
               </div>
 
-              <div class="mb-3">
-                <label for="systemDateColumn" class="form-label">Columna de la fecha</label>
-                <input type="text" class="form-control" id="systemDateColumn" aria-describedby="systemDateColumnHelp">
-                <div id="systemDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
+              <div class="row mb-3">
+
+                <div class="col-6">
+                  <label for="systemDateColumn" class="form-label">Columna de la fecha</label>
+                  <input type="text" class="form-control" id="systemDateColumn" aria-describedby="systemDateColumnHelp">
+                  <div id="systemDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
+                </div>
+
+                <div class="col-6">
+                  <label for="systemDateNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="systemDateNulls" aria-describedby="systemDateNullsHelp">
+                    <option value="0" selected>No</option>              
+                    <option value="1">Si</option>              
+                  </select>
+                  <div id="systemDateNullsHelp" class="form-text">Omite las celdas que no tienen contenido y no las registra como error</div>
+                </div>
+
               </div>
 
-              <div class="mb-3">
-                <label for="systemDescriptionColumn" class="form-label">Columna de la Descripción</label>
-                <input type="text" class="form-control" id="systemDescriptionColumn" aria-describedby="systemDescriptionColumnHelp">
-                <div id="systemDescriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
+              <div class="row mb-3">
+
+                <div class="col-6">
+                  <label for="systemDescriptionColumn" class="form-label">Columna de la Descripción</label>
+                  <input type="text" class="form-control" id="systemDescriptionColumn" aria-describedby="systemDescriptionColumnHelp">
+                  <div id="systemDescriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
+                </div>
+                <div class="col-6">
+                  <label for="systemDescriptionNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="systemDescriptionNulls" aria-describedby="systemDescriptionNullsHelp">
+                    <option value="0" selected>No</option>              
+                    <option value="1">Si</option>              
+                  </select>
+                  <div id="systemDescriptionNullsHelp" class="form-text">Omite las celdas que no tienen contenido y no las registra como error</div>
+                </div>
               </div>
 
               <div class="mb-3">
@@ -159,22 +183,63 @@
                 <div id="systemValueTAcountHelp" class="form-text">Selecciona para indicar que el archivo contiene una cuenta de tipo T (Credito/Debito)</div>
               </div>
 
-              <div class="mb-3">
-                <label for="systemValueColumn" class="form-label">Columna del Valor</label>
-                <input type="text" class="form-control" id="systemValueColumn" aria-describedby="systemValueColumnHelp">
-                <div id="systemValueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+              <div class="row mb-3">
+
+                <div class="col-6">
+                  <label for="systemValueColumn" class="form-label">Columna del Valor</label>
+                  <input type="text" class="form-control" id="systemValueColumn" aria-describedby="systemValueColumnHelp">
+                  <div id="systemValueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+                </div>
+                <div class="col-6">
+                  <label for="systemValueNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="systemValueNulls" aria-describedby="systemValueNullsHelp">
+                    <option value="0" selected>No</option>              
+                    <option value="1">Si</option>              
+                  </select>
+                  <div id="systemValueNullsHelp" class="form-text">Omite las celdas que no tienen contenido y no las registra como error</div>
+                </div>
+
               </div>
 
-              <div class="mb-3">
-                <label for="systemValueCreditColumn" class="form-label">Columna del Credito</label>
-                <input type="text" class="form-control" id="systemValueCreditColumn" aria-describedby="systemValueCreditColumnHelp" disabled>
-                <div id="systemValueCreditColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro en Cuenta T</div>
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="systemValueCreditColumn" class="form-label">Columna del Credito</label>
+                  <input type="text" class="form-control" id="systemValueCreditColumn" aria-describedby="systemValueCreditColumnHelp" disabled>
+                  <div id="systemValueCreditColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro en Cuenta T</div>
+                </div>
+                <div class="col-6">
+                  <label for="systemValueCreditNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="systemValueCreditNulls" aria-describedby="systemValueCreditNullsHelp">
+                    <option value="0" selected>No</option>              
+                    <option value="1">Si</option>              
+                  </select>
+                  <div id="systemValueCreditNullsHelp" class="form-text">
+                    Omite las celdas que no tienen contenido y no las registra como error
+                  </div>
+                </div>
+
               </div>
 
-              <div class="mb-3">
-                <label for="systemValueDebitColumn" class="form-label">Columna del Debito</label>
-                <input type="text" class="form-control" id="systemValueDebitColumn" aria-describedby="systemValueDebitColumnHelp" disabled>
-                <div id="systemValueDebitColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro en Cuenta T</div>
+              <div class="row mb-3">
+
+                <div class="col-6">
+                  <label for="systemValueDebitColumn" class="form-label">Columna del Debito</label>
+                  <input type="text" class="form-control" id="systemValueDebitColumn" aria-describedby="systemValueDebitColumnHelp" disabled>
+                  <div id="systemValueDebitColumnHelp" class="form-text">
+                    Letra de la columna en donde se leerá el valor de cada registro en Cuenta T
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="systemValueDebitNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="systemValueDebitNulls" aria-describedby="systemValueDebitNullsHelp">
+                    <option value="0" selected>No</option>
+                    <option value="1">Si</option>
+                  </select>
+                  <div id="systemValueDebitNullsHelp" class="form-text">
+                    Omite las celdas que no tienen contenido y no las registra como error
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -185,8 +250,8 @@
           <button class="btn btn-warning mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#bankForm">
             Configuracion para Excel del Banco
           </button>
-    
-          <div class="collapse" id="bankForm">
+
+          <div class="show" id="bankForm">
             <div class="card card-body">
 
               <div class="mb-3">
@@ -201,22 +266,64 @@
                 <div id="bankRowLimitHelp" class="form-text">Indica hasta que fila se hará la lectura del archivo</div>
               </div>
 
-              <div class="mb-3">
-                <label for="bankDateColumn" class="form-label">Columna de la fecha</label>
-                <input type="text" class="form-control" id="bankDateColumn" aria-describedby="bankDateColumnHelp">
-                <div id="bankDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="bankDateColumn" class="form-label">Columna de la fecha</label>
+                  <input type="text" class="form-control" id="bankDateColumn" aria-describedby="bankDateColumnHelp">
+                  <div id="bankDateColumnHelp" class="form-text">
+                    Letra de la columna en donde se leerá la fecha de cada registro
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="bankDateNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="bankDateNulls" aria-describedby="bankDateNullsHelp">
+                    <option value="0" selected>No</option>
+                    <option value="1">Si</option>
+                  </select>
+                  <div id="bankDateNullsHelp" class="form-text">
+                    Omite las celdas que no tienen contenido y no las registra como error
+                  </div>
+                </div>
               </div>
 
-              <div class="mb-3">
-                <label for="bankDescriptionColumn" class="form-label">Columna de la Descripción</label>
-                <input type="text" class="form-control" id="bankDescriptionColumn" aria-describedby="bankDescriptionColumnHelp">
-                <div id="bankDescriptionColumnHelp" class="form-text">Letra de la columna en donde se leerá la descripción de cada registro</div>
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="bankDescriptionColumn" class="form-label">Columna de la Descripción</label>
+                  <input type="text" class="form-control" id="bankDescriptionColumn" aria-describedby="bankDescriptionColumnHelp">
+                  <div id="bankDescriptionColumnHelp" class="form-text">
+                    Letra de la columna en donde se leerá la descripción de cada registro
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="bankDescriptionNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="bankDescriptionNulls" aria-describedby="bankDescriptionNullsHelp">
+                    <option value="0" selected>No</option>
+                    <option value="1">Si</option>
+                  </select>
+                  <div id="bankDescriptionNullsHelp" class="form-text">
+                    Omite las celdas que no tienen contenido y no las registra como error
+                  </div>
+                </div>
               </div>
 
-              <div class="mb-3">
-                <label for="valueColumn" class="form-label">Columna del Valor</label>
-                <input type="text" class="form-control" id="bankValueColumn" aria-describedby="bankValueColumnHelp">
-                <div id="bankValueColumnHelp" class="form-text">Letra de la columna en donde se leerá el valor de cada registro</div>
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="bankValueColumn" class="form-label">Columna del Valor</label>
+                  <input type="text" class="form-control" id="bankValueColumn" aria-describedby="bankValueColumnHelp">
+                  <div id="bankValueColumnHelp" class="form-text">
+                    Letra de la columna en donde se leerá el valor de cada registro
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="bankValueNulls" class="form-label">Omitir Celdas nulas</label>
+                  <select class="form-select" id="bankValueNulls" aria-describedby="bankValueNullsHelp">
+                    <option value="0" selected>No</option>
+                    <option value="1">Si</option>
+                  </select>
+                  <div id="bankValueNullsHelp" class="form-text">
+                    Omite las celdas que no tienen contenido y no las registra como error
+                  </div>
+                </div>
               </div>
 
               <div class="mb-3">
