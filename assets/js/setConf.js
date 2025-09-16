@@ -106,6 +106,24 @@ btnSaveConfig.addEventListener('click', () =>{
     }
 })
 
+//eventos para uppercase
+const inputsToUpper = [
+    systemDateColumn,
+    systemDescriptionColumn,
+    systemValueColumn,
+    systemValueCreditColumn,
+    systemValueDebitColumn,
+    bankDateColumn,
+    bankDescriptionColumn,
+    bankValueColumn,
+]
+
+inputsToUpper.forEach(input => {
+    input.addEventListener('keyup', () =>{
+        input.value = input.value.toUpperCase()
+    })
+})
+
 /// pendiente tramitar errores en cada parte | revisar todo
 const getFormConfig = () =>{
     let bankRowLimitValue
