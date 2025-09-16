@@ -2,6 +2,8 @@ let savedConf = localStorage.getItem('conf')
 const btnLoadConfig = document.querySelector('#btnLoadConfig')
 const tacountCkeckBox = document.querySelector('#systemValueTAcount')
 const btnSaveConfig = document.querySelector('#btnSaveConfig')
+const btnAddSystemCustomValue = document.querySelector('#btnAddSystemCustomValue')
+const btnAddBankCustomValue = document.querySelector('#btnAddBankCustomValue')
 
 //System consts
 const systemRowStart = document.querySelector('#systemRowStart')
@@ -104,6 +106,14 @@ btnSaveConfig.addEventListener('click', () =>{
             text: getConfigResponse.msg
         })
     }
+})
+
+btnAddSystemCustomValue.addEventListener('click', () =>{
+    addCustomValue('displaySystemCustomValues')
+})
+
+btnAddBankCustomValue.addEventListener('click', () =>{
+    addCustomValue('displayBankCustomValues')
 })
 
 //eventos para uppercase
@@ -456,5 +466,54 @@ function setInput(inputType, input, value){
     }
     if (inputType === 'state') {
         value ? input.removeAttribute('disabled') : input.setAttribute('disabled','')
+    }
+}
+
+function addCustomValue(displayId){
+    const display = document.querySelector(`#${displayId}`)
+    const uuid = crypto.randomUUID()
+
+    let placeholderDiv = document.createElement('div')
+    placeholderDiv.setAttribute("id", uuid)
+
+    placeholderDiv.innerHTML = `
+        <div class="row mb-3">
+
+            <div class="col-2">
+                <label for="column_${uuid}" class="form-label">Columna</label>
+                <input type="text" class="form-control" id="column_${uuid}" aria-describedby="columnHelp_${uuid}">
+                <div id="columnHelp_${uuid}" class="form-text">Columna a leer</div>
+            </div>
+
+            <div class="col-3">
+                <label for="type_${uuid}" class="form-label">Tipo</label>
+                    <select class="form-select" id="type_${uuid}" aria-describedby="typeHelp_${uuid}">
+                        <option value="literal" selected>Literal</option>
+                        <option value="relative">Relativo</option>
+                    </select>
+                    <div id="typeHelp_${uuid}" class="form-text">
+                        Tipo de lectura
+                    </div>
+            </div>
+
+            <div class="col-6">
+                <label for="value_${uuid}" class="form-label">Valor</label>
+                <input type="text" class="form-control" id="value_${uuid}" aria-describedby="valueHelp_${uuid}">
+                <div id="valueHelp_${uuid}" class="form-text">Valor que se va a buscar en la lectura</div>
+            </div>
+
+            <div class="col-1">
+                <button type="button" class="btn-close" aria-label="Close" onclick="deleteCustomForm('${uuid}')"></button>
+            </div>
+
+        </div>
+    `
+    display.appendChild(placeholderDiv)
+}
+
+function deleteCustomForm(id){
+    const divForm = document.getElementById(id)
+    if (divForm) {
+        divForm.remove()
     }
 }
