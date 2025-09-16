@@ -1,7 +1,9 @@
-const cols = [];
-for (let i = 65; i <= 90; i++) {
-  cols.push(String.fromCharCode(i))
-}
+//const cols = [];
+//for (let i = 65; i <= 90; i++) {
+//  cols.push(String.fromCharCode(i))
+//}
+
+const cols = generateExcelColumns(200)
 
 const setNegative = (text) =>{
     return parseFloat(text)*-1
@@ -22,29 +24,122 @@ const getData = (data, args) => {
     let t_acountColumn
     let t_acountNulls
 
-    if('date' in args && 'description' in args && 'value' in args){
-        'rowStart' in args ?  initialRow = (args.rowStart) - 1 : errors.push({status:false, msg:errCode.rowStart})
-        'rowLimit' in args ?  '' : errors.push({status:false, msg:errCode.rowLimit})
+    //Condicionales
 
-        'column' in args.date ?  dateColumn = cols.indexOf(args.date.column) : errors.push({status:false, msg:errCode.date.column})
-        'nulls' in args.date ?  dateNulls = args.date.column.nulls : errors.push({status:false, msg:errCode.date.nulls})
-        'column' in args.description ?  descriptionColumn = cols.indexOf(args.description.column) : errors.push({status:false, msg:errCode.description.column})
-        'nulls' in args.description ?  descriptionNulls = args.description.nulls : errors.push({status:false, msg:errCode.description.nulls})
+    if('date' in args && 'description' in args && 'value' in args){
+
+        if ('rowStart' in args) {
+            initialRow = (args.rowStart) - 1
+        }else{
+            errors.push({
+                status:false, 
+                msg:errCode.rowStart
+            })
+        }
+
+        if ('rowLimit' in args) {
+
+        }else{
+            errors.push({
+                status:false, 
+                msg:errCode.rowLimit
+            })
+        }
+
+        if ('column' in args.date) {
+            dateColumn = cols.indexOf(args.date.column)
+        }else{
+            errors.push({
+                status:false, 
+                msg:errCode.date.column
+            })
+        }
+
+        if ('nulls' in args.date) {
+            dateNulls = args.date.nulls
+        }else{
+            errors.push({
+                status:false, 
+                msg:errCode.date.nulls
+            })
+        }
+
+        if ('column' in args.description) {
+           descriptionColumn = cols.indexOf(args.description.column) 
+        }else{
+            errors.push({
+                status:false, 
+                msg:errCode.description.column
+            })
+        }
+
+        if ('nulls' in args.description) {
+            descriptionNulls = args.description.nulls
+        }else{
+            errors.push({
+                status:false, 
+                msg:errCode.description.nulls
+            })
+        }
 
         if ('t_acount' in args.value) {
             if ('credit' in args.value.t_acount) {
-                'column' in args.value.t_acount.credit ? valueColumn = cols.indexOf(args.value.t_acount.credit.column) : errors.push({status:false, msg:errCode.value.t_acount.credit})
-                'nulls' in args.value.t_acount.credit ? valueNulls = args.value.t_acount.credit.nulls : errors.push({status:false, msg:errCode.value.t_acount.credit.nulls})
+                if ('column' in args.value.t_acount.credit) {
+                    valueColumn = cols.indexOf(args.value.t_acount.credit.column)
+                }else{
+                    errors.push({
+                        status:false, 
+                        msg:errCode.value.t_acount.credit
+                    })
+                } 
+                if ('nulls' in args.value.t_acount.credit) {
+                    valueNulls = args.value.t_acount.credit.nulls
+                }else{
+                    errors.push({
+                        status:false, 
+                        msg:errCode.value.t_acount.credit.nulls
+                    })
+                } 
             }
             if ('debit' in args.value.t_acount) {
-                'column' in args.value.t_acount.debit ? t_acountColumn = cols.indexOf(args.value.t_acount.debit.column) : errors.push({status:false, msg:errCode.value.t_acount.debit})
-                'nulls' in args.value.t_acount.debit ? t_acountNulls = args.value.t_acount.debit.nulls : errors.push({status:false, msg:errCode.value.t_acount.debit.nulls})
+                if ('column' in args.value.t_acount.debit) {
+                    t_acountColumn = cols.indexOf(args.value.t_acount.debit.column)
+                }else{
+                    errors.push({
+                        status:false, 
+                        msg:errCode.value.t_acount.debit
+                    })
+                }
+                if ('nulls' in args.value.t_acount.debit) {
+                    t_acountNulls = args.value.t_acount.debit.nulls
+                }else{
+                    errors.push({
+                        status:false, 
+                        msg:errCode.value.t_acount.debit.nulls
+                    })
+                }
             }
         }else{
-            'column' in args.value ?  valueColumn = cols.indexOf(args.value.column) : errors.push({status:false, msg:errCode.value.column})
-            'nulls' in args.value ? valueNulls = args.value.nulls : errors.push({status:false, msg:errCode.value.nulls})
+            if ('column' in args.value) {
+                valueColumn = cols.indexOf(args.value.column)
+            }else{
+                errors.push({
+                    status:false, 
+                    msg:errCode.value.column
+                })
+            }
+            if ('nulls' in args.value) {
+                valueNulls = args.value.nulls
+            }else{
+                errors.push({
+                    status:false, 
+                    msg:errCode.value.nulls
+                })
+            }
         }
     } //poner un elese aqui
+
+    //Inicio de extraccion de datos
 
     if (errors.length > 0) {
         response = {status:false, data:errors}
@@ -59,7 +154,22 @@ const getData = (data, args) => {
             if(counter >= initialRow){
                 dataState = true
 
+                if (dataRows[dateColumn] == undefined ||dataRows[dateColumn] == null && dateNulls == true) {
+                    dataState = false
+                }
+                
+                if (dataRows[descriptionColumn] == undefined || dataRows[descriptionColumn] == null && descriptionNulls == true) {
+                    dataState = false
+                }
+
+                if (dataRows[valueColumn] == undefined || dataRows[valueColumn] == null && valueNulls == true) {
+                    dataState = false
+                }
+
                 if ('t_acount' in args.value){
+                    if (dataRows[valueColumn] == undefined || dataRows[valueColumn] == null && t_acountNulls == true) {
+                        dataState = false
+                    }
                     const valueFromValueColumn = parseFloat(dataRows[valueColumn])
                     const valueFromT_acountColumn = parseFloat(dataRows[t_acountColumn])
 
@@ -96,8 +206,11 @@ const getData = (data, args) => {
                     dateData = dataRows[dateColumn]
                 }
 
-                if (isNaN(valueData)){
-                    errors.push({status:false,msg:errCode.value.notANumber + ` | Intentando leer Celda: ${args.value.column+(counter+1)}`})
+                if (dataState && isNaN(valueData)){
+                    errors.push({
+                        status:false,
+                        msg:errCode.value.notANumber + ` | Intentando leer Celda: ${args.value.column+(counter+1)}`
+                    })
                 }
 
                 if (dataState) {                    
@@ -118,4 +231,23 @@ const getData = (data, args) => {
     }
     console.log(responseData)
     return response
+}
+
+
+function getExcelColumnName(colIndex) {
+    let name = "";
+    while (colIndex > 0) {
+        let remainder = (colIndex - 1) % 26;
+        name = String.fromCharCode(65 + remainder) + name;
+        colIndex = Math.floor((colIndex - 1) / 26);
+    }
+    return name;
+}
+
+function generateExcelColumns(limit = 200) {
+    const cols = [];
+    for (let i = 1; i <= limit; i++) {
+        cols.push(getExcelColumnName(i));
+    }
+    return cols;
 }

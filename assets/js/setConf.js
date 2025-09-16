@@ -112,24 +112,42 @@ const getFormConfig = () =>{
     let bankDateConf
     let systemValueConf
     let systemRowLimitValue
+    let bankDateColumnValue
+    let systemValueCreditNullsValue
+    let systemValueDebitNullsValue
+    let bankDescriptionNullsValue
+    let bankValueNullsValue
+    let systemDateNullsValue
+    let systemDescriptionNullsValue
+    let systemValueNullsValue
 
     if (!bankRowStart.value) {
         return {status:false,msg:'La fila inicial en configuracion - Banco, es obligatoria'}
     }
 
+    if (!bankDateNulls.value) {
+        return {status:false,msg:'Definir el estado nulo de la fecha en configuracion - Banco, es obligatoria'}
+    }
+
     bankRowLimit.value ? bankRowLimitValue = parseInt(bankRowLimit.value) : bankRowLimitValue = false
+
+    bankDateNulls.value === '1' ? bankDateColumnValue = true : bankDateColumnValue = false
 
     if (bankRegex.value === 'false') {
         bankDateConf = {
-            column:bankDateColumn.value
+            column:bankDateColumn.value,
+            nulls:bankDateColumnValue
         }
     }else{
+
         let bankSetYearBolean
         bankSetYear.value === '1' ? bankSetYearBolean = true : bankSetYearBolean = false
+
         bankDateConf = {
             column:bankDateColumn.value,
             readByRegex: parseInt(bankRegex.value),
-            setYear:bankSetYearBolean
+            setYear:bankSetYearBolean,
+            nulls:bankDateColumnValue
         }
     }
 
@@ -137,8 +155,16 @@ const getFormConfig = () =>{
         return {status:false,msg:'La descripción en configuracion - Banco, es obligatoria'}
     }
 
+    if (!bankDescriptionNulls.value) {
+        return {status:false,msg:'Definir el estado nulo de la descripción en configuracion - Banco, es obligatoria'}
+    }
+
     if (!bankValueColumn.value) {
         return {status:false,msg:'El la columna valor en configuracion - Banco, es obligatorio'}
+    }
+
+    if (!bankValueNulls.value) {
+        return {status:false,msg:'Definir el estado nulo del valor en configuracion - Banco, es obligatorio'}
     }
 
     if (!systemRowStart.value) {
@@ -151,8 +177,16 @@ const getFormConfig = () =>{
         return {status:false,msg:'La columna fecha en configuracion - Sistema, es obligatoria'}
     }
 
+    if (!systemDateNulls.value) {
+        return {status:false,msg:'Definir el estado nulo de la fecha en configuracion - Sistema, es obligatoria'}
+    }
+
     if (!systemDescriptionColumn.value) {
         return {status:false,msg:'La columna descripcion en configuracion - Sistema, es obligatoria'}
+    }
+
+    if (!systemDescriptionNulls.value) {
+        return {status:false,msg:'Definir el estado nulo de la descripción en configuracion - Sistema, es obligatoria'}
     }
 
     if (systemValueTAcount.checked) {
@@ -160,14 +194,31 @@ const getFormConfig = () =>{
         if (!systemValueCreditColumn.value) {
             return {status:false,msg:'La columna credito en configuracion - Sistema, es obligatoria'}
         }
+        if (!systemValueCreditNulls.value) {
+            return {status:false,msg:'Definir el estado nulo del credito en configuracion - Sistema, es obligatoria'}
+        }
         if (!systemValueDebitColumn.value) {
             return {status:false,msg:'La columna debito en configuracion - Sistema, es obligatoria'}
         }
+        if (!systemValueDebitNulls.value) {
+            return {status:false,msg:'Definir el estado nulo del debito en configuracion - Sistema, es obligatoria'}
+        }
+
+        systemValueCreditNulls.value == '1' ? systemValueCreditNullsValue = true : systemValueCreditNullsValue = false
+        systemValueDebitNulls.value == '1' ? systemValueDebitNullsValue = true : systemValueDebitNullsValue = false
+
+        console.log(systemValueCreditNulls.value)
 
         systemValueConf = {
             t_acount:{
-                credit:systemValueCreditColumn.value,
-                debit:systemValueDebitColumn.value
+                credit:{
+                    column:systemValueCreditColumn.value,
+                    nulls:systemValueCreditNullsValue
+                },
+                debit:{
+                    column:systemValueDebitColumn.value,
+                    nulls:systemValueDebitNullsValue
+                }
             }
         }
 
@@ -175,10 +226,23 @@ const getFormConfig = () =>{
         if (!systemValueColumn.value) {
             return {status:false,msg:'La columna valor en configuracion - Sistema, es obligatoria'}
         }
+        if (!systemValueNulls.value) {
+            return {status:false,msg:'Definir el estado nulo del valor en configuracion - Sistema, es obligatoria'}
+        }
+
+        systemValueNulls.value === '1' ? systemValueNullsValue = true : systemValueNullsValue = false 
+
         systemValueConf = {
-            column:systemValueColumn.value
+            column:systemValueColumn.value,
+            nulls:systemValueNullsValue
         }
     }
+
+    bankDescriptionNulls.value === '1' ? bankDescriptionNullsValue = true : bankDescriptionNullsValue = false
+    bankValueNulls.value === '1' ? bankValueNullsValue = true : bankValueNullsValue = false
+
+    systemDateNulls.value === '1' ? systemDateNullsValue = true : systemDateNullsValue = false
+    systemDescriptionNulls.value === '1' ? systemDescriptionNullsValue = true : systemDescriptionNullsValue = false
 
     let configObject = {
 
@@ -187,20 +251,24 @@ const getFormConfig = () =>{
             rowLimit:bankRowLimitValue,
             date:bankDateConf,
             description:{
-                column:bankDescriptionColumn.value
+                column:bankDescriptionColumn.value,
+                nulls:bankDescriptionNullsValue
             },
             value:{
-                column:bankValueColumn.value
+                column:bankValueColumn.value,
+                nulls:bankValueNullsValue
             }
         },
         systemConf:{
             rowStart: parseInt(systemRowStart.value),
             rowLimit:systemRowLimitValue,
             date:{
-                column:systemDateColumn.value
+                column:systemDateColumn.value,
+                nulls:systemDateNullsValue
             },
             description:{
-                column:systemDescriptionColumn.value
+                column:systemDescriptionColumn.value,
+                nulls:systemDescriptionNullsValue
             },
             value:systemValueConf
         }
@@ -215,67 +283,144 @@ function loadCurrentConf(){
         currentConf = JSON.parse(savedConf)
 
         if ('systemConf' in currentConf) {
-            'rowStart' in currentConf.systemConf ? setInput('text', systemRowStart, currentConf.systemConf.rowStart) : ''
-            if ('rowLimit' in currentConf.systemConf) {
-                currentConf.systemConf.rowLimit == 'false' ? setInput('text', systemRowLimit, currentConf.systemConf.rowLimit) : ''
+            const systemConf = currentConf.systemConf
+            'rowStart' in systemConf ? setInput('text', systemRowStart, systemConf.rowStart) : ''
+            if ('rowLimit' in systemConf) {
+                systemConf.rowLimit == 'false' ? setInput('text', systemRowLimit, systemConf.rowLimit) : ''
             }
 
-            if ('date' in currentConf.systemConf) {
-                'column' in currentConf.systemConf.date ? setInput('text', systemDateColumn, currentConf.systemConf.date.column) : ''
+            if ('date' in systemConf) {
+                const date = systemConf.date
+                if ('column' in date) {
+                    setInput('text', systemDateColumn, date.column)
+                }
+                if (date.nulls) {
+                    setInput('select', systemDateNulls, "1")
+                }else{
+                    setInput('select', systemDateNulls, "0")
+                }
             }
 
-            if ('description' in currentConf.systemConf) {
-                'column' in currentConf.systemConf.description ? setInput('text', systemDescriptionColumn, currentConf.systemConf.description.column) : ''
+            if ('description' in systemConf) {
+                const description = systemConf.description
+                if ('column' in description) {
+                    setInput('text', systemDescriptionColumn, description.column)
+                    if (description.nulls) {
+                        setInput('select', systemDescriptionNulls, "1")
+                    }else{
+                        setInput('select', systemDescriptionNulls, "0")
+                    }
+                }
             }
 
-            if ('value' in currentConf.systemConf) {
-                const dataValue = currentConf.systemConf.value
+            if ('value' in systemConf) {
+                const dataValue = systemConf.value
                 if ('t_acount' in dataValue) {
                     setInput('checkbox', systemValueTAcount, true)
                     setInput('state', systemValueCreditColumn, true)
+                    setInput('state', systemValueCreditNulls, true)
                     setInput('state', systemValueDebitColumn, true)
+                    setInput('state', systemValueDebitNulls, true)
                     setInput('state', systemValueColumn, false)
-                    'credit' in dataValue.t_acount ? setInput('text', systemValueCreditColumn, dataValue.t_acount.credit) : ''
-                    'debit' in dataValue.t_acount ? setInput('text', systemValueDebitColumn, dataValue.t_acount.debit) : ''
+                    setInput('state', systemValueNulls, false)
+                    if ('credit' in dataValue.t_acount) {
+                        setInput('text', systemValueCreditColumn, dataValue.t_acount.credit.column)
+
+                        if (dataValue.t_acount.credit.nulls) {
+                            setInput('select', systemValueCreditNulls, "1")
+                        }else{
+                            setInput('select', systemValueCreditNulls, "0") 
+                        } 
+                    }
+                    if ('debit' in dataValue.t_acount) {
+                        setInput('text', systemValueDebitColumn, dataValue.t_acount.debit.column)
+
+                        if (dataValue.t_acount.debit.nulls) {
+                            setInput('select', systemValueDebitNulls, "1")
+                        }else{
+                            setInput('select', systemValueDebitNulls, "0") 
+                        } 
+                    }
                 }else{
                     setInput('checkbox', systemValueTAcount, false)
                     setInput('state', systemValueCreditColumn, false)
+                    setInput('state', systemValueCreditNulls, false)
                     setInput('state', systemValueDebitColumn, false)
+                    setInput('state', systemValueDebitNulls, false)
                     setInput('state', systemValueColumn, true)
-                    'column' in dataValue ? setInput('text', systemValueColumn, dataValue.column) : ''
+                    setInput('state', systemValueNulls, true)
+                    if ('column' in dataValue) {
+                        setInput('text', systemValueColumn, dataValue.column)
+                        if (dataValue.nulls) {
+                            setInput('select', systemValueNulls, "1") 
+                        }else{
+                            setInput('select', systemValueNulls, "0") 
+                        }
+                    }
                 }
             }
         }
 
         //bank conf getters
         if ('bankConf' in currentConf) {
+            const bankConf = currentConf.bankConf
+            'rowStart' in bankConf ? setInput('text', bankRowStart, bankConf.rowStart) : ''
 
-            'rowStart' in currentConf.bankConf ? setInput('text', bankRowStart, currentConf.bankConf.rowStart) : ''
-
-            if ('rowLimit' in currentConf.bankConf) {
-                currentConf.bankConf.rowLimit == 'false' ? setInput('text', bankRowLimit, currentConf.bankConf.rowLimit) : ''
+            if ('rowLimit' in bankConf) {
+                bankConf.rowLimit == 'false' ? setInput('text', bankRowLimit, bankConf.rowLimit) : ''
             }
 
-            if ('date' in currentConf.bankConf) {
-                'column' in currentConf.bankConf.date ? setInput('text', bankDateColumn, currentConf.bankConf.date.column) : ''
-                if ('readByRegex' in currentConf.bankConf.date) {
-                    if(currentConf.bankConf.date.readByRegex != false || currentConf.bankConf.date.readByRegex != 'false'){
-                        setInput('select', bankRegex, currentConf.bankConf.date.readByRegex)
+            if ('date' in bankConf) {
+                const date = bankConf.date
+
+                if ('column' in date) {
+                    setInput('text', bankDateColumn, date.column)
+                }
+
+                if ('nulls' in date) {                    
+                    if (date.nulls) {
+                        setInput('select', bankDateNulls, "1")
+                    }else{
+                        setInput('select', bankDateNulls, "0")
                     }
                 }
-                if ('setYear' in currentConf.bankConf.date) {
-                    const setYearValue = currentConf.bankConf.date.setYear
-                    setYearValue ? setInput('select', bankSetYear, "1") : setInput('select', bankSetYear, "0")
-                    
+
+                if ('readByRegex' in bankConf.date) {
+                    if(date.readByRegex != false || date.readByRegex != 'false'){
+                        setInput('select', bankRegex, date.readByRegex)
+                    }
+                }
+                if ('setYear' in date) {
+                    const setYearValue = date.setYear
+                    setYearValue ? setInput('select', bankSetYear, "1") : setInput('select', bankSetYear, "0")   
                 }
             }
 
-            if ('description' in currentConf.bankConf) {
-                'column' in currentConf.bankConf.description ? setInput('text', bankDescriptionColumn, currentConf.bankConf.description.column) : ''
+            if ('description' in bankConf) {
+
+                if ('column' in bankConf.description) {
+                    setInput('text', bankDescriptionColumn, bankConf.description.column)
+                }
+                if ('nulls' in bankConf.description) {
+                    if (bankConf.description.nulls) {
+                       setInput('select', bankDescriptionNulls, "1") 
+                    }else{
+                        setInput('select', bankDescriptionNulls, "0")
+                    }   
+                }
             }
 
-            if ('value' in currentConf.bankConf) {
-                'column' in currentConf.bankConf.value ? setInput('text', bankValueColumn, currentConf.bankConf.value.column) : ''
+            if ('value' in bankConf) {
+                if ('column' in bankConf.value) {
+                    setInput('text', bankValueColumn, bankConf.value.column)
+                }
+                if ('nulls' in bankConf.value) {
+                    if (bankConf.value.nulls) {
+                        setInput('select', bankValueNulls, "1")
+                    }else{
+                        setInput('select', bankValueNulls, "0")
+                    }
+                }
             }
         }
     }

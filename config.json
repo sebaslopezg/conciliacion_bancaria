@@ -42,7 +42,8 @@
             "nulls":false
         },
         "description":{
-            "column":"B"
+            "column":"B",
+            "nulls":false
         },
         "value":{
             "t_acount":{
