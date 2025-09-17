@@ -31,6 +31,18 @@
                     "value":"PAGO N?"
                 } 
             }
+        ],
+        "replaceValues":[
+            {
+                "column":"C",
+                "search":"",
+                "replace":""
+            },
+            {
+                "column":"F",
+                "search":",",
+                "replace":""
+            }
         ]
     },
 

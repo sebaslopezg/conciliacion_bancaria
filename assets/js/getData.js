@@ -166,6 +166,7 @@ const getData = (data, args) => {
                     dataState = false
                 }
 
+                //Revisar bien el flujo del proceso, puede hacer redundancias 
                 if ('t_acount' in args.value){
                     if (dataRows[valueColumn] == undefined || dataRows[valueColumn] == null && t_acountNulls == true) {
                         dataState = false
@@ -179,13 +180,27 @@ const getData = (data, args) => {
                         valueData = valueFromValueColumn
                     }
                 } else {
-                    valueData = parseFloat(dataRows[valueColumn])
+                    let valueDataRaw = dataRows[valueColumn]
+                    const replaces = args.replaceValues
+                    replaces.forEach(replace => {
+                        if (replace.column === 'value') {
+                            valueDataRaw = searchAndReplace(valueDataRaw, replace.search, replace.replace)
+                        }
+                    })
+                    valueData = parseFloat(valueDataRaw)
                 }
 
                 if (dataRows[valueColumn] == 0 || dataRows[valueColumn] == null && dataRows[t_acountColumn] !== 0) {
                     valueData = setNegative(dataRows[t_acountColumn])
                 } else {
-                    valueData = parseFloat(dataRows[valueColumn])
+                    let valueDataRaw = dataRows[valueColumn]
+                    const replaces = args.replaceValues
+                    replaces.forEach(replace => {
+                        if (replace.column === 'value') {
+                            valueDataRaw = searchAndReplace(valueDataRaw, replace.search, replace.replace)
+                        }
+                    })
+                    valueData = parseFloat(valueDataRaw)
                 }
 
                 if ('readByRegex' in args.date) {
@@ -204,6 +219,11 @@ const getData = (data, args) => {
                     }
                 }else{
                     dateData = dataRows[dateColumn]
+                }
+
+                //Aqui se convierte la fecha en caso de que venga como un numero
+                if (!isNaN(dateData)) {
+                    dateData = XLSX.SSF.format('d/mm/yyyy', dateData)
                 }
 
                 if (dataState && isNaN(valueData)){
@@ -250,4 +270,16 @@ function generateExcelColumns(limit = 200) {
         cols.push(getExcelColumnName(i));
     }
     return cols;
+}
+
+function searchAndReplace(value, stringToReplace, replacement){
+
+     const escapedString = stringToReplace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const pattern = new RegExp(escapedString, 'g');
+
+    if (typeof value === "string") {
+        return value.replace(pattern, replacement);
+    }else{
+        return value
+    }
 }

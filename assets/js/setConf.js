@@ -20,6 +20,7 @@ const systemValueCreditNulls = document.querySelector('#systemValueCreditNulls')
 const systemValueDebitColumn = document.querySelector('#systemValueDebitColumn')
 const systemValueDebitNulls = document.querySelector('#systemValueDebitNulls')
 
+
 //Bank consts
 const bankRowStart = document.querySelector('#bankRowStart')
 const bankRowLimit = document.querySelector('#bankRowLimit')
@@ -136,6 +137,9 @@ inputsToUpper.forEach(input => {
 
 /// pendiente tramitar errores en cada parte | revisar todo
 const getFormConfig = () =>{
+
+    const bankReplaceRows = document.querySelectorAll(".bankReplaceRow")
+
     let bankRowLimitValue
     let bankDateConf
     let systemValueConf
@@ -148,6 +152,26 @@ const getFormConfig = () =>{
     let systemDateNullsValue
     let systemDescriptionNullsValue
     let systemValueNullsValue
+
+    let bankSaveValues = []
+    let bankReplaceValues = []
+    let systemSaveValuess = []
+    let systemReplaceValues = []
+
+    bankReplaceRows.forEach(el => {
+
+        const bankSearchColInput = el.querySelector(".bankSearchCol")
+        const bankSearchInput = el.querySelector(".bankSearch")
+        const replaceValueInput = el.querySelector(".bankReplace")
+
+        if (bankSearchInput && bankSearchColInput && replaceValueInput) {
+            bankReplaceValues.push({
+                column:bankSearchColInput.value,
+                search:bankSearchInput.value,
+                replace:replaceValueInput.value
+            })
+        }
+    })
 
     if (!bankRowStart.value) {
         return {status:false,msg:'La fila inicial en configuracion - Banco, es obligatoria'}
@@ -235,8 +259,6 @@ const getFormConfig = () =>{
         systemValueCreditNulls.value == '1' ? systemValueCreditNullsValue = true : systemValueCreditNullsValue = false
         systemValueDebitNulls.value == '1' ? systemValueDebitNullsValue = true : systemValueDebitNullsValue = false
 
-        console.log(systemValueCreditNulls.value)
-
         systemValueConf = {
             t_acount:{
                 credit:{
@@ -262,7 +284,7 @@ const getFormConfig = () =>{
 
         systemValueConf = {
             column:systemValueColumn.value,
-            nulls:systemValueNullsValue
+            nulls:systemValueNullsValue,
         }
     }
 
@@ -280,25 +302,29 @@ const getFormConfig = () =>{
             date:bankDateConf,
             description:{
                 column:bankDescriptionColumn.value,
-                nulls:bankDescriptionNullsValue
+                nulls:bankDescriptionNullsValue,
             },
             value:{
                 column:bankValueColumn.value,
-                nulls:bankValueNullsValue
-            }
+                nulls:bankValueNullsValue,
+            },
+            saveValues:bankSaveValues,
+            replaceValues:bankReplaceValues
         },
         systemConf:{
             rowStart: parseInt(systemRowStart.value),
             rowLimit:systemRowLimitValue,
             date:{
                 column:systemDateColumn.value,
-                nulls:systemDateNullsValue
+                nulls:systemDateNullsValue,
             },
             description:{
                 column:systemDescriptionColumn.value,
-                nulls:systemDescriptionNullsValue
+                nulls:systemDescriptionNullsValue,
             },
-            value:systemValueConf
+            value:systemValueConf,
+            saveValues:systemSaveValuess,
+            replaceValues:systemReplaceValues
         }
     }
 
@@ -477,7 +503,7 @@ function addCustomValue(displayId){
     placeholderDiv.setAttribute("id", uuid)
 
     placeholderDiv.innerHTML = `
-        <div class="row mb-3">
+        <div class="row mb-3 ${displayBankCustomValues}_row">
 
             <div class="col-2">
                 <label for="column_${uuid}" class="form-label">Columna</label>
