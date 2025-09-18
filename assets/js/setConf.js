@@ -4,6 +4,7 @@ const tacountCkeckBox = document.querySelector('#systemValueTAcount')
 const btnSaveConfig = document.querySelector('#btnSaveConfig')
 const btnAddSystemCustomValue = document.querySelector('#btnAddSystemCustomValue')
 const btnAddBankCustomValue = document.querySelector('#btnAddBankCustomValue')
+const btnAddReplaceValues = document.querySelector('#btnAddReplaceValues')
 
 //System consts
 const systemRowStart = document.querySelector('#systemRowStart')
@@ -115,6 +116,10 @@ btnAddSystemCustomValue.addEventListener('click', () =>{
 
 btnAddBankCustomValue.addEventListener('click', () =>{
     addCustomValue('displayBankCustomValues')
+})
+
+btnAddReplaceValues.addEventListener('click', () =>{
+    addReplaceValue('displayBankReplaces')
 })
 
 //eventos para uppercase
@@ -503,7 +508,7 @@ function addCustomValue(displayId){
     placeholderDiv.setAttribute("id", uuid)
 
     placeholderDiv.innerHTML = `
-        <div class="row mb-3 ${displayBankCustomValues}_row">
+        <div class="row mb-3 displayBankCustomValues_row">
 
             <div class="col-2">
                 <label for="column_${uuid}" class="form-label">Columna</label>
@@ -535,6 +540,52 @@ function addCustomValue(displayId){
         </div>
     `
     display.appendChild(placeholderDiv)
+}
+
+function addReplaceValue(displayId){
+    const display = document.querySelector(`#${displayId}`)
+    const uuid = crypto.randomUUID()
+
+    let rowDiv = document.createElement('div')
+    rowDiv.setAttribute("id", uuid)
+    rowDiv.setAttribute("class", "row mb-3 bankReplaceRow")
+
+    rowDiv.innerHTML = `
+
+        <div class="col-3">
+            <label for="bankSearchColumn_${uuid}" class="form-label">Columna</label>
+            <select class="form-select" id="bankSearchColumn_${uuid}" aria-describedby="bankSearchColumnHelp_${uuid}">              
+              <option value="date">Fecha</option>              
+              <option value="description">Descripcion</option>              
+              <option value="value" selected>Valor</option>              
+            </select>
+            <div id="bankSearchColumnHelp_${uuid}" class="form-text">
+              Inserte la columna a leer
+            </div>
+        </div>
+
+        <div class="col-4">
+          <label for="bankSearchValue_${uuid}" class="form-label">Buscar</label>
+          <input type="text" class="form-control bankSearch" id="bankSearchValue_${uuid}" aria-describedby="bankSearchValueHelp_${uuid}">
+          <div id="bankSearchValueHelp_${uuid}" class="form-text">
+            Inserte los caracteres que desea buscar
+          </div>
+        </div>
+
+        <div class="col-4">
+          <label for="bankReplaceValue_${uuid}" class="form-label">Reemplazar</label>
+          <input type="text" class="form-control bankReplace" id="bankReplaceValue_${uuid}" aria-describedby="bankReplaceValueHelp">
+          <div id="bankReplaceValueHelp" class="form-text">
+            Inserte los caracteres que con los que desea reemplazar
+          </div>
+        </div>
+
+        <div class="col-1">
+            <button type="button" class="btn-close" aria-label="Close" onclick="deleteCustomForm('${uuid}')"></button>
+        </div>
+    `
+
+    display.appendChild(rowDiv)
 }
 
 function deleteCustomForm(id){

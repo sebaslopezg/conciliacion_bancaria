@@ -374,40 +374,13 @@
                 <div class="accordion-item">
                   <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                      Buscar y reemplazar caracteres en columna Valor
+                      Buscar y reemplazar caracteres en columna
                     </button>
                   </h2>
                   <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionReplaceValues">
                     <div class="accordion-body">
-
-                    <div class="row mb-3 bankReplaceRow">
-
-                      <div class="col-4">
-                          <label for="bankSearchColumn" class="form-label">Columna</label>
-                          <input type="text" class="form-control bankSearchCol" id="bankSearchColumn" aria-describedby="bankSearchColumnHelp">
-                          <div id="bankSearchColumnHelp" class="form-text">
-                            Inserte la columna a leer
-                          </div>
-                      </div>
-
-                      <div class="col-4">
-                        <label for="bankSearchValue" class="form-label">Buscar</label>
-                        <input type="text" class="form-control bankSearch" id="bankSearchValue" aria-describedby="bankSearchValueHelp">
-                        <div id="bankSearchValueHelp" class="form-text">
-                          Inserte los caracteres que desea buscar
-                        </div>
-                      </div>
-
-                      <div class="col-4">
-                        <label for="bankReplaceValue" class="form-label">Reemplazar</label>
-                        <input type="text" class="form-control bankReplace" id="bankReplaceValue" aria-describedby="bankReplaceValueHelp">
-                        <div id="bankReplaceValueHelp" class="form-text">
-                          Inserte los caracteres que con los que desea reemplazar
-                        </div>
-                      </div>
-                      
-                    </div>
-                      
+                      <div id="displayBankReplaces"></div>
+                      <button type="button" id="btnAddReplaceValues" class="btn btn-secondary">Agregar Buscar y Reemplazar</button> 
                     </div>
                   </div>
                 </div>
