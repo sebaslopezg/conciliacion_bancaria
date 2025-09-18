@@ -137,6 +137,21 @@ const getData = (data, args) => {
                 })
             }
         }
+
+        if ('saveValues' in args) {
+            const saveValues = args.saveValues
+            if (saveValues.length > 0) {
+                saveValues.forEach(el => {
+                    if (!'descriptionCol' in el || !'valueCol' in el || !'value' in el || !'name' in el) {
+                        errors.push({
+                            status:false, 
+                            msg:errCode.saveValues
+                        })
+                    }
+                })
+            }
+        }
+
     } //poner un elese aqui
 
     //Inicio de extraccion de datos
@@ -147,18 +162,24 @@ const getData = (data, args) => {
         let counter = 0
         let yearSetter = ''
         let valueData
+        let descripcionData
         let dateData
         let dataState
+        let customValuesData = []
+
+        customValuesData = createCustomValueKeys(args.saveValues)
 
         data.forEach(dataRows => {
             if(counter >= initialRow){
                 dataState = true
 
+                descripcionData = dataRows[descriptionColumn]
+
                 if (dataRows[dateColumn] == undefined ||dataRows[dateColumn] == null && dateNulls == true) {
                     dataState = false
                 }
                 
-                if (dataRows[descriptionColumn] == undefined || dataRows[descriptionColumn] == null && descriptionNulls == true) {
+                if (descripcionData == undefined || descripcionData == null && descriptionNulls == true) {
                     dataState = false
                 }
 
@@ -233,10 +254,14 @@ const getData = (data, args) => {
                     })
                 }
 
+                if (dataState) {
+                    AddCustomValue(args.saveValues, dataRows, customValuesData)
+                }
+
                 if (dataState) {                    
                     responseData.push({
                         date:dateData,
-                        descripcion:dataRows[descriptionColumn],
+                        descripcion:descripcionData,
                         value:valueData
                     })
                 }
@@ -246,10 +271,10 @@ const getData = (data, args) => {
         if (errors.length > 0) {
             response = {status:false, data:errors}
         }else{
-            response = {status:true,data:responseData}
+            response = {status:true,data:{rows:responseData, customValues:customValuesData}}
         }
     }
-    console.log(responseData)
+    console.log(response)
     return response
 }
 
@@ -282,4 +307,49 @@ function searchAndReplace(value, stringToReplace, replacement){
     }else{
         return value
     }
+}
+
+function AddCustomValue(params, dataRow, customValues){
+    if (Array.isArray(params)) {
+        params.forEach(el => {
+            const patternString = el.value
+            const descriptionCol = cols.indexOf(el.descriptionCol)
+            const valueCol = cols.indexOf(el.valueCol)
+            if (patternString.includes('?')) {
+                const regexPattern = new RegExp('^' + patternString.replace(/\?/g, '.*'), 'i')
+                if(regexPattern.test(dataRow[descriptionCol])){
+                    addValueToCostumData(customValues, el.name, dataRow[valueCol], dataRow[descriptionCol])
+                }
+            }else{
+                if(dataRow[descriptionCol] === patternString){
+                    addValueToCostumData(customValues, el.name, dataRow[valueCol], dataRow[descriptionCol])
+                }
+            }
+        })
+    }
+}
+
+function createCustomValueKeys(confArgs){
+    const result = []
+
+    confArgs.forEach(key => {
+      result.push({
+        name:key.name,
+        values:[],
+        description:[]
+      })  
+    })
+
+    return result
+}
+
+function addValueToCostumData(valuesKey, categoryName, newValue, newDescription) {
+
+  for (const item of valuesKey) {
+    if (item.name === categoryName) {
+        item.values.push(newValue)
+        item.description.push(newDescription)
+        return
+    }
+  }
 }

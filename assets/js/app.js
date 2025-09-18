@@ -141,10 +141,9 @@ const readData = () =>{
     bankDataResponse = getData(bankData, bankParams)
     systemDataResponse = getData(systemData, systemParams)
 
-
     if (bankDataResponse.status && systemDataResponse.status) {
-        bankDataRows = bankDataResponse.data
-        systemDataRows = systemDataResponse.data
+        bankDataRows = bankDataResponse.data.rows
+        systemDataRows = systemDataResponse.data.rows
 
         resultDataRows = setTransactions(systemDataRows,bankDataRows)
 
@@ -214,8 +213,6 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido') =>
 
     keys.forEach(key => {
         let objActual = obj[key]
-        let fecha
-        //let fechaFormateada = `${fecha.getDate()}/${fecha.getMonth()}/${fecha.getFullYear()}`
         index = parseInt(key) + 1
         html += `
 

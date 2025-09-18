@@ -24,5 +24,21 @@ const errCode = {
                 nulls:'No se encuentra la llave "nulls" en el objeto "value.t_acount.debit", revise la configuracion'
             },
         }              
-    }
+    },
+    saveValues:'No se encuentra una o varias de las llaves en "saveValues".'
 }
+
+
+const values = [
+    {
+        name:'Pagos autorizados',
+        values:[
+            1222,122323,345345,345345,3453,4534,34534,435,3
+        ]
+    },
+    {  name:'Otros pagos',
+        values:[
+            4433,23444,44433,2222,8665,23233,234,2,3
+        ]
+    }
+]

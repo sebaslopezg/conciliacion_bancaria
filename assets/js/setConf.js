@@ -182,14 +182,14 @@ const getFormConfig = () =>{
 
     bankCustomRows.forEach(el => {
         const bankCustomCol = el.querySelector(".bankCustomCol")
-        const bankCustomType = el.querySelector(".bankCustomType")
+        const bankCustomValueCol = el.querySelector(".bankCustomValueCol")
         const bankCustomName = el.querySelector(".bankCustomName")
         const bankCustomValue = el.querySelector(".bankCustomValue")
 
-        if (bankCustomCol && bankCustomType && bankCustomName && bankCustomValue) {
+        if (bankCustomCol && bankCustomValueCol && bankCustomName && bankCustomValue) {
             bankSaveValues.push({
-                column:bankCustomCol.value,
-                type:bankCustomType.value,
+                descriptionCol:bankCustomCol.value,
+                valueCol:bankCustomValueCol.value,
                 name:bankCustomName.value,
                 value:bankCustomValue.value
             })
@@ -541,10 +541,10 @@ function addCustomValue(displayId, values){
     let formValues
 
     const defaultValues = {
-        column:'',
-        type:'',
-        name:'',
-        value:''
+        descriptionCol:'',
+        valueCol:'',
+        value:'',
+        name:''
     }
 
     values ? formValues = values : formValues =  defaultValues
@@ -556,24 +556,18 @@ function addCustomValue(displayId, values){
     placeholderDiv.setAttribute("id", uuid)
     placeholderDiv.setAttribute("class", "row mb-3 bankCustomRow")
 
-    const isLiteralSelected = formValues.type === 'literal' ? 'selected' : '';
-    const isRelativoSelected = formValues.type === 'relative' ? 'selected' : '';
-
     placeholderDiv.innerHTML = `
 
         <div class="col-2">
-            <label for="column_${uuid}" class="form-label">Columna</label>
-            <input type="text" class="form-control bankCustomCol" id="column_${uuid}" aria-describedby="columnHelp_${uuid}" value="${formValues.column}">
+            <label for="column_${uuid}" class="form-label">Col. Texto</label>
+            <input type="text" class="form-control bankCustomCol" id="column_${uuid}" aria-describedby="columnHelp_${uuid}" value="${formValues.descriptionCol}">
             <div id="columnHelp_${uuid}" class="form-text">Columna a leer</div>
         </div>
 
         <div class="col-2">
-            <label for="type_${uuid}" class="form-label">Tipo</label>
-                <select class="form-select bankCustomType" id="type_${uuid}" aria-describedby="typeHelp_${uuid}">
-                    <option value="literal" ${isLiteralSelected}>Literal</option>
-                    <option value="relative" ${isRelativoSelected}>Relativo</option>
-                </select>
-                <div id="typeHelp_${uuid}" class="form-text">
+            <label for="type_${uuid}" class="form-label">Col. Valor</label>
+                <input type="text" class="form-control bankCustomValueCol" id="ValueColumn_${uuid}" aria-describedby="ValueColumnHelp_${uuid}" value="${formValues.valueCol}">
+                <div id="ValueColumnHelp_${uuid}" class="form-text">
                     Tipo de lectura
                 </div>
         </div>
