@@ -144,6 +144,7 @@ inputsToUpper.forEach(input => {
 const getFormConfig = () =>{
 
     const bankReplaceRows = document.querySelectorAll(".bankReplaceRow")
+    const bankCustomRows = document.querySelectorAll(".bankCustomRow")
 
     let bankRowLimitValue
     let bankDateConf
@@ -163,6 +164,7 @@ const getFormConfig = () =>{
     let systemSaveValuess = []
     let systemReplaceValues = []
 
+    //debajo de este bucle, falta agregar el correspondiente a valores personalizados para extraer sus valores
     bankReplaceRows.forEach(el => {
 
         const bankSearchColInput = el.querySelector(".bankSearchCol")
@@ -174,6 +176,22 @@ const getFormConfig = () =>{
                 column:bankSearchColInput.value,
                 search:bankSearchInput.value,
                 replace:replaceValueInput.value
+            })
+        }
+    })
+
+    bankCustomRows.forEach(el => {
+        const bankCustomCol = el.querySelector(".bankCustomCol")
+        const bankCustomType = el.querySelector(".bankCustomType")
+        const bankCustomName = el.querySelector(".bankCustomName")
+        const bankCustomValue = el.querySelector(".bankCustomValue")
+
+        if (bankCustomCol && bankCustomType && bankCustomName && bankCustomValue) {
+            bankSaveValues.push({
+                column:bankCustomCol.value,
+                type:bankCustomType.value,
+                name:bankCustomName.value,
+                value:bankCustomValue.value
             })
         }
     })
@@ -481,6 +499,24 @@ function loadCurrentConf(){
                     }
                 }
             }
+
+            if ('replaceValues' in bankConf) {
+                const replaceValues = bankConf.replaceValues
+                if (Array.isArray(replaceValues)) {
+                    replaceValues.forEach(obj => {
+                        addReplaceValue('displayBankReplaces', obj)
+                    })
+                }
+            }
+
+            if ('saveValues' in bankConf) {
+                const saveValues = bankConf.saveValues
+                if (Array.isArray(saveValues)) {
+                    saveValues.forEach(obj => {
+                        addCustomValue('displayBankCustomValues', obj)
+                    })
+                }
+            }
         }
     }
 }
@@ -500,49 +536,83 @@ function setInput(inputType, input, value){
     }
 }
 
-function addCustomValue(displayId){
+function addCustomValue(displayId, values){
+
+    let formValues
+
+    const defaultValues = {
+        column:'',
+        type:'',
+        name:'',
+        value:''
+    }
+
+    values ? formValues = values : formValues =  defaultValues
+
     const display = document.querySelector(`#${displayId}`)
     const uuid = crypto.randomUUID()
 
     let placeholderDiv = document.createElement('div')
     placeholderDiv.setAttribute("id", uuid)
+    placeholderDiv.setAttribute("class", "row mb-3 bankCustomRow")
+
+    const isLiteralSelected = formValues.type === 'literal' ? 'selected' : '';
+    const isRelativoSelected = formValues.type === 'relative' ? 'selected' : '';
 
     placeholderDiv.innerHTML = `
-        <div class="row mb-3 displayBankCustomValues_row">
 
-            <div class="col-2">
-                <label for="column_${uuid}" class="form-label">Columna</label>
-                <input type="text" class="form-control" id="column_${uuid}" aria-describedby="columnHelp_${uuid}">
-                <div id="columnHelp_${uuid}" class="form-text">Columna a leer</div>
-            </div>
+        <div class="col-2">
+            <label for="column_${uuid}" class="form-label">Columna</label>
+            <input type="text" class="form-control bankCustomCol" id="column_${uuid}" aria-describedby="columnHelp_${uuid}" value="${formValues.column}">
+            <div id="columnHelp_${uuid}" class="form-text">Columna a leer</div>
+        </div>
 
-            <div class="col-3">
-                <label for="type_${uuid}" class="form-label">Tipo</label>
-                    <select class="form-select" id="type_${uuid}" aria-describedby="typeHelp_${uuid}">
-                        <option value="literal" selected>Literal</option>
-                        <option value="relative">Relativo</option>
-                    </select>
-                    <div id="typeHelp_${uuid}" class="form-text">
-                        Tipo de lectura
-                    </div>
-            </div>
+        <div class="col-2">
+            <label for="type_${uuid}" class="form-label">Tipo</label>
+                <select class="form-select bankCustomType" id="type_${uuid}" aria-describedby="typeHelp_${uuid}">
+                    <option value="literal" ${isLiteralSelected}>Literal</option>
+                    <option value="relative" ${isRelativoSelected}>Relativo</option>
+                </select>
+                <div id="typeHelp_${uuid}" class="form-text">
+                    Tipo de lectura
+                </div>
+        </div>
 
-            <div class="col-6">
-                <label for="value_${uuid}" class="form-label">Valor</label>
-                <input type="text" class="form-control" id="value_${uuid}" aria-describedby="valueHelp_${uuid}">
-                <div id="valueHelp_${uuid}" class="form-text">Valor que se va a buscar en la lectura</div>
-            </div>
+        <div class="col-3">
+            <label for="name_${uuid}" class="form-label">Nombre</label>
+            <input type="text" class="form-control bankCustomName" id="name_${uuid}" aria-describedby="nameHelp_${uuid}" value="${formValues.name}">
+            <div id="nameHelp_${uuid}" class="form-text">Nombre personalizado</div>
+        </div>
 
-            <div class="col-1">
-                <button type="button" class="btn-close" aria-label="Close" onclick="deleteCustomForm('${uuid}')"></button>
-            </div>
+        <div class="col-4">
+            <label for="value_${uuid}" class="form-label">Valor</label>
+            <input type="text" class="form-control bankCustomValue" id="value_${uuid}" aria-describedby="valueHelp_${uuid}" value="${formValues.value}">
+            <div id="valueHelp_${uuid}" class="form-text">Valor que se va a buscar en la lectura</div>
+        </div>
 
+        <div class="col-1">
+            <button type="button" class="btn-close" aria-label="Close" onclick="deleteCustomForm('${uuid}')"></button>
         </div>
     `
     display.appendChild(placeholderDiv)
 }
 
-function addReplaceValue(displayId){
+function addReplaceValue(displayId, values){
+
+    let formValues
+
+    const defaultValues = {
+        column:'',
+        search:'',
+        replace:''
+    }
+
+    values ? formValues = values : formValues =  defaultValues
+
+    const isDateSelected = formValues.column === 'date' ? 'selected' : '';
+    const isDescriptionSelected = formValues.column === 'description' ? 'selected' : '';
+    const isValueSelected = formValues.column === 'value' ? 'selected' : '';
+
     const display = document.querySelector(`#${displayId}`)
     const uuid = crypto.randomUUID()
 
@@ -554,10 +624,10 @@ function addReplaceValue(displayId){
 
         <div class="col-3">
             <label for="bankSearchColumn_${uuid}" class="form-label">Columna</label>
-            <select class="form-select" id="bankSearchColumn_${uuid}" aria-describedby="bankSearchColumnHelp_${uuid}">              
-              <option value="date">Fecha</option>              
-              <option value="description">Descripcion</option>              
-              <option value="value" selected>Valor</option>              
+            <select class="form-select bankSearchCol" id="bankSearchColumn_${uuid}" aria-describedby="bankSearchColumnHelp_${uuid}">              
+              <option value="date" ${isDateSelected}>Fecha</option>              
+              <option value="description" ${isDescriptionSelected}>Descripcion</option>              
+              <option value="value" ${isValueSelected}>Valor</option>              
             </select>
             <div id="bankSearchColumnHelp_${uuid}" class="form-text">
               Inserte la columna a leer
@@ -566,7 +636,7 @@ function addReplaceValue(displayId){
 
         <div class="col-4">
           <label for="bankSearchValue_${uuid}" class="form-label">Buscar</label>
-          <input type="text" class="form-control bankSearch" id="bankSearchValue_${uuid}" aria-describedby="bankSearchValueHelp_${uuid}">
+          <input value="${formValues.search}" type="text" class="form-control bankSearch" id="bankSearchValue_${uuid}" aria-describedby="bankSearchValueHelp_${uuid}">
           <div id="bankSearchValueHelp_${uuid}" class="form-text">
             Inserte los caracteres que desea buscar
           </div>
@@ -574,7 +644,7 @@ function addReplaceValue(displayId){
 
         <div class="col-4">
           <label for="bankReplaceValue_${uuid}" class="form-label">Reemplazar</label>
-          <input type="text" class="form-control bankReplace" id="bankReplaceValue_${uuid}" aria-describedby="bankReplaceValueHelp">
+          <input value="${formValues.replace}" type="text" class="form-control bankReplace" id="bankReplaceValue_${uuid}" aria-describedby="bankReplaceValueHelp">
           <div id="bankReplaceValueHelp" class="form-text">
             Inserte los caracteres que con los que desea reemplazar
           </div>
