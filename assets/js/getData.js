@@ -209,6 +209,7 @@ const getData = (data, args) => {
                         }
                     })
                     valueData = parseFloat(valueDataRaw)
+                    dataRows[valueColumn] = valueData
                 }
 
                 if (dataRows[valueColumn] == 0 || dataRows[valueColumn] == null && dataRows[t_acountColumn] !== 0) {
@@ -222,6 +223,7 @@ const getData = (data, args) => {
                         }
                     })
                     valueData = parseFloat(valueDataRaw)
+                    dataRows[valueColumn] = valueData
                 }
 
                 if ('readByRegex' in args.date) {
