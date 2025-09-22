@@ -180,7 +180,7 @@ function readExcel(file) {
     reader.onerror = (err) => reject(err)
 
     reader.readAsArrayBuffer(file)
-  });
+  })
 }
 
 function formatMoney(number){

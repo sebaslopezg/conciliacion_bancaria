@@ -162,7 +162,7 @@ const getFormConfig = () =>{
 
     let bankSaveValues = []
     let bankReplaceValues = []
-    let systemSaveValuess = []
+    let systemSaveValues = []
     let systemReplaceValues = []
 
     bankReplaceRows.forEach(el => {
@@ -203,7 +203,7 @@ const getFormConfig = () =>{
         const systemCustomValue = el.querySelector(".systemCustomValue")
 
         if (systemCustomCol && systemCustomValueCol && systemCustomName && systemCustomValue) {
-            systemSaveValuess.push({
+            systemSaveValues.push({
                 descriptionCol:systemCustomCol.value,
                 valueCol:systemCustomValueCol.value,
                 name:systemCustomName.value,
@@ -362,7 +362,7 @@ const getFormConfig = () =>{
                 nulls:systemDescriptionNullsValue,
             },
             value:systemValueConf,
-            saveValues:systemSaveValuess,
+            saveValues:systemSaveValues,
             replaceValues:systemReplaceValues
         }
     }
@@ -457,7 +457,7 @@ function loadCurrentConf(){
                 const saveValues = systemConf.saveValues
                 if (Array.isArray(saveValues)) {
                     saveValues.forEach(obj => {
-                        addCustomValue('displaySystemCustomValues', obj)
+                        addCustomValue('displaySystemCustomValues', obj, 'system')
                     })
                 }
             }
@@ -538,7 +538,7 @@ function loadCurrentConf(){
                 const saveValues = bankConf.saveValues
                 if (Array.isArray(saveValues)) {
                     saveValues.forEach(obj => {
-                        addCustomValue('displayBankCustomValues', obj)
+                        addCustomValue('displayBankCustomValues', obj, 'bank')
                     })
                 }
             }
