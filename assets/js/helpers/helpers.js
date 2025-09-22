@@ -182,3 +182,11 @@ function readExcel(file) {
     reader.readAsArrayBuffer(file)
   });
 }
+
+function formatMoney(number){
+    const formatter = new Intl.NumberFormat('es-CO');
+
+    const formattedString = formatter.format(number);
+
+    return formattedString
+}

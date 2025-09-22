@@ -173,10 +173,10 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
     headerColor ? tableHeaderColor = `class="table-${headerColor}"` : tableHeaderColor = ''
     const uuid = crypto.randomUUID()
     let keys = Object.keys(obj)
-    const customValuesTable = printCustomValues(customValue)
+    let customValuesTable
+    customValue ? customValuesTable = printCustomValues(customValue) : ''
 
     let html = `
-
         <div class="card">
             <div class="card-header">
                 ${fileName}
@@ -228,7 +228,7 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                 <td>${index}</td>
                 <td>${objActual.date}</td>
                 <td>${objActual.descripcion}</td>
-                <td>${objActual.value}</td>
+                <td>$ ${formatMoney(objActual.value)}</td>
             </tr>
         `
     })
@@ -259,7 +259,7 @@ function printCustomValues(obj){
             <div class="accordion-item">
                 <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#customValuesAcordeonCollapse_${index}" aria-expanded="false" aria-controls="customValuesAcordeonCollapse_${index}">
-                    ${customValue.name} : <b> $${total}</b>
+                    ${customValue.name} : <b> $${formatMoney(total)}</b>
                 </button>
                 </h2>
                 <div id="customValuesAcordeonCollapse_${index}" class="accordion-collapse collapse" data-bs-parent="#customValuesAcordeon_${index}">
@@ -284,7 +284,7 @@ function printCustomValues(obj){
                 <tr>
                     <td>${i+1}</td>
                     <td>${customValue.description[i]}</td>
-                    <td>${value}</td>
+                    <td>$ ${formatMoney(value)}</td>
                 </tr>
             
             `

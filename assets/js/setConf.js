@@ -111,11 +111,11 @@ btnSaveConfig.addEventListener('click', () =>{
 })
 
 btnAddSystemCustomValue.addEventListener('click', () =>{
-    addCustomValue('displaySystemCustomValues')
+    addCustomValue('displaySystemCustomValues', '', 'system')
 })
 
 btnAddBankCustomValue.addEventListener('click', () =>{
-    addCustomValue('displayBankCustomValues')
+    addCustomValue('displayBankCustomValues', '','bank')
 })
 
 btnAddReplaceValues.addEventListener('click', () =>{
@@ -145,6 +145,7 @@ const getFormConfig = () =>{
 
     const bankReplaceRows = document.querySelectorAll(".bankReplaceRow")
     const bankCustomRows = document.querySelectorAll(".bankCustomRow")
+    const systemCustomRows = document.querySelectorAll(".systemCustomRow")
 
     let bankRowLimitValue
     let bankDateConf
@@ -164,7 +165,6 @@ const getFormConfig = () =>{
     let systemSaveValuess = []
     let systemReplaceValues = []
 
-    //debajo de este bucle, falta agregar el correspondiente a valores personalizados para extraer sus valores
     bankReplaceRows.forEach(el => {
 
         const bankSearchColInput = el.querySelector(".bankSearchCol")
@@ -192,6 +192,22 @@ const getFormConfig = () =>{
                 valueCol:bankCustomValueCol.value,
                 name:bankCustomName.value,
                 value:bankCustomValue.value
+            })
+        }
+    })
+
+    systemCustomRows.forEach(el => {
+        const systemCustomCol = el.querySelector(".systemCustomCol")
+        const systemCustomValueCol = el.querySelector(".systemCustomValueCol")
+        const systemCustomName = el.querySelector(".systemCustomName")
+        const systemCustomValue = el.querySelector(".systemCustomValue")
+
+        if (systemCustomCol && systemCustomValueCol && systemCustomName && systemCustomValue) {
+            systemSaveValuess.push({
+                descriptionCol:systemCustomCol.value,
+                valueCol:systemCustomValueCol.value,
+                name:systemCustomName.value,
+                value:systemCustomValue.value
             })
         }
     })
@@ -436,6 +452,15 @@ function loadCurrentConf(){
                     }
                 }
             }
+
+            if ('saveValues' in systemConf) {
+                const saveValues = systemConf.saveValues
+                if (Array.isArray(saveValues)) {
+                    saveValues.forEach(obj => {
+                        addCustomValue('displaySystemCustomValues', obj)
+                    })
+                }
+            }
         }
 
         //bank conf getters
@@ -536,8 +561,8 @@ function setInput(inputType, input, value){
     }
 }
 
-function addCustomValue(displayId, values){
-
+function addCustomValue(displayId, values, lectorType = ''){
+    console.log(lectorType)
     let formValues
 
     const defaultValues = {
@@ -554,19 +579,19 @@ function addCustomValue(displayId, values){
 
     let placeholderDiv = document.createElement('div')
     placeholderDiv.setAttribute("id", uuid)
-    placeholderDiv.setAttribute("class", "row mb-3 bankCustomRow")
+    placeholderDiv.setAttribute("class", `row mb-3 ${lectorType}CustomRow`)
 
     placeholderDiv.innerHTML = `
 
         <div class="col-2">
             <label for="column_${uuid}" class="form-label">Col. Texto</label>
-            <input type="text" class="form-control bankCustomCol" id="column_${uuid}" aria-describedby="columnHelp_${uuid}" value="${formValues.descriptionCol}">
+            <input type="text" class="form-control ${lectorType}CustomCol" id="column_${uuid}" aria-describedby="columnHelp_${uuid}" value="${formValues.descriptionCol}">
             <div id="columnHelp_${uuid}" class="form-text">Columna a leer</div>
         </div>
 
         <div class="col-2">
             <label for="type_${uuid}" class="form-label">Col. Valor</label>
-                <input type="text" class="form-control bankCustomValueCol" id="ValueColumn_${uuid}" aria-describedby="ValueColumnHelp_${uuid}" value="${formValues.valueCol}">
+                <input type="text" class="form-control ${lectorType}CustomValueCol" id="ValueColumn_${uuid}" aria-describedby="ValueColumnHelp_${uuid}" value="${formValues.valueCol}">
                 <div id="ValueColumnHelp_${uuid}" class="form-text">
                     Tipo de lectura
                 </div>
@@ -574,13 +599,13 @@ function addCustomValue(displayId, values){
 
         <div class="col-3">
             <label for="name_${uuid}" class="form-label">Nombre</label>
-            <input type="text" class="form-control bankCustomName" id="name_${uuid}" aria-describedby="nameHelp_${uuid}" value="${formValues.name}">
+            <input type="text" class="form-control ${lectorType}CustomName" id="name_${uuid}" aria-describedby="nameHelp_${uuid}" value="${formValues.name}">
             <div id="nameHelp_${uuid}" class="form-text">Nombre personalizado</div>
         </div>
 
         <div class="col-4">
             <label for="value_${uuid}" class="form-label">Valor</label>
-            <input type="text" class="form-control bankCustomValue" id="value_${uuid}" aria-describedby="valueHelp_${uuid}" value="${formValues.value}">
+            <input type="text" class="form-control ${lectorType}CustomValue" id="value_${uuid}" aria-describedby="valueHelp_${uuid}" value="${formValues.value}">
             <div id="valueHelp_${uuid}" class="form-text">Valor que se va a buscar en la lectura</div>
         </div>
 
