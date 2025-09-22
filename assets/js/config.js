@@ -5,30 +5,45 @@ const defaultConf = {
         date:{
             column:'A',
             readByRegex: 0,
-            setYear:true
+            setYear:true,
+            nulls: false
         },
         description:{
-            column:'B'
+            column:'B',
+            nulls: false
         },
         value:{
-            column:'D'
-        }
+            column:'D',
+            nulls: false
+        },
+        saveValues:[],
+        replaceValues:[]
     },
     systemConf:{
         rowStart: 2,
         rowLimit:false,
         date:{
-            column:'A'
+            column:'A',
+            nulls: false
         },
         description:{
-            column:'B'
+            column:'B',
+            nulls: false
         },
         value:{
             t_acount:{
-                credit:'C',
-                debit:'D'
+                credit:{
+                    column: "C",
+                    nulls: true
+                },
+                debit:{
+                    column: "D",
+                    nulls: true
+                }
             }
-        }
+        },
+        saveValues:[],
+        replaceValues:[]
     }
 }
 

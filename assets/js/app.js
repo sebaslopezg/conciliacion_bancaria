@@ -83,11 +83,6 @@ Array.from(inputs).forEach(input => {
         
             if (fileExtention === 'xlsx' || fileExtention === 'xls') {
 
-/*                 readXlsxFile(input.files[0]).then((rows) => {
-                    input.id === 'exSistema' ? systemData = rows : '' 
-                    input.id === 'exBanco' ? bankData = rows : '' 
-                }) */
-
                 readExcel(input.files[0])
                 .then(rows => {
                     input.id === 'exSistema' ? systemData = rows : '' 
