@@ -562,7 +562,6 @@ function setInput(inputType, input, value){
 }
 
 function addCustomValue(displayId, values, lectorType = ''){
-    console.log(lectorType)
     let formValues
 
     const defaultValues = {

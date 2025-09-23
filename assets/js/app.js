@@ -259,8 +259,6 @@ function printCustomValues(obj){
                 </h2>
                 <div id="customValuesAcordeonCollapse_${index}" class="accordion-collapse collapse" data-bs-parent="#customValuesAcordeon_${index}">
                 <div class="accordion-body">
-
-
         `
 
         html += `
