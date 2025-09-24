@@ -167,10 +167,10 @@ function createDateExtractor(type = 'default') {
 //
 //// 2. Custom regex pattern
 //const customExtractor = new DateExtractor({
-//  pattern: /hasta\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
+//  pattern: /\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
 //  debug: true
 //});
-//console.log(customExtractor.extractAndFormatDate("Vence hasta 15 diciembre 2024")); // "15/12/2024"
+//console.log(customExtractor.extractAndFormatDate("cancela 6 ago 2025")); // "15/12/2024"
 //
 //// 3. Different output format
 //const usFormatExtractor = new DateExtractor({

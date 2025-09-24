@@ -22,6 +22,7 @@ const systemValueDebitColumn = document.querySelector('#systemValueDebitColumn')
 const systemValueDebitNulls = document.querySelector('#systemValueDebitNulls')
 const systemAllowExtractDateCkeckBox = document.querySelector('#allowExtractDate')
 const systemExtractDateColumn = document.querySelector('#systemExtractDateColumn') 
+const btnAddSystemConcatValue = document.querySelector('#btnAddSystemConcatValue') 
 
 //Bank consts
 const bankRowStart = document.querySelector('#bankRowStart')
@@ -129,6 +130,10 @@ btnAddBankCustomValue.addEventListener('click', () =>{
 
 btnAddReplaceValues.addEventListener('click', () =>{
     addReplaceValue('displayBankReplaces')
+})
+
+btnAddSystemConcatValue.addEventListener('click', () =>{
+    addConcatValue('displaySystemConcatValues')
 })
 
 //eventos para uppercase
@@ -713,4 +718,35 @@ function deleteCustomForm(id){
     if (divForm) {
         divForm.remove()
     }
+}
+
+/// TERMINAR FUNCION
+function addConcatValue(displayId, values = {}, lectorType = 'cell'){
+
+    const defaultValue = ''
+
+
+    const display = document.querySelector(`#${displayId}`)
+    const uuid = crypto.randomUUID()
+
+    let rowDiv = document.createElement('div')
+    rowDiv.setAttribute("id", uuid)
+    rowDiv.setAttribute("class", `row mb-3 ${lectorType}ConcatRow`)
+
+    rowDiv.innerHTML = `
+
+        <div class="col-6">
+          <label for="${lectorType}ConcatValue_${uuid}" class="form-label">Buscar</label>
+          <input value="${defaultValue}" type="text" class="form-control bankSearch" id="${lectorType}ConcatValue_${uuid}" aria-describedby="${lectorType}ConcatValueHelp_${uuid}">
+          <div id="${lectorType}ConcatValueHelp_${uuid}" class="form-text">
+            Inserte los caracteres que desea buscar
+          </div>
+        </div>
+
+        <div class="col-1">
+            <button type="button" class="btn-close" aria-label="Close" onclick="deleteCustomForm('${uuid}')"></button>
+        </div>
+    `
+
+    display.appendChild(rowDiv)
 }

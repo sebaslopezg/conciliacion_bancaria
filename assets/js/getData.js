@@ -254,9 +254,11 @@ const getData = (data, args) => {
                 if (args.extractDate !== false) {
                     const cellIndex = cols.indexOf(args.extractDate.column)
                     const customExtractor = new DateExtractor({
-                      pattern: defaultDateExtractor,
+                      pattern: defaultDateExtractor.pattern,
                       debug: true
                     })
+
+                    console.log(defaultDateExtractor)
     
                     const newDate = customExtractor.extractAndFormatDate(dataRows[cellIndex])
 

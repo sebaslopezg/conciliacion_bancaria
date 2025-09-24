@@ -21,7 +21,8 @@ const defaultConf = {
         extractDate:{
             column:'B',
             regex:''
-        }
+        },
+        concatValues:[]
     },
     systemConf:{
         rowStart: 2,
@@ -60,6 +61,6 @@ const defaultRegex = [
 ]
 
 const defaultDateExtractor = {
-    pattern: /al\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
+    pattern: /\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
     debug: true
 }
