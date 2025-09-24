@@ -162,46 +162,30 @@ function createDateExtractor(type = 'default') {
 // Example usage:
 
 // 1. Default configuration (Spanish "al" pattern)
-const defaultExtractor = new DateExtractor();
-console.log(defaultExtractor.extractAndFormatDate("CANCELA AL 31 AGO 2025")); // "31/08/2025"
-
-// 2. Custom regex pattern
-const customExtractor = new DateExtractor({
-  pattern: /hasta\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
-  debug: true
-});
-console.log(customExtractor.extractAndFormatDate("Vence hasta 15 diciembre 2024")); // "15/12/2024"
-
-// 3. Different output format
-const usFormatExtractor = new DateExtractor({
-  outputFormat: 'MM/DD/YYYY'
-});
-console.log(usFormatExtractor.extractAndFormatDate("al 31 ago 2025")); // "08/31/2025"
-
-// 4. English dates with different capture group order
-const englishExtractor = createDateExtractor('english');
-console.log(englishExtractor.extractAndFormatDate("July 4, 2024")); // "04/07/2024"
-
-// 5. Update configuration dynamically
-const extractor = new DateExtractor();
-extractor.updateConfig({
-  pattern: /(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})/i,
-  outputFormat: 'YYYY-MM-DD'
-});
-console.log(extractor.extractAndFormatDate("25 de marzo de 2024")); // "2024-03-25"
-
-// 6. Using with SheetJS
-/*
-import * as XLSX from 'xlsx';
-
-const workbook = XLSX.readFile('your-file.xlsx');
-const worksheet = workbook.Sheets['Sheet1'];
-
-const extractor = new DateExtractor({
-  debug: true,
-  outputFormat: 'YYYY-MM-DD'
-});
-
-const formattedDate = extractor.processExcelCell(worksheet, 'A1');
-console.log(formattedDate);
-*/
+//const defaultExtractor = new DateExtractor();
+//console.log(defaultExtractor.extractAndFormatDate("CANCELA AL 31 AGO 2025")); // "31/08/2025"
+//
+//// 2. Custom regex pattern
+//const customExtractor = new DateExtractor({
+//  pattern: /hasta\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
+//  debug: true
+//});
+//console.log(customExtractor.extractAndFormatDate("Vence hasta 15 diciembre 2024")); // "15/12/2024"
+//
+//// 3. Different output format
+//const usFormatExtractor = new DateExtractor({
+//  outputFormat: 'MM/DD/YYYY'
+//});
+//console.log(usFormatExtractor.extractAndFormatDate("al 31 ago 2025")); // "08/31/2025"
+//
+//// 4. English dates with different capture group order
+//const englishExtractor = createDateExtractor('english');
+//console.log(englishExtractor.extractAndFormatDate("July 4, 2024")); // "04/07/2024"
+//
+//// 5. Update configuration dynamically
+//const extractor = new DateExtractor();
+//extractor.updateConfig({
+//  pattern: /(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})/i,
+//  outputFormat: 'YYYY-MM-DD'
+//});
+//console.log(extractor.extractAndFormatDate("25 de marzo de 2024")); // "2024-03-25"

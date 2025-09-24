@@ -17,7 +17,11 @@ const defaultConf = {
             nulls: false
         },
         saveValues:[],
-        replaceValues:[]
+        replaceValues:[],
+        extractDate:{
+            column:'B',
+            regex:''
+        }
     },
     systemConf:{
         rowStart: 2,
@@ -43,7 +47,8 @@ const defaultConf = {
             }
         },
         saveValues:[],
-        replaceValues:[]
+        replaceValues:[],
+        extractDate:false
     }
 }
 
@@ -53,3 +58,8 @@ const defaultRegex = [
         description:'Permitir solo fecha de dos valores sin año EJ: 01/01'
     }
 ]
+
+const defaultDateExtractor = {
+    pattern: /al\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
+    debug: true
+}

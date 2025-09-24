@@ -244,6 +244,28 @@
 
               </div>
 
+              <div class="mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="allowExtractDate">
+                <label class="form-check-label" for="allowExtractDate" aria-describedby="allowExtractDateHelp">
+                  Extraer fecha
+                </label>
+                <div id="allowExtractDateHelp" class="form-text">Extrae la fecha con la regla del formato indicada por el usuario</div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-6">
+                  <label for="systemExtractDateColumn" class="form-label">Columna a extraer</label>
+                  <input type="text" class="form-control" id="systemExtractDateColumn" aria-describedby="systemExtractDateColumnHelp" disabled>
+                  <div id="systemExtractDateColumnHelp" class="form-text">Columna de texto donde se extraerá la fecha</div>
+                </div>
+
+                <div class="col-6">
+                  <label for="systemExtractDateRegex" class="form-label">Expresión Regular</label>
+                  <input type="text" value="/al\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})" class="form-control" id="systemExtractDateRegex" aria-describedby="systemExtractDateRegexHelp" disabled>
+                  <div id="systemExtractDateRegexHelp" class="form-text">Escribe la expresión regular que se usará para leer la columna</div>
+                </div>
+              </div>
+
               <div class="row mb-3">
                 <div class="accordion" id="accordionSystemCustomValues">
                   <div class="accordion-item">
@@ -439,6 +461,7 @@
   <script src="./assets/js/config.js"></script>
   <script src="./assets/js/helpers/helpers.js"></script>
   <script src="./assets/js/errors.js"></script>
+  <script src="./assets/js/dateExtractor.js"></script>
   <script src="./assets/js/getData.js"></script>
   <script src="./assets/js/setTransactions.js"></script>
   <script src="./assets/js/setConf.js"></script>

@@ -20,7 +20,8 @@ const systemValueCreditColumn = document.querySelector('#systemValueCreditColumn
 const systemValueCreditNulls = document.querySelector('#systemValueCreditNulls')
 const systemValueDebitColumn = document.querySelector('#systemValueDebitColumn')
 const systemValueDebitNulls = document.querySelector('#systemValueDebitNulls')
-
+const systemAllowExtractDateCkeckBox = document.querySelector('#allowExtractDate')
+const systemExtractDateColumn = document.querySelector('#systemExtractDateColumn') 
 
 //Bank consts
 const bankRowStart = document.querySelector('#bankRowStart')
@@ -52,6 +53,14 @@ tacountCkeckBox.addEventListener('change', () =>{
         systemValueCreditNulls.setAttribute('disabled','')
         systemValueDebitColumn.setAttribute('disabled','')
         systemValueDebitNulls.setAttribute('disabled','')
+    }
+})
+
+systemAllowExtractDateCkeckBox.addEventListener('change', () =>{
+    if (systemAllowExtractDateCkeckBox.checked) {
+        systemExtractDateColumn.removeAttribute('disabled')
+    }else{
+        systemExtractDateColumn.setAttribute('disabled','')
     }
 })
 
@@ -159,6 +168,7 @@ const getFormConfig = () =>{
     let systemDateNullsValue
     let systemDescriptionNullsValue
     let systemValueNullsValue
+    let systemExtractDate
 
     let bankSaveValues = []
     let bankReplaceValues = []
@@ -327,6 +337,15 @@ const getFormConfig = () =>{
         }
     }
 
+    if(systemAllowExtractDateCkeckBox.checked){
+        systemExtractDate = {
+            column:systemExtractDateColumn.value,
+            regex:''
+        }
+    }else{
+        systemExtractDate = false
+    }
+
     bankDescriptionNulls.value === '1' ? bankDescriptionNullsValue = true : bankDescriptionNullsValue = false
     bankValueNulls.value === '1' ? bankValueNullsValue = true : bankValueNullsValue = false
 
@@ -348,7 +367,8 @@ const getFormConfig = () =>{
                 nulls:bankValueNullsValue,
             },
             saveValues:bankSaveValues,
-            replaceValues:bankReplaceValues
+            replaceValues:bankReplaceValues,
+            extractDate:false
         },
         systemConf:{
             rowStart: parseInt(systemRowStart.value),
@@ -363,7 +383,8 @@ const getFormConfig = () =>{
             },
             value:systemValueConf,
             saveValues:systemSaveValues,
-            replaceValues:systemReplaceValues
+            replaceValues:systemReplaceValues,
+            extractDate:systemExtractDate
         }
     }
 
@@ -459,6 +480,17 @@ function loadCurrentConf(){
                     saveValues.forEach(obj => {
                         addCustomValue('displaySystemCustomValues', obj, 'system')
                     })
+                }
+            }
+
+            if ('extractDate' in systemConf) {
+                if (systemConf.extractDate === false) {
+                    setInput('checkbox', systemAllowExtractDateCkeckBox, false)
+                    setInput('state', systemExtractDateColumn, false)
+                }else{
+                    setInput('checkbox', systemAllowExtractDateCkeckBox, true)
+                    setInput('state', systemExtractDateColumn, true)
+                    setInput('text', systemExtractDateColumn, systemConf.extractDate.column)
                 }
             }
         }

@@ -152,6 +152,13 @@ const getData = (data, args) => {
             }
         }
 
+        if (!('extractDate' in args)) {
+            errors.push({
+                status:false, 
+                msg:errCode.extractDate
+            })
+        }
+
     } //poner un elese aqui
 
     //Inicio de extraccion de datos
@@ -243,6 +250,19 @@ const getData = (data, args) => {
                 }else{
                     dateData = dataRows[dateColumn]
                 }
+
+                if (args.extractDate !== false) {
+                    const cellIndex = cols.indexOf(args.extractDate.column)
+                    const customExtractor = new DateExtractor({
+                      pattern: defaultDateExtractor,
+                      debug: true
+                    })
+    
+                    const newDate = customExtractor.extractAndFormatDate(dataRows[cellIndex])
+
+                    newDate ? dateData = newDate : ''
+                }
+
 
                 //Aqui se convierte la fecha en caso de que venga como un numero
                 if (!isNaN(dateData)) {
@@ -355,58 +375,3 @@ function addValueToCostumData(valuesKey, categoryName, newValue, newDescription)
     }
   }
 }
-
-
-//// fro claude.... //////// ---------------------------------
-
-function extractAndFormatDate(cellValue) {
-  if (!cellValue || typeof cellValue !== 'string') {
-    return null;
-  }
-
-  // Month mappings for Spanish months
-  const monthMap = {
-    'enero': '01', 'ene': '01',
-    'febrero': '02', 'feb': '02',
-    'marzo': '03', 'mar': '03',
-    'abril': '04', 'abr': '04',
-    'mayo': '05', 'may': '05',
-    'junio': '06', 'jun': '06',
-    'julio': '07', 'jul': '07',
-    'agosto': '08', 'ago': '08',
-    'septiembre': '09', 'sep': '09',
-    'octubre': '10', 'oct': '10',
-    'noviembre': '11', 'nov': '11',
-    'diciembre': '12', 'dic': '12'
-  }
-
-  // Regular expression to match date patterns
-  // Looks for "al" followed by day, month, and year
-  const datePattern = /al\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i;
-  
-  const match = cellValue.match(datePattern);
-  
-  if (!match) {
-    return null;
-  }
-  
-  const day = match[1].padStart(2, '0');
-  const monthName = match[2].toLowerCase();
-  const year = match[3];
-  
-  // Get the month number from the mapping
-  const month = monthMap[monthName];
-  
-  if (!month) {
-    console.warn(`Unknown month: ${monthName}`);
-    return null;
-  }
-  
-  return `${day}/${month}/${year}`;
-}
-
-// Example usage:
-console.log(extractAndFormatDate("CANCELA AL 31 AGO 2025")); // "31/08/2025"
-console.log(extractAndFormatDate("Quincena al 31 Agosto 2025")); // "31/08/2025"
-console.log(extractAndFormatDate("some comment ... al 24 julio 2025")); // "24/07/2025"
-console.log(extractAndFormatDate("Payment al 15 dic 2024")); // "15/12/2024"

@@ -25,7 +25,8 @@ const errCode = {
             },
         }              
     },
-    saveValues:'No se encuentra una o varias de las llaves en "saveValues".'
+    saveValues:'No se encuentra una o varias de las llaves en "saveValues".',
+    extractDate:'No se encontró definida la llave "extractDate", revise la configuracion'
 }
 
 
