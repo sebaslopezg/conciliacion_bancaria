@@ -133,7 +133,7 @@ btnAddReplaceValues.addEventListener('click', () =>{
 })
 
 btnAddSystemConcatValue.addEventListener('click', () =>{
-    addConcatValue('displaySystemConcatValues')
+    addConcatValue('displaySystemConcatValues', '', 'system')
 })
 
 //eventos para uppercase
@@ -160,6 +160,7 @@ const getFormConfig = () =>{
     const bankReplaceRows = document.querySelectorAll(".bankReplaceRow")
     const bankCustomRows = document.querySelectorAll(".bankCustomRow")
     const systemCustomRows = document.querySelectorAll(".systemCustomRow")
+    const systemconcatRows = document.querySelectorAll(".systemConcatRow")
 
     let bankRowLimitValue
     let bankDateConf
@@ -179,6 +180,7 @@ const getFormConfig = () =>{
     let bankReplaceValues = []
     let systemSaveValues = []
     let systemReplaceValues = []
+    let systemConcatValues = []
 
     bankReplaceRows.forEach(el => {
 
@@ -225,6 +227,18 @@ const getFormConfig = () =>{
                 value:systemCustomValue.value
             })
         }
+    })
+
+    systemconcatRows.forEach(el =>{
+        const systemConcatCol = el.querySelector('.systemConcatCol')
+        const systemConcatSep = el.querySelector('.systemConcatSep')
+        if (systemConcatCol) {
+            systemConcatValues.push({
+                column:systemConcatCol.value,
+                separator:systemConcatSep.value
+            })
+        }
+
     })
 
     if (!bankRowStart.value) {
@@ -389,7 +403,8 @@ const getFormConfig = () =>{
             value:systemValueConf,
             saveValues:systemSaveValues,
             replaceValues:systemReplaceValues,
-            extractDate:systemExtractDate
+            extractDate:systemExtractDate,
+            concatValues:systemConcatValues
         }
     }
 
@@ -496,6 +511,15 @@ function loadCurrentConf(){
                     setInput('checkbox', systemAllowExtractDateCkeckBox, true)
                     setInput('state', systemExtractDateColumn, true)
                     setInput('text', systemExtractDateColumn, systemConf.extractDate.column)
+                }
+            }
+
+            if ('concatValues' in systemConf) {
+                const concatValues = systemConf.concatValues
+                if (Array.isArray(concatValues)) {
+                    concatValues.forEach(obj =>{
+                        addConcatValue('displaySystemConcatValues', obj, 'system')
+                    })
                 }
             }
         }
@@ -720,11 +744,16 @@ function deleteCustomForm(id){
     }
 }
 
-/// TERMINAR FUNCION
 function addConcatValue(displayId, values = {}, lectorType = 'cell'){
 
-    const defaultValue = ''
+    let objValue = {
+        column: '',
+        separator: ''
+    }
 
+    
+
+    values ? objValue = values : ''
 
     const display = document.querySelector(`#${displayId}`)
     const uuid = crypto.randomUUID()
@@ -736,10 +765,18 @@ function addConcatValue(displayId, values = {}, lectorType = 'cell'){
     rowDiv.innerHTML = `
 
         <div class="col-6">
-          <label for="${lectorType}ConcatValue_${uuid}" class="form-label">Buscar</label>
-          <input value="${defaultValue}" type="text" class="form-control bankSearch" id="${lectorType}ConcatValue_${uuid}" aria-describedby="${lectorType}ConcatValueHelp_${uuid}">
-          <div id="${lectorType}ConcatValueHelp_${uuid}" class="form-text">
-            Inserte los caracteres que desea buscar
+          <label for="${lectorType}ConcatCol_${uuid}" class="form-label">Columna</label>
+          <input value="${objValue.column}" type="text" class="form-control ${lectorType}ConcatCol" id="${lectorType}ConcatCol_${uuid}" aria-describedby="${lectorType}ConcatColHelp_${uuid}">
+          <div id="${lectorType}ConcatColHelp_${uuid}" class="form-text">
+            Incerte la letra de la columna que desea concatenar
+          </div>
+        </div>
+
+        <div class="col-5">
+          <label for="${lectorType}ConcatSep_${uuid}" class="form-label">Separador</label>
+          <input value="${objValue.separator}" type="text" class="form-control ${lectorType}ConcatSep" id="${lectorType}ConcatSep_${uuid}" aria-describedby="${lectorType}ConcatSepHelp_${uuid}">
+          <div id="${lectorType}ConcatSepHelp_${uuid}" class="form-text">
+            Separador que desea incluir entre concatenaciones
           </div>
         </div>
 

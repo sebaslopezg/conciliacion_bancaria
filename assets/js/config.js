@@ -49,7 +49,8 @@ const defaultConf = {
         },
         saveValues:[],
         replaceValues:[],
-        extractDate:false
+        extractDate:false,
+        concatValues:[]
     }
 }
 

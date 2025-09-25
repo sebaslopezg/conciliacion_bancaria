@@ -282,6 +282,18 @@ const getData = (data, args) => {
                     AddCustomValue(args.saveValues, dataRows, customValuesData)
                 }
 
+                if ('concatValues' in args) {
+                    const concatValues = args.concatValues
+                    if (Array.isArray(concatValues)) {
+                        concatValues.forEach(el =>{
+                            const index = cols.indexOf(el.column)
+                            if (index) {
+                              descripcionData = descripcionData + el.separator + dataRows[index]
+                            }
+                        })
+                    }
+                }
+
                 if (dataState) {                    
                     responseData.push({
                         date:dateData,
