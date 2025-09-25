@@ -2,7 +2,7 @@ class DateExtractor {
   constructor(config = {}) {
     this.config = {
       // Default regex pattern for "al DD MONTH YYYY" format
-      pattern: config.pattern || /al\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
+      pattern: config.pattern ? new RegExp(config.pattern, 'i') : /al\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
       
       // Default month mappings for Spanish
       monthMap: config.monthMap || {
@@ -66,7 +66,7 @@ class DateExtractor {
     }
 
     // Process day
-    const day = dayRaw.padStart(2, '0')
+    const day = dayRaw.padStart(2, '0');
     
     // Process month
     const monthName = monthRaw.toLowerCase();
@@ -96,96 +96,116 @@ class DateExtractor {
       .replace('YY', year.slice(-2));
   }
 
+  // Method to set regex pattern from simple text
+  setPatternFromSimpleText(patternText) {
+    try {
+      // Escape special regex characters except spaces
+      let processedPattern = patternText
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)')
+        .replace(/\[/g, '\\[')
+        .replace(/\]/g, '\\]')
+        .replace(/\{/g, '\\{')
+        .replace(/\}/g, '\\}')
+        .replace(/\./g, '\\.')
+        .replace(/\+/g, '\\+')
+        .replace(/\*/g, '\\*')
+        .replace(/\?/g, '\\?')
+        .replace(/\^/g, '\\^')
+        .replace(/\$/g, '\\$')
+        .replace(/\|/g, '\\|');
+      
+      // Replace placeholders with capture groups
+      processedPattern = processedPattern
+        .replace(/DD/g, '(\\d{1,2})')
+        .replace(/MONTH/g, '([a-záéíóúñ]+)')
+        .replace(/YYYY/g, '(\\d{4})');
+      
+      // Replace spaces with flexible space matching
+      processedPattern = processedPattern.replace(/\s+/g, '\\s+');
+      
+      // Make the pattern flexible to match anywhere in the text
+      processedPattern = '.*?' + processedPattern;
+      
+      this.config.pattern = new RegExp(processedPattern, 'i');
+      
+      if (this.config.debug) {
+        console.log(`Original: "${patternText}"`);
+        console.log(`Processed: "${processedPattern}"`);
+        console.log(`Final regex: ${this.config.pattern}`);
+      }
+      return true;
+    } catch (error) {
+      if (this.config.debug) {
+        console.error(`Invalid pattern: ${patternText}`, error);
+      }
+      return false;
+    }
+  }
+
+  // Method to set exact regex pattern from input text
+  setPatternFromText(patternText) {
+    try {
+      this.config.pattern = new RegExp(patternText, 'i');
+      if (this.config.debug) {
+        console.log(`Pattern updated to: ${this.config.pattern}`);
+      }
+      return true;
+    } catch (error) {
+      if (this.config.debug) {
+        console.error(`Invalid regex pattern: ${patternText}`, error);
+      }
+      return false;
+    }
+  }
+
   // Method to update configuration
   updateConfig(newConfig) {
+    if (newConfig.pattern && typeof newConfig.pattern === 'string') {
+      newConfig.pattern = new RegExp(newConfig.pattern, 'i');
+    }
     this.config = { ...this.config, ...newConfig };
   }
-
-  // Method to process Excel cell with SheetJS
-  processExcelCell(worksheet, cellAddress) {
-    const cell = worksheet[cellAddress];
-    
-    if (!cell || !cell.v) {
-      return null;
-    }
-    
-    const cellValue = cell.v.toString();
-    return this.extractAndFormatDate(cellValue);
-  }
 }
-
-// Factory function for common configurations
-function createDateExtractor(type = 'default') {
-  const configurations = {
-    // Default Spanish "al" pattern
-    default: {},
-    
-    // Pattern for "hasta DD MONTH YYYY"
-    hasta: {
-      pattern: /hasta\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i
-    },
-    
-    // Pattern for "DD de MONTH de YYYY"
-    deDe: {
-      pattern: /(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})/i
-    },
-    
-    // Pattern for "MONTH DD, YYYY" (English)
-    english: {
-      pattern: /([a-z]+)\s+(\d{1,2}),\s+(\d{4})/i,
-      captureGroups: { day: 2, month: 1, year: 3 },
-      monthMap: {
-        'january': '01', 'jan': '01',
-        'february': '02', 'feb': '02',
-        'march': '03', 'mar': '03',
-        'april': '04', 'apr': '04',
-        'may': '05',
-        'june': '06', 'jun': '06',
-        'july': '07', 'jul': '07',
-        'august': '08', 'aug': '08',
-        'september': '09', 'sep': '09',
-        'october': '10', 'oct': '10',
-        'november': '11', 'nov': '11',
-        'december': '12', 'dec': '12'
-      }
-    },
-    
-    // US format MM/DD/YYYY
-    us: {
-      outputFormat: 'MM/DD/YYYY'
-    }
-  };
-
-  return new DateExtractor(configurations[type] || configurations.default);
-}
+/*
 
 // Example usage:
 
-// 1. Default configuration (Spanish "al" pattern)
-//const defaultExtractor = new DateExtractor();
-//console.log(defaultExtractor.extractAndFormatDate("CANCELA AL 31 AGO 2025")); // "31/08/2025"
-//
-//// 2. Custom regex pattern
-//const customExtractor = new DateExtractor({
-//  pattern: /\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
-//  debug: true
-//});
-//console.log(customExtractor.extractAndFormatDate("cancela 6 ago 2025")); // "15/12/2024"
-//
-//// 3. Different output format
-//const usFormatExtractor = new DateExtractor({
-//  outputFormat: 'MM/DD/YYYY'
-//});
-//console.log(usFormatExtractor.extractAndFormatDate("al 31 ago 2025")); // "08/31/2025"
-//
-//// 4. English dates with different capture group order
-//const englishExtractor = createDateExtractor('english');
-//console.log(englishExtractor.extractAndFormatDate("July 4, 2024")); // "04/07/2024"
-//
-//// 5. Update configuration dynamically
-//const extractor = new DateExtractor();
-//extractor.updateConfig({
-//  pattern: /(\d{1,2})\s+de\s+([a-záéíóúñ]+)\s+de\s+(\d{4})/i,
-//  outputFormat: 'YYYY-MM-DD'
-//});
-//console.log(extractor.extractAndFormatDate("25 de marzo de 2024")); // "2024-03-25"
+// 1. Default usage
+console.log('=== Default patterns ===');
+const defaultExtractor = new DateExtractor();
+console.log(defaultExtractor.extractAndFormatDate("CANCELA AL 31 AGO 2025")); // "31/08/2025"
+console.log(defaultExtractor.extractAndFormatDate("Quincena al 31 Agosto 2025")); // "31/08/2025"
+
+// 2. Simple patterns that now work correctly
+console.log('\n=== Simple patterns ===');
+const simpleExtractor = new DateExtractor({ debug: true });
+simpleExtractor.setPatternFromSimpleText("DD MONTH YYYY");
+console.log(simpleExtractor.extractAndFormatDate("cancela 6 ago 2025")); // "06/08/2025"
+console.log(simpleExtractor.extractAndFormatDate("vence 31 diciembre 2024")); // "31/12/2024"
+
+// 3. More specific patterns
+console.log('\n=== Specific patterns ===');
+const specificExtractor = new DateExtractor();
+specificExtractor.setPatternFromSimpleText("hasta DD MONTH YYYY");
+console.log(specificExtractor.extractAndFormatDate("Vence hasta 15 diciembre 2024")); // "15/12/2024"
+
+// 4. Different formats
+console.log('\n=== Different formats ===');
+const deExtractor = new DateExtractor();
+deExtractor.setPatternFromSimpleText("DD de MONTH de YYYY");
+console.log(deExtractor.extractAndFormatDate("Fecha 25 de marzo de 2024")); // "25/03/2024"
+
+// 5. US date format output
+console.log('\n=== US format output ===');
+const usExtractor = new DateExtractor({ outputFormat: 'MM/DD/YYYY' });
+usExtractor.setPatternFromSimpleText("DD MONTH YYYY");
+console.log(usExtractor.extractAndFormatDate("payment 15 julio 2025")); // "07/15/2025"
+
+// 6. Advanced regex (for power users)
+console.log('\n=== Advanced regex ===');
+const advancedExtractor = new DateExtractor({ debug: true });
+advancedExtractor.setPatternFromText('(\\d{1,2})\\s+de\\s+([a-záéíóúñ]+)\\s+de\\s+(\\d{4})');
+console.log(advancedExtractor.extractAndFormatDate("Contrato 15 de agosto de 2025")); // "15/08/2025"
+
+*/

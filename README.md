@@ -2,6 +2,6 @@
 
 ## Pendiente:
 
-- Regex dinamico para configurar fechas
+- Regex dinamico para configurar fechas (no prioritario)
 - Agregar celdas añadibles para listado de lectura de fechas
-- Agregar celdas añadibles para concatenacion de descripcion
+- Leer regex dinamico para fechas extraidas de desc.

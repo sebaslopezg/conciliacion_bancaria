@@ -26,7 +26,8 @@ const errCode = {
         }              
     },
     saveValues:'No se encuentra una o varias de las llaves en "saveValues".',
-    extractDate:'No se encontró definida la llave "extractDate", revise la configuracion'
+    extractDate:'No se encontró definida la llave "extractDate", revise la configuracion',
+    colIndex:'Error, la letra de la columna no existe en este contexto.'
 }
 
 

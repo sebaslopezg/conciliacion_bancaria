@@ -22,6 +22,7 @@ const systemValueDebitColumn = document.querySelector('#systemValueDebitColumn')
 const systemValueDebitNulls = document.querySelector('#systemValueDebitNulls')
 const systemAllowExtractDateCkeckBox = document.querySelector('#allowExtractDate')
 const systemExtractDateColumn = document.querySelector('#systemExtractDateColumn') 
+const systemExtractDateRegex = document.querySelector('#systemExtractDateRegex') 
 const btnAddSystemConcatValue = document.querySelector('#btnAddSystemConcatValue') 
 
 //Bank consts
@@ -60,8 +61,10 @@ tacountCkeckBox.addEventListener('change', () =>{
 systemAllowExtractDateCkeckBox.addEventListener('change', () =>{
     if (systemAllowExtractDateCkeckBox.checked) {
         systemExtractDateColumn.removeAttribute('disabled')
+        systemExtractDateRegex.removeAttribute('disabled')
     }else{
         systemExtractDateColumn.setAttribute('disabled','')
+        systemExtractDateRegex.setAttribute('disabled','')
     }
 })
 
@@ -359,7 +362,7 @@ const getFormConfig = () =>{
     if(systemAllowExtractDateCkeckBox.checked){
         systemExtractDate = {
             column:systemExtractDateColumn.value,
-            regex:''
+            regex:systemExtractDateRegex.value
         }
     }else{
         systemExtractDate = false
@@ -507,10 +510,13 @@ function loadCurrentConf(){
                 if (systemConf.extractDate === false) {
                     setInput('checkbox', systemAllowExtractDateCkeckBox, false)
                     setInput('state', systemExtractDateColumn, false)
+                    setInput('state', systemExtractDateRegex, false)
                 }else{
                     setInput('checkbox', systemAllowExtractDateCkeckBox, true)
                     setInput('state', systemExtractDateColumn, true)
+                    setInput('state', systemExtractDateRegex, true)
                     setInput('text', systemExtractDateColumn, systemConf.extractDate.column)
+                    setInput('text', systemExtractDateRegex, systemConf.extractDate.regex)
                 }
             }
 

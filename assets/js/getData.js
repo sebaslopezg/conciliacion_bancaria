@@ -252,15 +252,22 @@ const getData = (data, args) => {
                 }
 
                 if (args.extractDate !== false) {
-                    const cellIndex = cols.indexOf(args.extractDate.column)
-                    const customExtractor = new DateExtractor({
-                      pattern: defaultDateExtractor.pattern,
-                      debug: true
-                    })
-
-                    console.log(defaultDateExtractor)
+                    const extractDate = args.extractDate
+                    const cellIndex = cols.indexOf(extractDate.column)
+                    let newDate
+                    let patternValue
+                    extractDate.regex ? patternValue = extractDate.regex : patternValue = defaultDateExtractor.pattern
+                    const customExtractor = new DateExtractor({debug: false})
+                    customExtractor.setPatternFromSimpleText(patternValue)
     
-                    const newDate = customExtractor.extractAndFormatDate(dataRows[cellIndex])
+                    if (cellIndex) {
+                        newDate = customExtractor.extractAndFormatDate(dataRows[cellIndex])
+                    }else{
+                        errors.push({
+                            status:false,
+                            msg:errCode.colIndex
+                        }) 
+                    }
 
                     newDate ? dateData = newDate : ''
                 }

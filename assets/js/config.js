@@ -62,6 +62,7 @@ const defaultRegex = [
 ]
 
 const defaultDateExtractor = {
-    pattern: /\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
+    pattern: `\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})`,
+    //pattern: /\s+(\d{1,2})\s+([a-záéíóúñ]+)\s+(\d{4})/i,
     debug: true
 }
