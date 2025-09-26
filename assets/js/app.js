@@ -3,8 +3,6 @@ const btnExecute = document.querySelector('#execute')
 const display = document.querySelector('#display')
 const btnShowSystemTable = document.querySelector('#btnShowSystemTable')
 const btnShowBankTable = document.querySelector('#btnShowBankTable')
-const btnShowFind = document.querySelector('#btnShowFind')
-const btnShowNotFind = document.querySelector('#btnShowNotFind')
 const exSistema = document.querySelector('#exSistema')
 const exBanco = document.querySelector('#exBanco')
 
@@ -23,8 +21,6 @@ courrentYearInput.value = date.getFullYear()
 const enableButtons = () =>{
     btnShowSystemTable.disabled = false
     btnShowBankTable.disabled = false
-    btnShowFind.disabled = false
-    btnShowNotFind.disabled = false
 }
 
 btnExecute.addEventListener('click', () =>{
@@ -43,7 +39,7 @@ btnExecute.addEventListener('click', () =>{
 btnShowSystemTable.addEventListener('click', () =>{
     if (systemDataRows.length > 0) {
         const fname = exSistema.files[0].name
-        printTable(systemDataRows, true, 'info', fname, systemDataCustomValues)
+        printTable(resultDataRows.system, true, 'info', fname, systemDataCustomValues)
     }else{
         Swal.fire({
             icon: "error",
@@ -56,7 +52,7 @@ btnShowSystemTable.addEventListener('click', () =>{
 btnShowBankTable.addEventListener('click', () =>{
     if (bankDataRows.length > 0) {
         const fname = exBanco.files[0].name
-        printTable(bankDataRows, true, 'warning',fname, bankDataCustomValues)
+        printTable(resultDataRows.bank, true, 'warning',fname, bankDataCustomValues)
     }else{
         Swal.fire({
             icon: "error",
@@ -64,14 +60,6 @@ btnShowBankTable.addEventListener('click', () =>{
             text: `No se encontraron datos validos en el archivo`
         })
     }
-})
-
-btnShowFind.addEventListener('click', () =>{
-    printTable(resultDataRows.coincide, true, 'primary','Resultados que coinciden')
-})
-
-btnShowNotFind.addEventListener('click', () =>{
-    printTable(resultDataRows.noCoincide, true, 'primary','Resultados que no coinciden')
 })
 
 Array.from(inputs).forEach(input => {
@@ -143,7 +131,17 @@ const readData = () =>{
         systemDataRows = systemDataResponse.data.rows
         systemDataCustomValues = systemDataResponse.data.customValues
 
-        resultDataRows = setTransactions(systemDataRows,bankDataRows)
+        //resultDataRows = setTransactions(systemDataRows,bankDataRows)
+        resultDataRows = setTransactions({
+            arrMain:{
+                array:systemDataRows,
+                name:'system'
+            },
+            arrSecond:{
+                array:bankDataRows,
+                name:'bank'
+            }
+        })
 
         Swal.fire({
             icon: "success",
@@ -189,8 +187,28 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                     </div>
                 </div>
 
+                <div class="col-2">
+                    <h6>Número de Registros:</h6> <h5><span class="badge text-bg-secondary">${keys.length}</span></h5>
+                </div>
+
                 <div class="col-3">
-                    <h6>Número de Registros: <span class="badge text-bg-secondary">${keys.length}</span></h6>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" onclick="setTableCells('matchCells')" id="matchCells">
+                        <label class="form-check-label" for="matchCells">
+                        <i class="bi bi-check-circle-fill text-success"></i> 
+                        Resaltar Celdas que coinciden
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" onclick="setTableCells('notMatchCells')" id="notMatchCells">
+                        <label class="form-check-label" for="notMatchCells">
+                        <i class="bi bi-x-circle-fill text-danger"></i> 
+                        Resaltar Celdas NO coinciden
+                        </label>
+                    </div>
                 </div>
 
             </div>
@@ -219,7 +237,7 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
         index = parseInt(key) + 1
         html += `
 
-            <tr>
+            <tr class="${objActual.status}">
                 <td>${index}</td>
                 <td>${objActual.date}</td>
                 <td>${objActual.descripcion}</td>
@@ -243,9 +261,7 @@ const printResult = () => {
 function printCustomValues(obj){
 
     html = ""
-
     obj.forEach((customValue, index) => {
-
         const total = customValue.values.reduce((acumulador, valorActual) => acumulador + valorActual, 0)
         
         html += `
@@ -293,3 +309,34 @@ function printCustomValues(obj){
     return html
 }
 
+function setTableCells(type){
+    const matchCells = document.querySelectorAll('.found')
+    const notMatchCells = document.querySelectorAll('.not_found')
+    let rows
+    let rowType
+    if (type === 'matchCells') {
+        rows = matchCells
+        rowType = true
+    }
+
+    if (type === 'notMatchCells') {
+        rows = notMatchCells
+        rowType = false
+    }
+
+    rows.forEach(row =>{
+        if (rowType) {
+            if(row.classList.contains("table-success")) {
+                row.classList.remove('table-success')
+            }else{ 
+                row.classList.add('table-success')
+            }
+        }else{
+            if(row.classList.contains("table-danger")) {
+                row.classList.remove('table-danger')
+            }else{ 
+                row.classList.add('table-danger')
+            }
+        }
+    })
+}
