@@ -141,13 +141,19 @@
 
               <div class="row mb-3">
 
-                <div class="col-6">
+                <div class="col-4">
                   <label for="systemDateColumn" class="form-label">Columna de la fecha</label>
                   <input type="text" class="form-control" id="systemDateColumn" aria-describedby="systemDateColumnHelp">
                   <div id="systemDateColumnHelp" class="form-text">Letra de la columna en donde se leerá la fecha de cada registro</div>
                 </div>
 
-                <div class="col-6">
+                <div class="col-4">
+                  <label for="systemDateFormat" class="form-label">Formato de fecha</label>
+                  <input type="text" class="form-control" id="systemDateFormat" aria-describedby="systemDateFormatHelp">
+                  <div id="systemDateFormatHelp" class="form-text">Ingrese el formato que tendra la fecha</div>
+                </div>
+
+                <div class="col-4">
                   <label for="systemDateNulls" class="form-label">Omitir Celdas nulas</label>
                   <select class="form-select" id="systemDateNulls" aria-describedby="systemDateNullsHelp">
                     <option value="0" selected>No</option>              
@@ -327,14 +333,21 @@
               </div>
 
               <div class="row mb-3">
-                <div class="col-6">
+                <div class="col-4">
                   <label for="bankDateColumn" class="form-label">Columna de la fecha</label>
                   <input type="text" class="form-control" id="bankDateColumn" aria-describedby="bankDateColumnHelp">
                   <div id="bankDateColumnHelp" class="form-text">
                     Letra de la columna en donde se leerá la fecha de cada registro
                   </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
+                  <label for="bankDateFormat" class="form-label">Formato de fecha</label>
+                  <input type="text" class="form-control" id="bankDateFormat" aria-describedby="bankDateFormatHelp">
+                  <div id="bankDateFormatHelp" class="form-text">
+                    Ingrese el formato que tendra la fecha
+                  </div>
+                </div>
+                <div class="col-4">
                   <label for="bankDateNulls" class="form-label">Omitir Celdas nulas</label>
                   <select class="form-select" id="bankDateNulls" aria-describedby="bankDateNullsHelp">
                     <option value="0" selected>No</option>

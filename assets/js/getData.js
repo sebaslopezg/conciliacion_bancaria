@@ -1,13 +1,4 @@
-//const cols = [];
-//for (let i = 65; i <= 90; i++) {
-//  cols.push(String.fromCharCode(i))
-//}
-
 const cols = generateExcelColumns(200)
-
-const setNegative = (text) =>{
-    return parseFloat(text)*-1
-}
 
 //Acceptar en argumentos, ignorar celdas vacias en columnas seleccionadas
 const getData = (data, args) => {
@@ -23,6 +14,7 @@ const getData = (data, args) => {
     let valueNulls
     let t_acountColumn
     let t_acountNulls
+    let dateFormat = 'DD/MM/YYYY' // Default date format
 
     //Condicionales
 
@@ -38,7 +30,6 @@ const getData = (data, args) => {
         }
 
         if ('rowLimit' in args) {
-
         }else{
             errors.push({
                 status:false, 
@@ -62,6 +53,11 @@ const getData = (data, args) => {
                 status:false, 
                 msg:errCode.date.nulls
             })
+        }
+
+        // Check for date format configuration
+        if ('format' in args.date) {
+            dateFormat = args.date.format
         }
 
         if ('column' in args.description) {
@@ -268,15 +264,25 @@ const getData = (data, args) => {
                             msg:errCode.colIndex
                         }) 
                     }
-
                     newDate ? dateData = newDate : ''
                 }
 
+                // Apply the configured date format
+                if (!isNaN(dateData) && typeof dateData === 'number') {
+                    // Handle Excel serial number dates
+                    dateData = formatDate(dateData, dateFormat)
+                } else if (dateData && typeof dateData === 'string') {
+                    // Handle string dates - try to parse and reformat
+                    const parsedDate = new Date(dateData)
+                    if (!isNaN(parsedDate.getTime())) {
+                        dateData = formatDate(parsedDate, dateFormat)
+                    }
+                }
 
                 //Aqui se convierte la fecha en caso de que venga como un numero
-                if (!isNaN(dateData)) {
-                    dateData = XLSX.SSF.format('d/mm/yyyy', dateData)
-                }
+                //if (!isNaN(dateData)) {
+                //    dateData = XLSX.SSF.format('d/mm/yyyy', dateData)
+                //}
 
                 if (dataState && isNaN(valueData)){
                     errors.push({
@@ -395,4 +401,55 @@ function addValueToCostumData(valuesKey, categoryName, newValue, newDescription)
         return
     }
   }
+}
+
+const setNegative = (text) =>{
+    return parseFloat(text)*-1
+}
+
+// Function to format date according to specified format
+const formatDate = (date, format = 'DD/MM/YYYY') => {
+    let dateObj;
+    
+    // Convert Excel serial number to date if needed
+    if (!isNaN(date) && typeof date === 'number') {
+        dateObj = new Date((date - 25569) * 86400 * 1000);
+    } else if (date instanceof Date) {
+        dateObj = date;
+    } else {
+        // Try to parse string date
+        dateObj = new Date(date);
+    }
+    
+    if (isNaN(dateObj.getTime())) {
+        return date; // Return original if can't parse
+    }
+    
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    
+    // Handle different format patterns
+    switch (format.toUpperCase()) {
+        case 'DD/MM/YYYY':
+            return `${day}/${month}/${year}`;
+        case 'MM/DD/YYYY':
+            return `${month}/${day}/${year}`;
+        case 'YYYY/MM/DD':
+            return `${year}/${month}/${day}`;
+        case 'DD-MM-YYYY':
+            return `${day}-${month}-${year}`;
+        case 'MM-DD-YYYY':
+            return `${month}-${day}-${year}`;
+        case 'YYYY-MM-DD':
+            return `${year}-${month}-${day}`;
+        case 'DD.MM.YYYY':
+            return `${day}.${month}.${year}`;
+        case 'MM.DD.YYYY':
+            return `${month}.${day}.${year}`;
+        case 'YYYY.MM.DD':
+            return `${year}.${month}.${day}`;
+        default:
+            return `${day}/${month}/${year}`; // Default to DD/MM/YYYY
+    }
 }

@@ -10,6 +10,7 @@ const btnAddReplaceValues = document.querySelector('#btnAddReplaceValues')
 const systemRowStart = document.querySelector('#systemRowStart')
 const systemRowLimit = document.querySelector('#systemRowLimit')
 const systemDateColumn = document.querySelector('#systemDateColumn')
+const systemDateFormat = document.querySelector('#systemDateFormat')
 const systemDateNulls = document.querySelector('#systemDateNulls')
 const systemValueTAcount = document.querySelector('#systemValueTAcount')
 const systemDescriptionColumn = document.querySelector('#systemDescriptionColumn')
@@ -29,6 +30,7 @@ const btnAddSystemConcatValue = document.querySelector('#btnAddSystemConcatValue
 const bankRowStart = document.querySelector('#bankRowStart')
 const bankRowLimit = document.querySelector('#bankRowLimit')
 const bankDateColumn = document.querySelector('#bankDateColumn')
+const bankDateFormat = document.querySelector('#bankDateFormat')
 const bankDateNulls = document.querySelector('#bankDateNulls')
 const bankDescriptionColumn = document.querySelector('#bankDescriptionColumn')
 const bankDescriptionNulls = document.querySelector('#bankDescriptionNulls')
@@ -259,7 +261,8 @@ const getFormConfig = () =>{
     if (bankRegex.value === 'false') {
         bankDateConf = {
             column:bankDateColumn.value,
-            nulls:bankDateColumnValue
+            nulls:bankDateColumnValue,
+            format:bankDateFormat.value
         }
     }else{
 
@@ -270,7 +273,8 @@ const getFormConfig = () =>{
             column:bankDateColumn.value,
             readByRegex: parseInt(bankRegex.value),
             setYear:bankSetYearBolean,
-            nulls:bankDateColumnValue
+            nulls:bankDateColumnValue,
+            format:bankDateFormat.value
         }
     }
 
@@ -398,6 +402,7 @@ const getFormConfig = () =>{
             date:{
                 column:systemDateColumn.value,
                 nulls:systemDateNullsValue,
+                format:systemDateFormat.value
             },
             description:{
                 column:systemDescriptionColumn.value,
@@ -430,6 +435,9 @@ function loadCurrentConf(){
                 const date = systemConf.date
                 if ('column' in date) {
                     setInput('text', systemDateColumn, date.column)
+                }
+                if ('format' in date) {
+                    setInput('text', systemDateFormat, date.format)
                 }
                 if (date.nulls) {
                     setInput('select', systemDateNulls, "1")
@@ -544,6 +552,10 @@ function loadCurrentConf(){
 
                 if ('column' in date) {
                     setInput('text', bankDateColumn, date.column)
+                }
+
+                if ('format' in date) {
+                    setInput('text', bankDateFormat, date.format)
                 }
 
                 if ('nulls' in date) {                    

@@ -6,7 +6,8 @@ const defaultConf = {
             column:'A',
             readByRegex: 0,
             setYear:true,
-            nulls: false
+            nulls: false,
+            format:''
         },
         description:{
             column:'B',
