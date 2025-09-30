@@ -16,7 +16,10 @@ function setTransactions(params) {
         ...transaction,
         status: arrMainKeys.has(getTransactionKey(transaction)) ? 'found' : 'not_found'
     }))
-    
+    console.log({
+        [params.arrMain.name]: arrMainWithStatus,
+        [params.arrSecond.name]: arrSecondWithStatus
+    })
     return {
         [params.arrMain.name]: arrMainWithStatus,
         [params.arrSecond.name]: arrSecondWithStatus

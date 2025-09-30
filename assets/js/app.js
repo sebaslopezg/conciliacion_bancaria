@@ -40,6 +40,7 @@ btnShowSystemTable.addEventListener('click', () =>{
     if (systemDataRows.length > 0) {
         const fname = exSistema.files[0].name
         printTable(resultDataRows.system, true, 'info', fname, systemDataCustomValues)
+        setAllCells()
     }else{
         Swal.fire({
             icon: "error",
@@ -53,6 +54,7 @@ btnShowBankTable.addEventListener('click', () =>{
     if (bankDataRows.length > 0) {
         const fname = exBanco.files[0].name
         printTable(resultDataRows.bank, true, 'warning',fname, bankDataCustomValues)
+        setAllCells()
     }else{
         Swal.fire({
             icon: "error",
@@ -195,8 +197,8 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" onclick="setTableCells('matchCells')" id="matchCells">
                         <label class="form-check-label" for="matchCells">
-                        <i class="bi bi-check-circle-fill text-success"></i> 
-                        Resaltar Celdas que coinciden
+                            <i class="bi bi-check-circle-fill text-success"></i> 
+                            Resaltar Celdas que coinciden
                         </label>
                     </div>
                 </div>
@@ -205,8 +207,8 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" onclick="setTableCells('notMatchCells')" id="notMatchCells">
                         <label class="form-check-label" for="notMatchCells">
-                        <i class="bi bi-x-circle-fill text-danger"></i> 
-                        Resaltar Celdas NO coinciden
+                            <i class="bi bi-x-circle-fill text-danger"></i> 
+                            Resaltar Celdas NO coinciden
                         </label>
                     </div>
                 </div>
@@ -227,6 +229,8 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                 <th scope="col">Fecha</th>
                 <th scope="col">Descripcion</th>
                 <th scope="col">Valor</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Comentario</th>
             </tr>
         </thead>
         <tbody>
@@ -242,6 +246,19 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                 <td>${objActual.date}</td>
                 <td>${objActual.descripcion}</td>
                 <td>$ ${formatMoney(objActual.value)}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-outline-danger" onclick="setRow(this,'notMatchRow')">
+                            <i class="bi bi-x-circle-fill"></i> 
+                        </button>
+                        <button type="button" class="btn btn-outline-success" onclick="setRow(this, 'matchRow')">
+                            <i class="bi bi-check-circle-fill"></i> 
+                        </button>
+                    </div>
+                </td>
+                <td>
+                    <input class="form-control" type="text">
+                </td>
             </tr>
         `
     })
@@ -309,6 +326,26 @@ function printCustomValues(obj){
     return html
 }
 
+function setRow(row, state){
+    console.log(row)
+    if (state === 'matchRow') {
+        row.classList.remove('not_found')
+        row.classList.add('found')
+    }
+
+    if (state === 'notMatchRow') {
+        row.classList.remove('found')
+        row.classList.add('not_found')
+    }
+
+    setAllCells()
+}
+
+function setAllCells(){
+    setTableCells('matchCells')
+    setTableCells('notMatchCells')
+}
+
 function setTableCells(type){
     const matchCells = document.querySelectorAll('.found')
     const notMatchCells = document.querySelectorAll('.not_found')
@@ -339,4 +376,19 @@ function setTableCells(type){
             }
         }
     })
+}
+
+function setMatchingRows(type){
+
+    const matchCells = document.querySelectorAll('.found')
+    const notMatchCells = document.querySelectorAll('.not_found')
+
+    if (type === "match") {
+        
+    }
+
+    if (type === "notMatch") {
+        
+    }
+
 }
