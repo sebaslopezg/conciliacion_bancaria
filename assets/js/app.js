@@ -161,6 +161,8 @@ let systemDataResponse
             bank:bankDataResponse
         }
 
+        console.log(mainDataResponse)
+
         bankDataRows = bankDataResponse.data.rows
         bankDataCustomValues = bankDataResponse.data.customValues
         systemDataRows = systemDataResponse.data.rows
@@ -444,14 +446,15 @@ function saveTables(){
     resultDataRows[currentDataRows.token] = dataObjects
 
     const currentDataSave = {
-        mainDataResponse
+        bank:mainDataResponse.bank,
+        system:mainDataResponse.system,
     }
 
-    localStorage.setItem("currentData", JSON.stringify(currentData))
+    localStorage.setItem("currentData", JSON.stringify(currentDataSave))
     localStorage.setItem("currentDataTokens", JSON.stringify(currentDataRows))
 }
 
-loadTablesFromLocal()
+//loadTablesFromLocal()
 
 function loadTablesFromLocal(){
     const storedData = localStorage.getItem('currentData')
@@ -461,10 +464,11 @@ function loadTablesFromLocal(){
 
         const data = JSON.parse(storedData)
         const dataTokens = JSON.parse(currentDataTokens)
-
+        console.log(data)
         enableButtons()
 
-        printTable(data[dataTokens.token], true, 'info', '', data[dataTokens.token].data.customValues)
+        printTable(data[dataTokens.token].data.rows, true, 'info', '', data[dataTokens.token].data.customValues)
+        setAllCells()
     }else{
         console.log('no encontrado')
     }
