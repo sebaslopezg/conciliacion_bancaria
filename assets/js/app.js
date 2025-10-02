@@ -5,23 +5,46 @@ const btnShowSystemTable = document.querySelector('#btnShowSystemTable')
 const btnShowBankTable = document.querySelector('#btnShowBankTable')
 const exSistema = document.querySelector('#exSistema')
 const exBanco = document.querySelector('#exBanco')
+const btnSaveChanges = document.querySelector('#btnSaveChanges')
 
 let systemData = null
 let bankData = null
-
 let bankDataRows
 let bankDataCustomValues
 let systemDataRows
 let systemDataCustomValues
 let resultDataRows
+let currentDataRows = {
+    data:'',
+    token:''
+}
+let mainDataResponse
 
 let date = new Date()
 courrentYearInput.value = date.getFullYear()
 
-const enableButtons = () =>{
+function enableButtons(){
     btnShowSystemTable.disabled = false
     btnShowBankTable.disabled = false
 }
+
+btnSaveChanges.addEventListener('click', () =>{
+    try {
+        saveTables()
+        Swal.fire({
+            icon: "success",
+            title: "Guardar Cambios",
+            text: `Cambios guardados`
+        })
+    } catch (error) {
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: `No se pudo guardar cambios`
+        })
+    }
+    
+})
 
 btnExecute.addEventListener('click', () =>{
     if (systemData === null || bankData === null) {
@@ -39,6 +62,8 @@ btnExecute.addEventListener('click', () =>{
 btnShowSystemTable.addEventListener('click', () =>{
     if (systemDataRows.length > 0) {
         const fname = exSistema.files[0].name
+        currentDataRows.data = resultDataRows.system
+        currentDataRows.token = 'system'
         printTable(resultDataRows.system, true, 'info', fname, systemDataCustomValues)
         setAllCells()
     }else{
@@ -53,6 +78,8 @@ btnShowSystemTable.addEventListener('click', () =>{
 btnShowBankTable.addEventListener('click', () =>{
     if (bankDataRows.length > 0) {
         const fname = exBanco.files[0].name
+        currentDataRows.data = resultDataRows.bank
+        currentDataRows.token = 'bank'
         printTable(resultDataRows.bank, true, 'warning',fname, bankDataCustomValues)
         setAllCells()
     }else{
@@ -109,8 +136,8 @@ Array.from(inputs).forEach(input => {
 
 const readData = () =>{
 
-    let bankDataResponse
-    let systemDataResponse
+let bankDataResponse
+let systemDataResponse
 
     let bankParams
     let systemParams
@@ -128,6 +155,12 @@ const readData = () =>{
     systemDataResponse = getData(systemData, systemParams)
 
     if (bankDataResponse.status && systemDataResponse.status) {
+
+        mainDataResponse = {
+            system:systemDataResponse,
+            bank:bankDataResponse
+        }
+
         bankDataRows = bankDataResponse.data.rows
         bankDataCustomValues = bankDataResponse.data.customValues
         systemDataRows = systemDataResponse.data.rows
@@ -194,23 +227,11 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                 </div>
 
                 <div class="col-3">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" onclick="setTableCells('matchCells')" id="matchCells">
-                        <label class="form-check-label" for="matchCells">
-                            <i class="bi bi-check-circle-fill text-success"></i> 
-                            Resaltar Celdas que coinciden
-                        </label>
-                    </div>
+
                 </div>
 
                 <div class="col-3">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" onclick="setTableCells('notMatchCells')" id="notMatchCells">
-                        <label class="form-check-label" for="notMatchCells">
-                            <i class="bi bi-x-circle-fill text-danger"></i> 
-                            Resaltar Celdas NO coinciden
-                        </label>
-                    </div>
+
                 </div>
 
             </div>
@@ -222,7 +243,7 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
             </div>
         </div>
         <br>
-        <table id="table_${uuid}" class="table table-striped table-hover">
+        <table id="table_${uuid}" class="table table-striped table-hover table_data">
         <thead>
             <tr ${tableHeaderColor}>
                 <th scope="col">#</th>
@@ -248,16 +269,16 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                 <td>$ ${formatMoney(objActual.value)}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                        <button type="button" class="btn btn-outline-danger" onclick="setRow(this,'notMatchRow')">
+                        <button type="button" class="btn btn-outline-danger" onclick="setRow(this.parentNode.parentNode.parentNode,'notMatchRow')">
                             <i class="bi bi-x-circle-fill"></i> 
                         </button>
-                        <button type="button" class="btn btn-outline-success" onclick="setRow(this, 'matchRow')">
+                        <button type="button" class="btn btn-outline-success" onclick="setRow(this.parentNode.parentNode.parentNode, 'matchRow')">
                             <i class="bi bi-check-circle-fill"></i> 
                         </button>
                     </div>
                 </td>
                 <td>
-                    <input class="form-control" type="text">
+                    <input class="form-control" type="text" value="${objActual.comment}">
                 </td>
             </tr>
         `
@@ -327,7 +348,7 @@ function printCustomValues(obj){
 }
 
 function setRow(row, state){
-    console.log(row)
+    
     if (state === 'matchRow') {
         row.classList.remove('not_found')
         row.classList.add('found')
@@ -339,56 +360,112 @@ function setRow(row, state){
     }
 
     setAllCells()
+    saveTables()
 }
 
 function setAllCells(){
-    setTableCells('matchCells')
-    setTableCells('notMatchCells')
+    setTableCells('matchCells', false)
+    setTableCells('notMatchCells', false)
 }
 
-function setTableCells(type){
+function setTableCells(type, switchMode = true){
     const matchCells = document.querySelectorAll('.found')
     const notMatchCells = document.querySelectorAll('.not_found')
     let rows
     let rowType
     if (type === 'matchCells') {
         rows = matchCells
-        rowType = true
     }
 
     if (type === 'notMatchCells') {
         rows = notMatchCells
-        rowType = false
     }
 
     rows.forEach(row =>{
-        if (rowType) {
+        if (type === 'matchCells') {
             if(row.classList.contains("table-success")) {
-                row.classList.remove('table-success')
+                switchMode ? row.classList.remove('table-success') : ''
             }else{ 
+                if (row.classList.contains("table-danger")) {
+                    row.classList.remove('table-danger')
+                }
                 row.classList.add('table-success')
             }
-        }else{
+        }
+
+        if (type === 'notMatchCells') {
             if(row.classList.contains("table-danger")) {
-                row.classList.remove('table-danger')
+                switchMode ? row.classList.remove('table-danger') : ''
             }else{ 
+                if (row.classList.contains("table-success")) {
+                    row.classList.remove('table-success')
+                }
                 row.classList.add('table-danger')
             }
         }
     })
 }
 
-function setMatchingRows(type){
 
-    const matchCells = document.querySelectorAll('.found')
-    const notMatchCells = document.querySelectorAll('.not_found')
 
-    if (type === "match") {
-        
+function saveTables(){
+    // currentDataRows
+    const currentData = {
+        bank:resultDataRows.bank,
+        system:resultDataRows.system
+    }
+    const table = document.querySelector('.table_data')
+    
+    const dataObjects = [];
+    for (let i = 1; i < table.rows.length; i++) {
+        const row = table.rows[i];
+        const rowObject = {};
+
+        if (table.rows[i].classList.contains('found')) {
+            rowObject.status = 'found'
+        }
+        if (table.rows[i].classList.contains('not_found')) {
+            rowObject.status = 'not_found'
+        }
+
+        for (let j = 0; j < row.cells.length; j++) {
+
+            const valueRow = resultDataRows[currentDataRows.token][i-1]
+
+            j == 1 ? rowObject.date = row.cells[j].textContent.trim() : ''
+            j == 2 ? rowObject.descripcion = row.cells[j].textContent.trim() : ''
+            j == 3 ? rowObject.value = valueRow.value : ''
+            j == 5 ? rowObject.comment = row.cells[j].childNodes[1].value : ''
+            
+        }
+        dataObjects.push(rowObject);
     }
 
-    if (type === "notMatch") {
-        
+    resultDataRows[currentDataRows.token] = dataObjects
+
+    const currentDataSave = {
+        mainDataResponse
     }
 
+    localStorage.setItem("currentData", JSON.stringify(currentData))
+    localStorage.setItem("currentDataTokens", JSON.stringify(currentDataRows))
+}
+
+loadTablesFromLocal()
+
+function loadTablesFromLocal(){
+    const storedData = localStorage.getItem('currentData')
+    const currentDataTokens = localStorage.getItem('currentDataTokens')
+
+    if (storedData && currentDataTokens) {
+
+        const data = JSON.parse(storedData)
+        const dataTokens = JSON.parse(currentDataTokens)
+
+        enableButtons()
+
+        printTable(data[dataTokens.token], true, 'info', '', data[dataTokens.token].data.customValues)
+    }else{
+        console.log('no encontrado')
+    }
 }

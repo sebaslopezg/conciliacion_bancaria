@@ -1,7 +1,7 @@
 const courrentYearInput = document.querySelector('#courrentYear')
 
 //Function for export an html table into excel file
-function exportTableToExcel(tableID, idFileName = '') {
+/* function exportTableToExcel(tableID, idFileName = '') {
     let fileName = 'excel_exportado.xlsx'
     if (idFileName) {
         let fileNameInput = document.querySelector(`#${idFileName}`)
@@ -12,6 +12,43 @@ function exportTableToExcel(tableID, idFileName = '') {
 
     var table = document.getElementById(tableID)
     var ws = XLSX.utils.table_to_sheet(table)
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "hoja 1")
+    XLSX.writeFile(wb, fileName)
+} */
+
+
+    function exportTableToExcel(tableID, idFileName = '', asteriskColumn = 4) {
+    let fileName = 'excel_exportado.xlsx'
+    if (idFileName) {
+        let fileNameInput = document.querySelector(`#${idFileName}`)
+        if (fileNameInput) {
+            fileNameInput.value ? fileName = fileNameInput.value + '.xlsx' : fileName = 'excel_exportado.xlsx'
+        }
+    }
+
+    var table = document.getElementById(tableID)
+    
+    // Clone the table to avoid modifying the original
+    var tableClone = table.cloneNode(true)
+    
+    // Process all inputs in the cloned table
+    var inputs = tableClone.querySelectorAll('input')
+    inputs.forEach(function(input) {
+        var td = input.parentElement
+        td.textContent = input.value
+    })
+    
+    // Add asterisk to rows with "found" class
+    var rows = tableClone.querySelectorAll('tr.found')
+    rows.forEach(function(row) {
+        var cells = row.querySelectorAll('td, th')
+        if (cells[asteriskColumn]) {
+            cells[asteriskColumn].textContent = '* ' + cells[asteriskColumn].textContent
+        }
+    })
+    
+    var ws = XLSX.utils.table_to_sheet(tableClone)
     var wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "hoja 1")
     XLSX.writeFile(wb, fileName)

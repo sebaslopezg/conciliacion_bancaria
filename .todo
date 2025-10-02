@@ -3,7 +3,3 @@
 - Regex dinamico para configurar fechas (no prioritario)
 - Agregar celdas añadibles para listado de lectura de fechas
 - Leer regex dinamico para fechas extraidas de desc.
-
-- Guardar tablas trabajadas con sus estados actuales en el local storage
-- Agregar boton para confirmar celda
-- Conservar el estado de los switch de encontrado/no encontrado

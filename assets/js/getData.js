@@ -311,7 +311,8 @@ const getData = (data, args) => {
                     responseData.push({
                         date:dateData,
                         descripcion:descripcionData,
-                        value:valueData
+                        value:valueData,
+                        comment:''
                     })
                 }
             }
@@ -323,7 +324,6 @@ const getData = (data, args) => {
             response = {status:true,data:{rows:responseData, customValues:customValuesData}}
         }
     }
-    console.log(response)
     return response
 }
 
