@@ -280,7 +280,7 @@ const printTable = (obj, reset, headerColor, fileName = 'Nombre no definido', cu
                     </div>
                 </td>
                 <td>
-                    <input class="form-control" type="text" value="${objActual.comment}">
+                    <input class="form-control" type="text" value="${objActual.comment}" onblur="saveTables()">
                 </td>
             </tr>
         `
